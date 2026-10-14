@@ -7,4 +7,4 @@
 - Master PNG disimpan pada output generator di luar repository. Sharp hanya memangkas margin transparan, menyesuaikan ukuran, dan mengompres WebP.
 - Logo tetap menggunakan aset SAP asli. Ikon navigasi berupa Lucide SVG melalui komponen React agar tajam pada berbagai kepadatan layar.
 
-Pet mobile dan desktop kini sama-sama memakai `../sapa/animation-v1/` melalui `SapaSprite`. Bilah bantuan memakai ikon Sparkles dan membuka percakapan yang sama, sehingga tidak menampilkan karakter kedua.
+Pet mobile dan desktop kini sama-sama memakai `../sapa/animation-v2-guardian/` melalui `SapaSprite`. Bilah bantuan memakai ikon Sparkles dan membuka percakapan yang sama, sehingga tidak menampilkan karakter kedua. Aset versi awal tetap disimpan untuk referensi dan rollback.

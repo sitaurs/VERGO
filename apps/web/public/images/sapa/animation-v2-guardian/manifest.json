@@ -1,0 +1,1331 @@
+{
+  "version": 2,
+  "name": "SAPA Leaf Guardian",
+  "generated_at": "2026-10-14",
+  "tool": "built-in image_gen.imagegen",
+  "status": "artwork and standalone preview; awaiting application integration",
+  "coordinate_system": "Actual PNG pixels. Source rectangles may have fractional dimensions.",
+  "anchor_method": "Estimated midpoint of two dominant opaque foot-support regions. Not rig data.",
+  "timing_status": "Suggested timings for preview and later integration, not an exported rig.",
+  "playback": {
+    "idle": "loop with long pose holds",
+    "wave": "once when opening chat",
+    "curious": "once on hover or focus with a cooldown",
+    "thinking": "loop while a real AI or scan request is pending",
+    "success": "once after a confirmed successful result; preserve upward motion",
+    "error": "once after an unsuccessful request"
+  },
+  "qa": {
+    "generated_pngs": 8,
+    "animation_sheets": 6,
+    "poses": 48,
+    "all_rgba_transparent": true,
+    "all_copied_without_pixel_changes": true,
+    "all_frame_silhouettes_clear_of_cell_edges": true,
+    "visual_inspection": "All selected full images inspected after generation."
+  },
+  "assets": [
+    {
+      "id": "master",
+      "file": "sapa-master.png",
+      "description": "Pose master seluruh tubuh",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "7ed0fab083e45228806492653c46ea3a1b424eec61da9caa6ca9e3ebb1892a09",
+      "bytes": 1467463,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "clear_fraction": 0.616,
+      "alpha_bbox": [
+        226,
+        18,
+        1069,
+        1208
+      ]
+    },
+    {
+      "id": "icon",
+      "file": "sapa-launcher-icon.png",
+      "description": "Ikon kepala untuk launcher/avatar",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "a852747b3398cc82af0b983d7c051dfb3a27e57b69b0c9e6a57d6734ce1708a4",
+      "bytes": 1769911,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.4639,
+      "alpha_bbox": [
+        94,
+        42,
+        1157,
+        1224
+      ]
+    },
+    {
+      "id": "idle",
+      "file": "sapa-idle-blink-sheet.png",
+      "description": "Diam, napas halus, dan kedipan mata",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "sha256": "9c4043d3e05dfb78fe5241b032f44236db73643152cecb106ad1cccd08cb607c",
+      "bytes": 1178877,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.7887,
+      "alpha_bbox": [
+        115,
+        126,
+        1672,
+        813
+      ],
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cell": [
+          443.5,
+          443.5
+        ]
+      },
+      "loop": true,
+      "total_ms": 7500,
+      "frames": [
+        {
+          "index": 0,
+          "source": [
+            0.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 3500,
+          "solid_bbox": [
+            118.0,
+            127.0,
+            339.0,
+            416.0
+          ],
+          "foot_anchor": [
+            234.07,
+            415.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 1,
+          "source": [
+            443.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 160,
+          "solid_bbox": [
+            110.5,
+            127.0,
+            348.5,
+            416.0
+          ],
+          "foot_anchor": [
+            235.04,
+            415.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 2,
+          "source": [
+            887.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 70,
+          "solid_bbox": [
+            108.0,
+            127.0,
+            342.0,
+            416.0
+          ],
+          "foot_anchor": [
+            233.17,
+            415.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 3,
+          "source": [
+            1330.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            113.5,
+            127.0,
+            339.5,
+            416.0
+          ],
+          "foot_anchor": [
+            232.6,
+            415.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 4,
+          "source": [
+            0.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 70,
+          "solid_bbox": [
+            115.0,
+            77.5,
+            343.0,
+            368.5
+          ],
+          "foot_anchor": [
+            233.78,
+            368.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 5,
+          "source": [
+            443.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 200,
+          "solid_bbox": [
+            106.5,
+            77.5,
+            346.5,
+            368.5
+          ],
+          "foot_anchor": [
+            233.68,
+            368.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 6,
+          "source": [
+            887.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 1600,
+          "solid_bbox": [
+            116.0,
+            77.5,
+            359.0,
+            368.5
+          ],
+          "foot_anchor": [
+            232.22,
+            368.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 7,
+          "source": [
+            1330.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 1800,
+          "solid_bbox": [
+            114.5,
+            77.5,
+            340.5,
+            368.5
+          ],
+          "foot_anchor": [
+            231.95,
+            368.0
+          ],
+          "boundary_clear": true
+        }
+      ],
+      "canonical_character_height": 289.0
+    },
+    {
+      "id": "wave",
+      "file": "sapa-wave-sheet.png",
+      "description": "Menyapa dengan lambaian tangan",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "sha256": "715aba65783dd7641f707e60746da2ff02013eb19d35c3977a86d224a42ff9e6",
+      "bytes": 1275834,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.7652,
+      "alpha_bbox": [
+        125,
+        85,
+        1671,
+        829
+      ],
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cell": [
+          443.5,
+          443.5
+        ]
+      },
+      "loop": false,
+      "total_ms": 800,
+      "frames": [
+        {
+          "index": 0,
+          "source": [
+            0.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            126.0,
+            89.0,
+            351.0,
+            401.0
+          ],
+          "foot_anchor": [
+            241.08,
+            399.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 1,
+          "source": [
+            443.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            113.5,
+            86.0,
+            336.5,
+            401.0
+          ],
+          "foot_anchor": [
+            224.7,
+            400.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 2,
+          "source": [
+            887.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            112.0,
+            86.0,
+            336.0,
+            401.0
+          ],
+          "foot_anchor": [
+            224.12,
+            400.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 3,
+          "source": [
+            1330.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            113.5,
+            86.0,
+            336.5,
+            401.0
+          ],
+          "foot_anchor": [
+            224.54,
+            400.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 4,
+          "source": [
+            0.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            127.0,
+            71.5,
+            355.0,
+            384.5
+          ],
+          "foot_anchor": [
+            239.6,
+            383.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 5,
+          "source": [
+            443.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            114.5,
+            71.5,
+            337.5,
+            385.5
+          ],
+          "foot_anchor": [
+            224.72,
+            383.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 6,
+          "source": [
+            887.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            112.0,
+            71.5,
+            337.0,
+            385.5
+          ],
+          "foot_anchor": [
+            224.41,
+            383.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 7,
+          "source": [
+            1330.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 130,
+          "solid_bbox": [
+            113.5,
+            71.5,
+            339.5,
+            385.5
+          ],
+          "foot_anchor": [
+            227.41,
+            383.5
+          ],
+          "boundary_clear": true
+        }
+      ],
+      "canonical_character_height": 312.0
+    },
+    {
+      "id": "curious",
+      "file": "sapa-curious-sheet.png",
+      "description": "Menoleh penasaran dan memperhatikan",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "sha256": "950f8d2ed371b1f51205719403abe1da19621102641096d424cd16fd301e61d5",
+      "bytes": 1201556,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.775,
+      "alpha_bbox": [
+        114,
+        120,
+        1673,
+        815
+      ],
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cell": [
+          443.5,
+          443.5
+        ]
+      },
+      "loop": false,
+      "total_ms": 860,
+      "frames": [
+        {
+          "index": 0,
+          "source": [
+            0.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 110,
+          "solid_bbox": [
+            116.0,
+            121.0,
+            347.0,
+            419.0
+          ],
+          "foot_anchor": [
+            234.7,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 1,
+          "source": [
+            443.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            110.5,
+            121.0,
+            348.5,
+            419.0
+          ],
+          "foot_anchor": [
+            233.81,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 2,
+          "source": [
+            887.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            108.0,
+            121.0,
+            344.0,
+            419.0
+          ],
+          "foot_anchor": [
+            229.31,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 3,
+          "source": [
+            1330.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 120,
+          "solid_bbox": [
+            106.5,
+            121.0,
+            340.5,
+            419.0
+          ],
+          "foot_anchor": [
+            226.8,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 4,
+          "source": [
+            0.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 110,
+          "solid_bbox": [
+            114.0,
+            72.5,
+            349.0,
+            370.5
+          ],
+          "foot_anchor": [
+            234.27,
+            370.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 5,
+          "source": [
+            443.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            117.5,
+            73.5,
+            353.5,
+            371.5
+          ],
+          "foot_anchor": [
+            234.8,
+            370.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 6,
+          "source": [
+            887.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            108.0,
+            72.5,
+            344.0,
+            371.5
+          ],
+          "foot_anchor": [
+            229.11,
+            370.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 7,
+          "source": [
+            1330.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 150,
+          "solid_bbox": [
+            106.5,
+            72.5,
+            341.5,
+            371.5
+          ],
+          "foot_anchor": [
+            226.78,
+            370.5
+          ],
+          "boundary_clear": true
+        }
+      ],
+      "canonical_character_height": 298.0
+    },
+    {
+      "id": "thinking",
+      "file": "sapa-thinking-sheet.png",
+      "description": "Memeriksa tablet saat berpikir atau memindai",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "sha256": "616ae5877b47820840ef570b5984e61d0c5b767dcc6f017ddde3080d01d0737c",
+      "bytes": 1370922,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.7255,
+      "alpha_bbox": [
+        92,
+        81,
+        1670,
+        836
+      ],
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cell": [
+          443.5,
+          443.5
+        ]
+      },
+      "loop": true,
+      "total_ms": 1820,
+      "frames": [
+        {
+          "index": 0,
+          "source": [
+            0.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 250,
+          "solid_bbox": [
+            93.0,
+            82.0,
+            334.0,
+            420.0
+          ],
+          "foot_anchor": [
+            217.84,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 1,
+          "source": [
+            443.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 220,
+          "solid_bbox": [
+            92.5,
+            83.0,
+            335.5,
+            420.0
+          ],
+          "foot_anchor": [
+            217.5,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 2,
+          "source": [
+            887.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 220,
+          "solid_bbox": [
+            90.0,
+            82.0,
+            332.0,
+            420.0
+          ],
+          "foot_anchor": [
+            215.78,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 3,
+          "source": [
+            1330.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 220,
+          "solid_bbox": [
+            91.5,
+            82.0,
+            333.5,
+            420.0
+          ],
+          "foot_anchor": [
+            217.12,
+            418.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 4,
+          "source": [
+            0.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 220,
+          "solid_bbox": [
+            93.0,
+            56.5,
+            344.0,
+            391.5
+          ],
+          "foot_anchor": [
+            218.01,
+            390.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 5,
+          "source": [
+            443.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 220,
+          "solid_bbox": [
+            90.5,
+            56.5,
+            335.5,
+            392.5
+          ],
+          "foot_anchor": [
+            216.41,
+            390.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 6,
+          "source": [
+            887.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 220,
+          "solid_bbox": [
+            88.0,
+            58.5,
+            343.0,
+            392.5
+          ],
+          "foot_anchor": [
+            215.64,
+            390.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 7,
+          "source": [
+            1330.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 250,
+          "solid_bbox": [
+            91.5,
+            57.5,
+            339.5,
+            392.5
+          ],
+          "foot_anchor": [
+            217.43,
+            390.0
+          ],
+          "boundary_clear": true
+        }
+      ],
+      "canonical_character_height": 338.0
+    },
+    {
+      "id": "success",
+      "file": "sapa-success-jump-sheet.png",
+      "description": "Lompatan kecil ketika berhasil",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "sha256": "44ad12b8dbba6b406292113c915fa60cb5c4c194628c409d3bc10a734a86b621",
+      "bytes": 1181718,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.7816,
+      "alpha_bbox": [
+        114,
+        86,
+        1676,
+        817
+      ],
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cell": [
+          443.5,
+          443.5
+        ]
+      },
+      "loop": false,
+      "total_ms": 850,
+      "frames": [
+        {
+          "index": 0,
+          "source": [
+            0.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 110,
+          "solid_bbox": [
+            117.0,
+            117.0,
+            342.0,
+            411.0
+          ],
+          "foot_anchor": [
+            232.37,
+            410.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 1,
+          "source": [
+            443.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            106.5,
+            135.0,
+            335.5,
+            414.0
+          ],
+          "foot_anchor": [
+            227.54,
+            413.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 2,
+          "source": [
+            887.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 80,
+          "solid_bbox": [
+            104.0,
+            88.0,
+            333.0,
+            388.0
+          ],
+          "foot_anchor": [
+            215.45,
+            386.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 3,
+          "source": [
+            1330.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 100,
+          "solid_bbox": [
+            92.5,
+            86.0,
+            343.5,
+            391.0
+          ],
+          "foot_anchor": [
+            217.39,
+            386.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 4,
+          "source": [
+            0.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 90,
+          "solid_bbox": [
+            115.0,
+            69.5,
+            344.0,
+            357.5
+          ],
+          "foot_anchor": [
+            226.46,
+            354.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 5,
+          "source": [
+            443.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 110,
+          "solid_bbox": [
+            98.5,
+            90.5,
+            347.5,
+            372.5
+          ],
+          "foot_anchor": [
+            227.15,
+            371.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 6,
+          "source": [
+            887.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 110,
+          "solid_bbox": [
+            102.0,
+            86.5,
+            339.0,
+            373.5
+          ],
+          "foot_anchor": [
+            218.28,
+            372.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 7,
+          "source": [
+            1330.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 150,
+          "solid_bbox": [
+            112.5,
+            86.5,
+            341.5,
+            373.5
+          ],
+          "foot_anchor": [
+            226.36,
+            373.0
+          ],
+          "boundary_clear": true
+        }
+      ],
+      "canonical_character_height": 294.0
+    },
+    {
+      "id": "error",
+      "file": "sapa-helpful-error-sheet.png",
+      "description": "Reaksi gagal yang tenang lalu menawarkan bantuan",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "sha256": "af96fd0ec48a269a218d55f060b5af6885e54066b0beb396e75a08e3e49b3be0",
+      "bytes": 1455551,
+      "transparent": true,
+      "unchanged_copy": true,
+      "corner_alpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "clear_fraction": 0.7416,
+      "alpha_bbox": [
+        109,
+        112,
+        1670,
+        833
+      ],
+      "grid": {
+        "columns": 4,
+        "rows": 2,
+        "cell": [
+          443.5,
+          443.5
+        ]
+      },
+      "loop": false,
+      "total_ms": 1020,
+      "frames": [
+        {
+          "index": 0,
+          "source": [
+            0.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 130,
+          "solid_bbox": [
+            111.0,
+            113.0,
+            356.0,
+            436.0
+          ],
+          "foot_anchor": [
+            235.93,
+            434.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 1,
+          "source": [
+            443.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 120,
+          "solid_bbox": [
+            107.5,
+            120.0,
+            356.5,
+            436.0
+          ],
+          "foot_anchor": [
+            228.83,
+            435.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 2,
+          "source": [
+            887.0,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 120,
+          "solid_bbox": [
+            93.0,
+            118.0,
+            343.0,
+            436.0
+          ],
+          "foot_anchor": [
+            219.62,
+            434.5
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 3,
+          "source": [
+            1330.5,
+            0.0,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 140,
+          "solid_bbox": [
+            87.5,
+            113.0,
+            335.5,
+            436.0
+          ],
+          "foot_anchor": [
+            212.17,
+            435.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 4,
+          "source": [
+            0.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 110,
+          "solid_bbox": [
+            109.0,
+            67.5,
+            361.0,
+            388.5
+          ],
+          "foot_anchor": [
+            238.31,
+            388.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 5,
+          "source": [
+            443.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 120,
+          "solid_bbox": [
+            103.5,
+            67.5,
+            361.5,
+            388.5
+          ],
+          "foot_anchor": [
+            232.74,
+            388.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 6,
+          "source": [
+            887.0,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 120,
+          "solid_bbox": [
+            92.0,
+            67.5,
+            348.0,
+            388.5
+          ],
+          "foot_anchor": [
+            221.69,
+            388.0
+          ],
+          "boundary_clear": true
+        },
+        {
+          "index": 7,
+          "source": [
+            1330.5,
+            443.5,
+            443.5,
+            443.5
+          ],
+          "duration_ms": 160,
+          "solid_bbox": [
+            89.5,
+            67.5,
+            339.5,
+            388.5
+          ],
+          "foot_anchor": [
+            214.9,
+            388.0
+          ],
+          "boundary_clear": true
+        }
+      ],
+      "canonical_character_height": 323.0
+    }
+  ]
+}

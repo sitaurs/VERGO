@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowRight, Brain, ChevronRight, FilePlus2, Map, Recycle, Search, Send, Sparkles, X } from "lucide-react";
 import { sendSapaMessage, type SapaCitation, type SapaPageContext, type SapaSuggestedAction } from "./sapa-client";
 import SapaSprite from "./sapa-sprite";
-import type { SapaActivity, SapaMotion } from "./sapa-motion-data";
+import { SAPA_ARTWORK, type SapaActivity, type SapaMotion } from "./sapa-motion-data";
 import styles from "./sapa-pet.module.css";
 import { useI18n } from "../lib/i18n/provider";
 
@@ -293,7 +293,7 @@ export default function SapaPet({ tab, backendLinked, activity, onNavigate, mobi
   return <><div className={`${styles.root} ${mobileDock ? styles.mobilePetRoot : ""}`} data-sap-mobile-chat={mobileDock || undefined} style={position ? { left: position.x, top: position.y, right: "auto", bottom: "auto" } : undefined}>
     {open && <section className={`${styles.panel} ${!docked && panelBelow ? styles.panelBelow : ""}`} style={docked ? undefined : { left: panelLeft - petX, right: "auto", maxHeight: panelMaxHeight }} id="sapa-chat-panel" role="dialog" aria-modal="false" aria-labelledby="sapa-chat-title">
       <header className={styles.header}>
-        <span className={styles.headerAvatar}><Image src="/images/sapa/SAPA_Chat_Avatar.png" alt="" width={42} height={42} /></span>
+        <span className={styles.headerAvatar}><Image src={SAPA_ARTWORK.avatar} alt="" width={42} height={42} /></span>
         <span className={styles.heading}><strong id="sapa-chat-title">SAPA</strong><small>{t("Asisten SAP")}</small></span>
         <button className={styles.close} type="button" onClick={closePanel} aria-label={t("Minimalkan chat SAPA")}><X size={19} /></button>
       </header>
@@ -301,7 +301,7 @@ export default function SapaPet({ tab, backendLinked, activity, onNavigate, mobi
       <div className={styles.body} ref={logRef}>
         {messages.length === 0 && <>
           <div className={styles.welcome}>
-            <Image src="/images/sapa/SAPA_Welcome_Sticker.png" alt={t("SAPA melambaikan tangan")} width={86} height={83} />
+            <Image src={SAPA_ARTWORK.master} alt="SAPA" width={86} height={83} />
             <p>{t("Hai! Aku SAPA.")}<br /><strong>{t("Mau bantu apa hari ini?")}</strong></p>
           </div>
           <div className={styles.quickActions} aria-label={t("Bantuan cepat SAPA")}>

@@ -2,10 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { SAPA_MOTIONS, type SapaMotion } from "./sapa-motion-data";
+import { SAPA_ARTWORK, SAPA_ASSET_ROOT, SAPA_MOTIONS, type SapaMotion } from "./sapa-motion-data";
 import styles from "./sapa-sprite.module.css";
 
-const ASSET_ROOT = "/images/sapa/animation-v1/";
 const images = new Map<SapaMotion, Promise<HTMLImageElement>>();
 
 // Load only the active sheet; subsequent reactions reuse its decoded image.
@@ -16,7 +15,7 @@ function loadSheet(motion: SapaMotion) {
       const image = new window.Image();
       image.onload = () => resolve(image);
       image.onerror = () => { images.delete(motion); reject(new Error("SAPA artwork unavailable")); };
-      image.src = ASSET_ROOT + SAPA_MOTIONS[motion].file;
+      image.src = SAPA_ASSET_ROOT + SAPA_MOTIONS[motion].file;
     });
     images.set(motion, promise);
   }
@@ -79,16 +78,18 @@ export default function SapaSprite({ motion, playId, paused = false, calm = fals
       // Calm breathing only while idle, never while the user is chatting/dragging.
       const breath = motion === "idle" && !calm && !reduced && !paused
         ? (1 - Math.cos(time / 3600 * Math.PI * 2)) * .35 : 0;
-      // Normalize the source feet, then add the deliberate takeoff/landing arc.
-      const flight = motion === "success" && !reduced && !paused
-        ? Math.sin(Math.PI * Math.max(0, Math.min(1, (time - 160) / 290))) * 10 : 0;
       const sourceWidth = sheet.naturalWidth / 4;
       const sourceHeight = sheet.naturalHeight / 2;
-      const scale = 112 / sourceHeight;
+      // v2 has generous transparent cell margins. Normalize the character, not the cell.
+      const scale = 100 / spec.characterHeight;
       const [anchorX, anchorY] = spec.anchors[frame];
+      // Register each row's feet while retaining the artwork's authored jump height.
+      const ground = spec.anchors[frame < 4 ? 0 : 7][1];
+      const flight = motion === "success" && frame >= 2 && frame <= 4 && !reduced && !paused
+        ? Math.min(0, anchorY - ground) * scale : 0;
       context!.clearRect(0, 0, 128, 128);
       context!.drawImage(sheet, (frame % 4) * sourceWidth, Math.floor(frame / 4) * sourceHeight,
-        sourceWidth, sourceHeight, 64 - anchorX * scale, 119 - anchorY * scale - breath - flight,
+        sourceWidth, sourceHeight, 64 - anchorX * scale, 119 - anchorY * scale - breath + flight,
         sourceWidth * scale, sourceHeight * scale);
     }
 
@@ -133,7 +134,7 @@ export default function SapaSprite({ motion, playId, paused = false, calm = fals
   }, [motion, playId, paused, calm]);
 
   return <span className={styles.sprite} aria-hidden="true">
-    <Image className={`${styles.fallback} ${ready ? styles.hidden : ""}`} src={`${ASSET_ROOT}sapa-master.png`} alt="" width={128} height={128} sizes="112px" draggable={false} />
+    <Image className={`${styles.fallback} ${ready ? styles.hidden : ""}`} src={SAPA_ARTWORK.master} alt="" width={128} height={128} sizes="112px" draggable={false} />
     <canvas ref={canvasRef} className={`${styles.canvas} ${ready ? styles.ready : ""}`} width={128} height={128} />
   </span>;
 }
