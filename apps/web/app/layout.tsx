@@ -7,6 +7,7 @@ import "./globals.css";
 import "./motion.css";
 import "leaflet/dist/leaflet.css";
 import MotionEnhancer from "../components/motion/motion-enhancer";
+import { BRAND } from "../lib/brand";
 
 const display = Manrope({
   subsets: ["latin"],
@@ -31,10 +32,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getSavedLocale();
   const t = (source: string) => translate(locale, source);
   return {
-    title: t("SAP — Kenali sampah, laporkan lokasi, pahami area"),
-    description: t("SAP membantu mengenali jenis sampah, mengirim laporan penumpukan, dan melihat area dengan laporan terverifikasi."),
+    metadataBase: new URL(process.env.APP_ORIGIN || "https://sap.venlab.tech"),
+    title: BRAND.title,
+    description: t("VERGO membantu mengenali jenis sampah, mengirim laporan penumpukan, dan melihat area dengan laporan terverifikasi."),
     openGraph: {
-      title: "SAP — Sustainable AI Platform",
+      title: BRAND.title,
       description: t("Kenali sampah, laporkan penumpukan, dan lihat data area terverifikasi."),
       type: "website",
       locale: locale === "en" ? "en_GB" : "id_ID",

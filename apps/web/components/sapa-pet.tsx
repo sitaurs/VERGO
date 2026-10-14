@@ -294,7 +294,7 @@ export default function SapaPet({ tab, backendLinked, activity, onNavigate, mobi
     {open && <section className={`${styles.panel} ${!docked && panelBelow ? styles.panelBelow : ""}`} style={docked ? undefined : { left: panelLeft - petX, right: "auto", maxHeight: panelMaxHeight }} id="sapa-chat-panel" role="dialog" aria-modal="false" aria-labelledby="sapa-chat-title">
       <header className={styles.header}>
         <span className={styles.headerAvatar}><Image src={SAPA_ARTWORK.avatar} alt="" width={42} height={42} /></span>
-        <span className={styles.heading}><strong id="sapa-chat-title">SAPA</strong><small>{t("Asisten SAP")}</small></span>
+        <span className={styles.heading}><strong id="sapa-chat-title">SAPA</strong><small>{t("Asisten VERGO")}</small></span>
         <button className={styles.close} type="button" onClick={closePanel} aria-label={t("Minimalkan chat SAPA")}><X size={19} /></button>
       </header>
 

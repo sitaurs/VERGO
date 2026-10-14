@@ -76,7 +76,7 @@ export default function CameraCapture({ onClose, onUpload, onPhoto }: Props) {
       <header className={styles.header}>
         <button className={styles.mobileBack} type="button" onClick={onClose} aria-label={t("Kembali ke halaman scan")}><ArrowLeft size={25} /></button>
         <span className={styles.headingIcon} aria-hidden="true"><Camera size={27} /></span>
-        <div className={styles.heading}><h2 id={titleId}>{review ? t("Tinjau foto") : t("Kamera SAP")}</h2><p id={descriptionId}>{review ? t("Pastikan objek terlihat jelas sebelum dipindai.") : t("Ambil foto sampah untuk dipindai dengan AI.")}</p></div>
+        <div className={styles.heading}><h2 id={titleId}>{review ? t("Tinjau foto") : t("Kamera VERGO")}</h2><p id={descriptionId}>{review ? t("Pastikan objek terlihat jelas sebelum dipindai.") : t("Ambil foto sampah untuk dipindai dengan AI.")}</p></div>
         <div className={styles.headerActions}>
           {!review && <label className={styles.cameraSelect}><Camera size={18} aria-hidden="true" /><select aria-label={t("Pilih kamera")} value={camera.activeDeviceId} disabled={camera.status === "loading" || camera.devices.length < 2} onChange={event => camera.chooseDevice(event.target.value)}>
             {!camera.devices.some(device => device.deviceId === camera.activeDeviceId) && <option value={camera.activeDeviceId}>{t("Kamera utama")}</option>}

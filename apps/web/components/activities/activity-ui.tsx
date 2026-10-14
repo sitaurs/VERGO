@@ -103,7 +103,7 @@ export function PageHead({
   subtitle,
   action,
   onBack,
-  kicker = "ADMIN SAP · KEGIATAN RELAWAN",
+  kicker = "ADMIN VERGO · KEGIATAN RELAWAN",
 }: {
   title: string;
   subtitle: string;

@@ -141,7 +141,7 @@ export default function ActivityResultReview({
       )
     ) {
       setError(
-        "Hasil selesai memerlukan foto sesudah dengan versi publik siap untuk web. Izin pemilik akan diperiksa oleh SAP.",
+        "Hasil selesai memerlukan foto sesudah dengan versi publik siap untuk web. Izin pemilik akan diperiksa oleh VERGO.",
       );
       return;
     }
@@ -326,7 +326,7 @@ export default function ActivityResultReview({
                   ))}
                 </div>
                 <Notice>
-                  {t("Foto asli hanya untuk peninjauan. Untuk publikasi, pilih versi publik yang siap. SAP memeriksa izin pemilik pada setiap kanal saat keputusan disimpan.")}</Notice>
+                  {t("Foto asli hanya untuk peninjauan. Untuk publikasi, pilih versi publik yang siap. VERGO memeriksa izin pemilik pada setiap kanal saat keputusan disimpan.")}</Notice>
               </section>
               <section className={s.card}>
                 <h2>{t("Catatan hasil kegiatan")}</h2>
@@ -917,7 +917,7 @@ export function PublicVersion({
       }
     >
       <Notice>
-        {t("Izin pemilik diperlukan untuk setiap kanal. Panel ini menyiapkan versi publik; izin pemilik tetap diperiksa oleh SAP saat keputusan hasil disimpan.")}</Notice>
+        {t("Izin pemilik diperlukan untuk setiap kanal. Panel ini menyiapkan versi publik; izin pemilik tetap diperiksa oleh VERGO saat keputusan hasil disimpan.")}</Notice>
       {error && <Notice error>{t(error)}</Notice>}
       {message && <Notice>{t(message)}</Notice>}
       <h3>{t("1. Siapkan versi publik")}</h3>
@@ -1105,7 +1105,7 @@ export function PublicVersion({
               )
             }
           />
-          {c === "web" ? t("Web SAP") : "Instagram SAP"}
+          {c === "web" ? t("Web VERGO") : "Instagram VERGO"}
         </label>
       ))}
       <p className={s.hint}>

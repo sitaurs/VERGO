@@ -181,7 +181,7 @@ export default function ReportDetail({ id, categories, onClose, onUpdated }: { i
                 disabled={photo.saving || photo.revision === null}
                 onChange={event => void toggleConsent(photo.mediaId, channel, event.target.checked)}
               />
-              {channel === "web" ? t("Publik SAP") : "Instagram SAP"}
+              {channel === "web" ? t("Publik VERGO") : "Instagram VERGO"}
             </label>)}
             {photo.saving && <small>{t("Menyimpan izin…")}</small>}
             {photo.error && <small className={styles.consentError}>{t(photo.error)}</small>}

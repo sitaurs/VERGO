@@ -25,7 +25,7 @@ function periods(): Period[] {
 }
 function messageForError(error: unknown): string {
   if (error instanceof ApiError && (error.code === "FEATURE_DISABLED" || error.code === "FEATURE_UNAVAILABLE"))
-    return "Ringkasan dampak belum diaktifkan oleh pengelola SAP.";
+    return "Ringkasan dampak belum diaktifkan oleh pengelola VERGO.";
   if (error instanceof ApiError && (error.status === 503 || error.code === "BACKEND_UNAVAILABLE"))
     return "Layanan dampak belum tersedia. Coba muat ulang beberapa saat lagi.";
   return error instanceof Error ? error.message : "Ringkasan dampak belum dapat dimuat.";
@@ -76,7 +76,7 @@ export default function ImpactPage() {
   }
 
   return <div className={s.page}>
-    <header data-motion="heading" className={s.pageHeading}><div><p className={s.eyebrow}>{t("ADMIN SAP · DAMPAK")}</p><h1>{t("Dampak")}</h1><p className={s.subtitle}>{t("Pantau hasil aksi lingkungan dari bukti yang telah disetujui.")}</p></div><span className={`${s.modeBadge} ${impactMockEnabled ? "" : s.liveBadge}`}>{impactMockEnabled ? t("Mockup · data contoh") : t("Ringkasan terverifikasi")}</span></header>
+    <header data-motion="heading" className={s.pageHeading}><div><p className={s.eyebrow}>{t("ADMIN VERGO · DAMPAK")}</p><h1>{t("Dampak")}</h1><p className={s.subtitle}>{t("Pantau hasil aksi lingkungan dari bukti yang telah disetujui.")}</p></div><span className={`${s.modeBadge} ${impactMockEnabled ? "" : s.liveBadge}`}>{impactMockEnabled ? t("Mockup · data contoh") : t("Ringkasan terverifikasi")}</span></header>
 
     <form className={`${s.card} ${s.filters}`} onSubmit={apply} aria-label={t("Filter dampak")}>
       <div className={s.filterRow}>
@@ -87,7 +87,7 @@ export default function ImpactPage() {
       </div>
       {(period === "custom" || scope === "custom") && <div className={s.customFilters}>
         {period === "custom" && <><label>{t("Dari tanggal")}<input type="date" value={start} onChange={e => setStart(e.target.value)} required /></label><label>{t("Sampai tanggal")}<input type="date" value={end} onChange={e => setEnd(e.target.value)} required /></label></>}
-        {scope === "custom" && <label className={s.cellField}>{t("ID sel area H3")}<input value={cellId} onChange={e => setCellId(e.target.value)} placeholder={t("Contoh: 8928308280fffff")} maxLength={15} required aria-describedby="impact-area-help" /><small id="impact-area-help">{t("Gunakan ID sel dari peta area SAP.")}</small></label>}
+        {scope === "custom" && <label className={s.cellField}>{t("ID sel area H3")}<input value={cellId} onChange={e => setCellId(e.target.value)} placeholder={t("Contoh: 8928308280fffff")} maxLength={15} required aria-describedby="impact-area-help" /><small id="impact-area-help">{t("Gunakan ID sel dari peta area VERGO.")}</small></label>}
       </div>}
       {validation && <p className={s.validation} role="alert">{t(validation)}</p>}
     </form>
@@ -122,10 +122,10 @@ function MethodDialog({ data, onClose }: { data: ImpactSummary; onClose: () => v
     <div className={s.dialogBody}>
       <header>
         <span className={s.dialogIcon}><ShieldCheck size={26} aria-hidden="true" /></span>
-        <div><p className={s.eyebrow}>{t("METODE DAMPAK SAP")}</p><h2 id="impact-method-dialog-title">{t("Angka yang dapat ditelusuri")}</h2></div>
+        <div><p className={s.eyebrow}>{t("METODE DAMPAK VERGO")}</p><h2 id="impact-method-dialog-title">{t("Angka yang dapat ditelusuri")}</h2></div>
         <button type="button" className={s.close} onClick={onClose} aria-label={t("Tutup metode perhitungan")}><X size={22} /></button>
       </header>
-      <p className={s.dialogIntro}>{t("Ringkasan mengikuti periode dan area yang dipilih. Hanya sumber publik yang memenuhi ketentuan SAP yang dihitung.")}</p>
+      <p className={s.dialogIntro}>{t("Ringkasan mengikuti periode dan area yang dipilih. Hanya sumber publik yang memenuhi ketentuan VERGO yang dihitung.")}</p>
       <dl className={s.methodDefinitions}>
         <div><dt>{t("Laporan terselesaikan")}</dt><dd>{t("Laporan publik yang bukan duplikat dan berstatus selesai dalam periode terpilih.")}</dd></div>
         <div>

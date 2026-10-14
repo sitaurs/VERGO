@@ -123,7 +123,7 @@ export default function CoordinatorPage({ id }: { id: string }) {
             <ActivityMembers
               activity={activity}
               gateway={coordinatorMembers}
-              kicker="SAP · KOORDINATOR KEGIATAN"
+              kicker="VERGO · KOORDINATOR KEGIATAN"
               onBack={() => setScreen("overview")}
               onChanged={setActivity}
             />
@@ -141,7 +141,7 @@ export default function CoordinatorPage({ id }: { id: string }) {
               activity={activity}
               resultId={resultId}
               gateway={resultGateway}
-              kicker="SAP · KOORDINATOR KEGIATAN"
+              kicker="VERGO · KOORDINATOR KEGIATAN"
               onBack={() => setScreen("overview")}
               onChanged={setActivity}
               onSaved={(r) => {

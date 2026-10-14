@@ -13,7 +13,7 @@ const legalLabels = ["Kebijakan Privasi", "Ketentuan Layanan", "Pengaturan Cooki
 export default function MobileFooter({ groups, onOpen }: { groups: readonly FooterGroup[]; onOpen: (label: string) => void }) {
   const { t } = useI18n();
   return <div className={styles.mobileOnly}>
-    <a href="#beranda" aria-label={t("SAP, kembali ke beranda")}><BrandLogo width={144} /></a>
+    <a href="#beranda" aria-label={t("VERGO, kembali ke beranda")}><BrandLogo width={144} /></a>
     <p className={styles.tagline}>{t("Bersama untuk masa depan yang lebih berkelanjutan.")}</p>
     <nav className={styles.groups} aria-label={t("Navigasi footer mobile")}>
       {groups.map(group => <details key={t(group.title)} open={group.title === "Produk"}>
@@ -26,6 +26,6 @@ export default function MobileFooter({ groups, onOpen }: { groups: readonly Foot
     <div className={styles.legal}>
       {legalLabels.map(label => <button key={label} type="button" onClick={() => onOpen(label)}>{t(label)}</button>)}
     </div>
-    <p className={styles.copyright}>© 2026 SAP. Sustainable AI Platform.</p>
+    <p className={styles.copyright}>© 2026 VERGO. Verify and Go.</p>
   </div>;
 }

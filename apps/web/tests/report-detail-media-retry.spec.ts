@@ -76,8 +76,8 @@ test("report owner can grant publication consent later for an existing photo", a
   await page.goto("/dashboard?view=reports");
   await page.getByRole("button", { name: /Lihat detail laporan/ }).click();
   const dialog = page.getByRole("dialog");
-  const webConsent = dialog.getByRole("checkbox", { name: "Publik SAP", exact: true });
-  const instagramConsent = dialog.getByRole("checkbox", { name: "Instagram SAP", exact: true });
+  const webConsent = dialog.getByRole("checkbox", { name: "Publik VERGO", exact: true });
+  const instagramConsent = dialog.getByRole("checkbox", { name: "Instagram VERGO", exact: true });
   await expect(webConsent).not.toBeChecked();
   await expect(instagramConsent).not.toBeChecked();
   await webConsent.check();

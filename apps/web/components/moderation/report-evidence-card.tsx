@@ -45,7 +45,7 @@ export function ReportEvidenceCard({ item, index, canPublish, selected, webAppro
           const approved = channel === "web" ? webApproved : instagramApproved;
           return <div key={channel} className={ui.permissionRow}>
             <span className={ui.permissionCheck} data-approved={approved} aria-hidden="true">{approved && <Check size={15} />}</span>
-            <div className={ui.permissionText}><strong>{channel === "web" ? "Web SAP" : "Instagram"}</strong><small>{t(!ready ? "Publikasi foto memerlukan versi siap." : channel === "web" ? "Setujui web mengizinkan foto tampil di halaman publik SAP." : "Persetujuan Instagram terpisah dari penerbitan postingan.")}</small></div>
+            <div className={ui.permissionText}><strong>{channel === "web" ? "Web VERGO" : "Instagram"}</strong><small>{t(!ready ? "Publikasi foto memerlukan versi siap." : channel === "web" ? "Setujui web mengizinkan foto tampil di halaman publik VERGO." : "Persetujuan Instagram terpisah dari penerbitan postingan.")}</small></div>
             <div className={ui.permissionAction}>
               <span className={ui.permissionStatus} data-approved={approved}>{t(approved ? "Disetujui" : "Belum disetujui")}</span>
               <span className={ui.srOnly}>{t(channel === "web" ? approved ? "Web: foto publik disetujui" : "Web: foto belum disetujui" : approved ? "Instagram: foto disetujui" : "Instagram: foto belum disetujui")}</span>

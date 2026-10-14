@@ -224,7 +224,7 @@ test("reserved signup domains stay on the form, then a corrected address can reg
     await page.getByLabel("Email", { exact: true }).fill(`qa@${domain}`);
     await page.getByRole("button", { name: "Daftar akun", exact: true }).click();
     await expect(page.locator('p[role="alert"]')).toContainText("domain publik yang valid");
-    await expect(page.getByRole("heading", { name: "Buat akun SAP" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Buat akun VERGO" })).toBeVisible();
   }
   expect(requests.filter(request => request.path === "/auth/register")).toHaveLength(0);
   await page.getByLabel("Email", { exact: true }).fill("qa@gmail.com");
@@ -354,7 +354,7 @@ test("a dashboard toast does not overlap the report wizard continue action", asy
   await settingsFixture(page);
   await page.goto("/dashboard?view=settings");
   await page.getByRole("button", { name: "Simpan perubahan", exact: true }).click();
-  const toast = page.getByRole("status").filter({ hasText: "Profil tersimpan di akun SAP Anda." });
+  const toast = page.getByRole("status").filter({ hasText: "Profil tersimpan di akun VERGO Anda." });
   await expect(toast).toBeVisible();
   if (testInfo.project.name === "mobile") await page.getByRole("button", { name: "Beranda", exact: true }).click();
   else await page.getByRole("navigation", { name: "Navigasi dashboard", exact: true }).getByRole("button", { name: "Dashboard", exact: true }).click();

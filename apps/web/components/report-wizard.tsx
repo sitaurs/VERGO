@@ -235,8 +235,8 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
         <legend>{t("Izin penggunaan foto")}</legend>
         <p>{t("Pilihan ini hanya memberi izin untuk peninjauan publikasi. Moderator tetap harus menyetujui foto sebelum tampil.")}</p>
         <div className={styles.consentOptions}>
-          <label><input type="checkbox" checked={publicationChannels.includes("web")} onChange={event => setPublicationChannels(current => event.target.checked ? [...current, "web"] : current.filter(channel => channel !== "web"))} />{t("Publik di SAP")}</label>
-          <label><input type="checkbox" checked={publicationChannels.includes("instagram")} onChange={event => setPublicationChannels(current => event.target.checked ? [...current, "instagram"] : current.filter(channel => channel !== "instagram"))} />{t("Instagram SAP")}</label>
+          <label><input type="checkbox" checked={publicationChannels.includes("web")} onChange={event => setPublicationChannels(current => event.target.checked ? [...current, "web"] : current.filter(channel => channel !== "web"))} />{t("Publik di VERGO")}</label>
+          <label><input type="checkbox" checked={publicationChannels.includes("instagram")} onChange={event => setPublicationChannels(current => event.target.checked ? [...current, "instagram"] : current.filter(channel => channel !== "instagram"))} />{t("Instagram VERGO")}</label>
         </div>
       </fieldset>
       <div className={styles.actions}><button className={styles.textButton} type="button" disabled={busy} onClick={() => { setError(""); setStep(2); }}><ArrowLeft size={18} />{t("Kembali")}</button><button className={styles.primaryButton} type="button" disabled={busy} onClick={submit}>{busy ? t(phase) : t("Kirim laporan")}{!busy && <Send size={21} />}</button></div>

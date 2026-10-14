@@ -71,7 +71,7 @@ export default function VolunteerActivitiesPage({ categories }: { categories: Sa
         if (!controller.signal.aborted) {
           setError(errorMessage(cause));
           if (cause instanceof ApiError && cause.code === "FEATURE_UNAVAILABLE")
-            setError("Fitur kegiatan relawan belum diaktifkan oleh pengelola SAP.");
+            setError("Fitur kegiatan relawan belum diaktifkan oleh pengelola VERGO.");
         }
       })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });

@@ -22,11 +22,11 @@ export function PublicHeader() {
   const activities = pathname.startsWith("/activities");
   const searchTarget = activities ? "/activities#cari-kegiatan" : "/incidents#cari-kejadian";
   return <header className={p.header}>
-    <Link href="/" className={p.brand} aria-label={t("Beranda SAP")}><BrandLogo width={112} /></Link>
+    <Link href="/" className={p.brand} aria-label={t("Beranda VERGO")}><BrandLogo width={112} /></Link>
     <nav className={p.navigation} aria-label={t("Navigasi publik")}>
       <Link href="/incidents" aria-current={pathname.startsWith("/incidents") ? "page" : undefined}>{t("Kejadian publik")}</Link>
       <Link href="/activities" aria-current={activities ? "page" : undefined}>{t("Kegiatan relawan")}</Link>
-      <Link href="/#cara-kerja">{t("Tentang SAP")}</Link>
+      <Link href="/#cara-kerja">{t("Tentang VERGO")}</Link>
     </nav>
     <div className={p.headerActions}>
       <a className={p.iconButton} href={searchTarget} aria-label={activities ? t("Cari kegiatan") : t("Cari kejadian")}><Search size={18} aria-hidden="true" /></a>
@@ -40,7 +40,7 @@ export function CommunityHero({ variant, title, children }: { variant: "incident
   const activities = variant === "activities";
   return <header className={[p.hero, activities ? p.activityHero : p.incidentHero].join(" ")}>
     <div data-motion="heading" className={p.heroText}>
-      <span className={p.eyebrow}>{t("SAP · Aksi warga")}</span>
+      <span className={p.eyebrow}>{t("VERGO · Aksi warga")}</span>
       <h1>{title}</h1>
       <p>{children}</p>
     </div>

@@ -215,7 +215,7 @@ export function DecisionModal({ report, categoryName, onClose, onDecided }: {
         crypto.randomUUID(),
       );
       applyLifecycle(lifecycle);
-      setEvidenceMessage(channel === "web" ? "Foto disetujui untuk halaman publik SAP." : "Foto disetujui untuk Instagram SAP.");
+      setEvidenceMessage(channel === "web" ? "Foto disetujui untuk halaman publik VERGO." : "Foto disetujui untuk Instagram VERGO.");
       await refreshReportEvidence();
     } catch (cause) {
       setEvidenceError(evidenceErrorText(cause, "Persetujuan foto belum tersimpan. Pastikan pemilik foto sudah memberi izin kanal ini."));

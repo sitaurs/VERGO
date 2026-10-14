@@ -150,7 +150,7 @@ export default function OperationPanel({
         <>
           <p>{operation.message}</p>
           <p>
-            SAP: {t(sapLabels[operation.channels.sap])} {" "}{t("· Instagram:")}{" "}
+            VERGO: {t(sapLabels[operation.channels.sap])} {" "}{t("· Instagram:")}{" "}
             {t(instagramLabels[operation.channels.instagram])}
           </p>
           <p>

@@ -12,7 +12,7 @@ import v from "./volunteer-workspace.module.css";
 export function WorkspaceHeading() {
   const { t } = useI18n();
   return <header className={v.heading}>
-    <p className={v.eyebrow}>{t("SAP · KEGIATAN RELAWAN")}</p>
+    <p className={v.eyebrow}>{t("VERGO · KEGIATAN RELAWAN")}</p>
     <h1 id="volunteer-workspace-title">{t("Ruang relawan")}</h1>
     <p className={v.subtitle}>{t("Cari kegiatan, pantau pendaftaran, dan kelola penugasan koordinator.")}</p>
   </header>;

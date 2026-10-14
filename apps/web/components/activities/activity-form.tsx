@@ -367,7 +367,7 @@ export default function ActivityForm({
               </>
             )}
             <p className={s.hint}>
-              {t("Draf dapat disusun terlebih dahulu. Publikasi memerlukan laporan utama yang terbuka untuk publik serta memenuhi persyaratan SAP.")}</p>
+              {t("Draf dapat disusun terlebih dahulu. Publikasi memerlukan laporan utama yang terbuka untuk publik serta memenuhi persyaratan VERGO.")}</p>
           </section>
           <section className={s.card}>
             <div className={s.sectionHeading}>

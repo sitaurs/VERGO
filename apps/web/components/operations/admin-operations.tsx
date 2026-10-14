@@ -90,7 +90,7 @@ function UserPicker({ value, name, label, onChange, disabled = false, filter = f
       {value && !eligible.some(item => item.id === value) && <option value={value}>{name || value}</option>}
       {eligible.map(user => <option key={user.id} value={user.id}>{t("{0} ({1})", { "0": user.displayName, "1": user.email })}</option>)}
     </select></label>
-    <span className={styles.muted}>{t("Petugas adalah admin SAP dengan email terverifikasi.")}</span>
+    <span className={styles.muted}>{t("Petugas adalah admin VERGO dengan email terverifikasi.")}</span>
     {page.loading && <span className={styles.muted} role="status">{t("Memuat pengguna...")}</span>}
     {page.error && <div className={styles.error} role="alert">{t(page.error)} <button type="button" className={styles.button} onClick={() => void page.reload()} disabled={disabled || page.loading}>{t("Coba lagi")}</button></div>}
     {!page.loading && !page.error && !eligible.length && <span className={styles.muted}>{t("Tidak ada admin terverifikasi pada halaman yang dimuat.")}</span>}

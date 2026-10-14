@@ -121,7 +121,7 @@ export function errorMessage(cause: unknown) {
   if (cause instanceof ApiError) {
     const messages: Record<string, string> = {
       FEATURE_UNAVAILABLE:
-        "Fitur kegiatan relawan belum diaktifkan oleh pengelola SAP.",
+        "Fitur kegiatan relawan belum diaktifkan oleh pengelola VERGO.",
       REVISION_CONFLICT:
         "Data berubah sejak Anda membuka halaman. Muat versi terbaru, periksa kembali input, lalu simpan ulang.",
       ACTIVITY_FULL:

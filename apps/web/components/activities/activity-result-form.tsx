@@ -637,7 +637,7 @@ function PhotoInput({
                       }
                     />
                     {t("Izinkan foto ini untuk")}{" "}
-                    {channel === "web" ? t("halaman publik SAP") : "Instagram SAP"}{" "}
+                    {channel === "web" ? t("halaman publik VERGO") : "Instagram VERGO"}{" "}
                     {t("setelah ditinjau.")}</label>
                 ))}
               </div>

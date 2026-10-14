@@ -15,7 +15,7 @@ type Activity = R1["PublicActivity"];
 export function ActivityDetailHeading({ activity }: { activity: Activity }) {
   const { t, locale } = useI18n();
   return <header className={d.heading}>
-    <span className={d.eyebrow}>{t("SAP · Aksi warga")}</span>
+    <span className={d.eyebrow}>{t("VERGO · Aksi warga")}</span>
     <h1>{activity.title}</h1>
     <p className={d.area}><MapPin size={22} aria-hidden="true" />{activity.area.label}</p>
     {locale === "id" ? <Image className={d.quote} src="/images/community/activity-detail/nature-quote.webp" alt="" width={342} height={98} aria-hidden="true" /> : <blockquote className={d.quoteText}>{t("Aksi kecil, lingkungan lebih bersih untuk masa depan yang lebih baik.")}</blockquote>}

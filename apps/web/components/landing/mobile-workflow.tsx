@@ -9,13 +9,13 @@ import { useI18n } from "../../lib/i18n/provider";
 export default function MobileWorkflow() {
   const { t } = useI18n();
   return <div className={styles.mobileOnly}>
-    <ol className={styles.steps} aria-label={t("Cara membuat laporan SAP")}>
+    <ol className={styles.steps} aria-label={t("Cara membuat laporan VERGO")}>
       <li>
         <span className={styles.number} aria-hidden="true">1</span>
         <div className={styles.step}>
           <h3>{t("Foto dan kenali")}</h3><p>{t("Ambil foto atau unggah dari galeri.")}</p>
           <div className={styles.card}>
-            <Image className={styles.scanPhoto} src="/images/landing-mobile/bottle-scan.webp" width={338} height={164} sizes="(max-width: 760px) calc(100vw - 92px), 1px" alt={t("Contoh foto botol plastik yang akan dikenali oleh SAP")} />
+            <Image className={styles.scanPhoto} src="/images/landing-mobile/bottle-scan.webp" width={338} height={164} sizes="(max-width: 760px) calc(100vw - 92px), 1px" alt={t("Contoh foto botol plastik yang akan dikenali oleh VERGO")} />
             <div className={styles.result}>
               <Camera aria-hidden="true" /><span><strong>{t("Botol plastik")}</strong><small>{t("Contoh hasil scan")}</small></span>
               <a href="/dashboard?view=scan" className={styles.upload}>{t("Unggah foto")}</a>

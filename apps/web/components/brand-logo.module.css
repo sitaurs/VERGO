@@ -1,2 +1,4 @@
-.frame{position:relative;display:block;width:220px;aspect-ratio:1121/462;overflow:hidden;flex:0 0 auto}
-.art{position:absolute;display:block;width:158.25%;max-width:none;height:auto;left:-29.6%;top:-45.8%}
+/* Display the approved PNG unchanged, excluding only its empty outer margins.
+   Visible window: x=148, y=99, width=1878, height=512 in the 2172×724 source. */
+.frame{position:relative;display:block;width:220px;aspect-ratio:1878/512;overflow:hidden;flex:0 0 auto}
+.art{position:absolute;display:block;width:115.655%;max-width:none;height:auto;left:-7.881%;top:-19.336%}

@@ -146,7 +146,7 @@ export function IncidentExplore() {
               </div>
               <p className={p.cardSummary}>{incident.summary || t("Ringkasan publik belum tersedia.")}</p>
             </div>
-            {incident.evidence.length > 0 && <div className={p.evidenceFrame}><Evidence items={incident.evidence.slice(0, 1)} /><span className={p.evidenceLabel}><ImageIcon size={12} aria-hidden="true" />{t("Bukti yang disetujui SAP")}</span></div>}
+            {incident.evidence.length > 0 && <div className={p.evidenceFrame}><Evidence items={incident.evidence.slice(0, 1)} /><span className={p.evidenceLabel}><ImageIcon size={12} aria-hidden="true" />{t("Bukti yang disetujui VERGO")}</span></div>}
           </div>
           {!incident.evidence.length && <p className={p.evidenceNotice}><Info size={19} aria-hidden="true" /><span>{t("Bukti publik belum tersedia; pembaruan warga masih bisa dikirim untuk ditinjau.")}</span></p>}
           <div className={p.cardFooter}><span className={p.supportCount}><UsersRound size={17} aria-hidden="true" /><span>{t("{0} dukungan warga", { "0": incident.supportCount })}</span></span>

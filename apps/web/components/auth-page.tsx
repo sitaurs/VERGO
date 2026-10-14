@@ -26,7 +26,7 @@ function usableEmailDomain(email: string) {
 function Brand() {
   const { t } = useI18n();
   return (
-    <Link href="/" className={styles.brand} aria-label={t("SAP, kembali ke beranda")}>
+    <Link href="/" className={styles.brand} aria-label={t("VERGO, kembali ke beranda")}>
       <BrandLogo width={250} />
     </Link>
   );
@@ -166,7 +166,7 @@ export default function AuthPage({ mode }: { mode: Mode }) {
     finally { requestInFlight.current = false; setBusy(false); setResendingCode(false); }
   }
 
-  const title = stage === "mfa" ? "Verifikasi masuk" : stage === "verify" ? "Verifikasi email" : stage === "forgot" ? "Lupa kata sandi?" : stage === "reset" ? "Atur kata sandi baru" : isSignup ? "Buat akun SAP" : "Selamat datang kembali";
+  const title = stage === "mfa" ? "Verifikasi masuk" : stage === "verify" ? "Verifikasi email" : stage === "forgot" ? "Lupa kata sandi?" : stage === "reset" ? "Atur kata sandi baru" : isSignup ? "Buat akun VERGO" : "Selamat datang kembali";
   const intro = stage === "mfa" ? mfaRecoveryMode ? "Masukkan salah satu kode pemulihan yang Anda simpan." : "Masukkan kode 6 digit dari aplikasi autentikator Anda." : stage === "verify" ? t("Masukkan enam digit kode yang dikirim ke {0}.", { "0": email }) : stage === "forgot" ? "Masukkan email akun untuk menerima kode pemulihan." : stage === "reset" ? "Masukkan kode dari email dan kata sandi baru." : isSignup ? "Mulai kenali sampah, laporkan penumpukan, dan pantau area." : "Masuk untuk melanjutkan aksi peduli lingkungan.";
 
   return (

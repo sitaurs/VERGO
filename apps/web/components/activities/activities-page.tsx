@@ -674,10 +674,10 @@ function timeRange(starts: string | null, ends: string | null, locale = "id-ID")
 }
 function CoordinatorSummary({ activity, compact = false }: { activity: Activity; compact?: boolean }) {
   const { t } = useI18n();
-  const [name, setName] = useState("Koordinator SAP");
+  const [name, setName] = useState("Koordinator VERGO");
   useEffect(() => {
     const c = new AbortController();
-    setName("Koordinator SAP");
+    setName("Koordinator VERGO");
     if (activity.status !== "draft" || activitiesMockEnabled)
       void getPublicActivity(activity.id, c.signal)
         .then((p) => {

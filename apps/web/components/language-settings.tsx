@@ -17,7 +17,7 @@ export default function LanguageSettings() {
   return <section className={`${styles.card} ${styles.languageCard}`}>
     <header className={styles.cardHeading}>
       <span className={styles.headingIcon}><Languages size={28} aria-hidden="true" /></span>
-      <div><h2>{t("Bahasa")}</h2><p>{t("Pilih bahasa tampilan SAP.")}</p></div>
+      <div><h2>{t("Bahasa")}</h2><p>{t("Pilih bahasa tampilan VERGO.")}</p></div>
     </header>
     <fieldset className={styles.languageOptions}>
       <legend className={styles.languageLegend}>{t("Bahasa antarmuka")}</legend>

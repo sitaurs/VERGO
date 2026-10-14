@@ -243,7 +243,7 @@ export default function Dashboard() {
   async function saveProfile(name: string) {
     const account = await updateProfile(name);
     setUser(account);
-    setToast("Profil tersimpan di akun SAP Anda.");
+    setToast("Profil tersimpan di akun VERGO Anda.");
   }
 
   function avatarChanged(account: SapUser) {
@@ -267,12 +267,12 @@ export default function Dashboard() {
     }
   }
 
-  if (loading || (!user && !loadError)) return <LoadingScreen message={t("Memuat ruang kerja SAP…")} />;
+  if (loading || (!user && !loadError)) return <LoadingScreen message={t("Memuat ruang kerja VERGO…")} />;
   if (loadError) return <div className={styles.loadingScreen} role="alert"><BrandLogo width={165} /><strong>{t("Ruang kerja belum dapat dimuat")}</strong><span>{t(loadError)}</span><button className={styles.primaryButton} type="button" onClick={() => { setLoading(true); void refreshData(); }}>{t("Coba lagi")}</button></div>;
 
   return <div className={styles.shell}>
     <aside className={styles.sidebar}>
-      <Link className={styles.brand} href="/" aria-label={t("SAP, kembali ke beranda")}><BrandLogo width={165} /></Link>
+      <Link className={styles.brand} href="/" aria-label={t("VERGO, kembali ke beranda")}><BrandLogo width={165} /></Link>
       <div className={styles.sideLabel}>{t("MENU")}</div>
       <nav className={styles.sideNav} aria-label={t("Navigasi dashboard")}>
         {mainNav.map(({ id, label, icon: Icon }) => <button data-motion-nav key={id} type="button" className={`${styles.navItem} ${activeTab === id ? styles.navActive : ""}`} onClick={() => openTab(id)} aria-current={activeTab === id ? "page" : undefined}><Icon size={23} /><span>{t(label)}</span></button>)}
@@ -306,7 +306,7 @@ export default function Dashboard() {
           </div>}
         </div>
         <div className={styles.headerTools}>
-          <div className={styles.popoverAnchor}><button className={styles.profileButton} type="button" onClick={() => setProfileOpen(value => !value)} aria-expanded={profileOpen} aria-label={t("Buka menu akun {0}", { "0": displayName })}><span className={styles.avatar}>{user?.avatarMediaId ? <MediaThumbnail mediaId={user.avatarMediaId} alt={t("Foto profil {0}", { "0": displayName })} className={styles.headerAvatarPhoto} fallback={<UserRound size={21} aria-hidden="true" />} /> : <UserRound size={21} aria-hidden="true" />}</span><span>{displayName}</span><ChevronDown size={18} /></button>{profileOpen && <div data-motion="feedback" className={styles.popover}><strong>{t("Akun SAP")}</strong><p>{user?.email}</p><button className={styles.popoverAction} type="button" onClick={() => openTab("settings")}>{t("Pengaturan")}</button><button className={styles.popoverAction} type="button" onClick={() => void signOut()}>{t("Keluar")}</button></div>}</div>
+          <div className={styles.popoverAnchor}><button className={styles.profileButton} type="button" onClick={() => setProfileOpen(value => !value)} aria-expanded={profileOpen} aria-label={t("Buka menu akun {0}", { "0": displayName })}><span className={styles.avatar}>{user?.avatarMediaId ? <MediaThumbnail mediaId={user.avatarMediaId} alt={t("Foto profil {0}", { "0": displayName })} className={styles.headerAvatarPhoto} fallback={<UserRound size={21} aria-hidden="true" />} /> : <UserRound size={21} aria-hidden="true" />}</span><span>{displayName}</span><ChevronDown size={18} /></button>{profileOpen && <div data-motion="feedback" className={styles.popover}><strong>{t("Akun VERGO")}</strong><p>{user?.email}</p><button className={styles.popoverAction} type="button" onClick={() => openTab("settings")}>{t("Pengaturan")}</button><button className={styles.popoverAction} type="button" onClick={() => void signOut()}>{t("Keluar")}</button></div>}</div>
         </div>
       </header>
 

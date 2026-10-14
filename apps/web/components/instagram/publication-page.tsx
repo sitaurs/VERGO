@@ -163,7 +163,7 @@ export default function InstagramPublication({
         ].includes(url.hostname)
       )
         throw new Error(
-          "Tautan otorisasi Instagram belum valid. Hubungi pengelola SAP.",
+          "Tautan otorisasi Instagram belum valid. Hubungi pengelola VERGO.",
         );
       window.location.assign(url.href);
     } catch (cause) {
@@ -249,7 +249,7 @@ export default function InstagramPublication({
           </strong>
           <p>
             {connectionResult === "connected"
-              ? t("SAP sudah menerima akun publikasi. Muat ulang informasi akun bila status belum berubah.")
+              ? t("VERGO sudah menerima akun publikasi. Muat ulang informasi akun bila status belum berubah.")
               : connectionResult === "state-invalid"
                 ? t("Mulai lagi dari tombol Hubungkan akun. Jangan membuka ulang URL callback dari percobaan sebelumnya.")
                 : t(connectionFailure(connectionReason).message)}
@@ -398,7 +398,7 @@ export default function InstagramPublication({
       {account && (
         <DialogShell
           title={t("Akun Instagram")}
-          subtitle={t("Tujuan publikasi SAP.")}
+          subtitle={t("Tujuan publikasi VERGO.")}
           onClose={() => setAccount(false)}
           busy={connecting}
           footer={
@@ -427,7 +427,7 @@ export default function InstagramPublication({
             <h3>
               {overview?.account.username
                 ? `@${overview.account.username}`
-                : t("Hubungkan akun publikasi SAP")}
+                : t("Hubungkan akun publikasi VERGO")}
             </h3>
             <p>
               {overview?.account.status === "connected"
@@ -438,7 +438,7 @@ export default function InstagramPublication({
           <Notice>
             <ShieldCheck size={19} className={styles.inlineIcon} />
             {available && overview?.capabilities.canConnect
-              ? t("Lanjutkan melalui halaman otorisasi resmi Meta. Kata sandi dan token tidak dimasukkan di SAP.")
+              ? t("Lanjutkan melalui halaman otorisasi resmi Meta. Kata sandi dan token tidak dimasukkan di VERGO.")
               : t("Koneksi akun belum diaktifkan oleh pengelola. Foto laporan tetap tersedia untuk ditinjau.")}
           </Notice>
           {overview?.account.status === "connected" && (
@@ -517,7 +517,7 @@ function connectionFailure(reason: string | null): {
   const failures: Record<string, { title: string; message: string }> = {
     USER_DENIED: {
       title: "Izin Meta belum disetujui.",
-      message: "Mulai hubungkan lagi dan setujui permintaan akses akun SAP.",
+      message: "Mulai hubungkan lagi dan setujui permintaan akses akun VERGO.",
     },
     META_PERMISSION_REQUIRED: {
       title: "Izin Instagram belum lengkap.",
@@ -532,16 +532,16 @@ function connectionFailure(reason: string | null): {
     META_ACCOUNT_AMBIGUOUS: {
       title: "Ada lebih dari satu akun Instagram yang tertaut.",
       message:
-        "Hubungi admin SAP untuk memilih Facebook Page tujuan publikasi.",
+        "Hubungi admin VERGO untuk memilih Facebook Page tujuan publikasi.",
     },
     META_RATE_LIMITED: {
       title: "Meta membatasi sementara permintaan ini.",
       message: "Tunggu sebentar, lalu coba hubungkan lagi.",
     },
     META_RESPONSE_UNCERTAIN: {
-      title: "SAP belum menerima jawaban dari Meta.",
+      title: "VERGO belum menerima jawaban dari Meta.",
       message:
-        "Periksa koneksi internet lalu coba lagi. Jika berulang, kirim kode admin di bawah ke pengelola SAP.",
+        "Periksa koneksi internet lalu coba lagi. Jika berulang, kirim kode admin di bawah ke pengelola VERGO.",
     },
     META_TOKEN_EXPIRED: {
       title: "Token dari Meta sudah kedaluwarsa.",
@@ -551,19 +551,19 @@ function connectionFailure(reason: string | null): {
     META_TOKEN_INVALID: {
       title: "Meta tidak memberikan token yang dapat digunakan.",
       message:
-        "Coba hubungkan ulang. Jika gagal lagi, kirim kode admin di bawah ke pengelola SAP.",
+        "Coba hubungkan ulang. Jika gagal lagi, kirim kode admin di bawah ke pengelola VERGO.",
     },
     META_CODE_MISSING: {
       title: "Meta tidak mengirim kode izin.",
       message: "Mulai ulang proses Hubungkan akun.",
     },
     META_CONFIGURATION_REQUIRED: {
-      title: "Konfigurasi Meta di SAP belum lengkap.",
-      message: "Hubungi pengelola SAP dan kirim kode admin di bawah.",
+      title: "Konfigurasi Meta di VERGO belum lengkap.",
+      message: "Hubungi pengelola VERGO dan kirim kode admin di bawah.",
     },
     META_VERSION_INVALID: {
-      title: "Versi Graph API SAP tidak valid.",
-      message: "Hubungi pengelola SAP dan kirim kode admin di bawah.",
+      title: "Versi Graph API VERGO tidak valid.",
+      message: "Hubungi pengelola VERGO dan kirim kode admin di bawah.",
     },
     META_REQUEST_FAILED: {
       title: "Meta menolak permintaan koneksi.",
@@ -575,8 +575,8 @@ function connectionFailure(reason: string | null): {
     failures[reason ?? ""] ?? {
       title: "Meta belum berhasil menghubungkan akun.",
       message: reason
-        ? "Kirim kode admin di bawah ke pengelola SAP agar penyebabnya bisa diperiksa."
-        : "Coba hubungkan lagi. Jika gagal, pengelola SAP perlu memeriksa log koneksi Meta.",
+        ? "Kirim kode admin di bawah ke pengelola VERGO agar penyebabnya bisa diperiksa."
+        : "Coba hubungkan lagi. Jika gagal, pengelola VERGO perlu memeriksa log koneksi Meta.",
     }
   );
 }

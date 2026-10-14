@@ -22,13 +22,13 @@ export default function MobileAccountMenu({ user, onNavigate, onSignOut, signing
   user: MenuUser; onNavigate: (tab: DashboardTab) => void; onSignOut: () => void; signingOut: boolean;
 }) {
   const { t } = useI18n();
-  const name = user.displayName?.trim() || "Pengguna SAP";
+  const name = user.displayName?.trim() || "Pengguna VERGO";
   const initials = name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join("").toUpperCase();
   return <section className={`${s.menuPage} ${s.accountMenu}`} aria-labelledby="mobile-account-title">
     <header data-motion="heading" className={s.pageHeading}><h1 id="mobile-account-title">{t("Akun & menu")}</h1><p>{t("Semua akses dalam satu tempat.")}</p></header>
     <button type="button" className={s.profileCard} onClick={() => onNavigate("settings")} aria-label={t("Kelola profil {0}", { "0": name })}>
       <span className={s.profileAvatar}>{user.avatarMediaId ? <MediaThumbnail mediaId={user.avatarMediaId} alt={t("Foto profil {0}", { "0": name })} className={s.avatarPhoto} fallback={initials} /> : initials}</span>
-      <span className={s.profileCopy}><strong>{name}</strong><small>{user.role === "admin" ? t("Admin SAP") : t("Pengguna SAP")}</small></span>
+      <span className={s.profileCopy}><strong>{name}</strong><small>{user.role === "admin" ? t("Admin VERGO") : t("Pengguna VERGO")}</small></span>
       <span className={s.profileAction}>{t("Kelola profil")}<ChevronRight size={18} aria-hidden="true" /></span>
     </button>
 
@@ -56,7 +56,7 @@ export function MobileAdminMenu({ isAdmin, onNavigate }: { isAdmin: boolean; onN
   return <section className={s.menuPage} aria-labelledby="mobile-admin-title">
     <header data-motion="heading" className={`${s.pageHeading} ${s.adminHeading}`}>
       <div><button type="button" className={s.backButton} onClick={() => onNavigate("account")} aria-label={t("Kembali ke Akun dan menu")}><ArrowLeft size={23} /></button><h1 id="mobile-admin-title">{t("Pusat admin")}</h1>{isAdmin && <span className={s.roleBadge}><ShieldCheck size={14} aria-hidden="true" />{t("Akses admin")}</span>}</div>
-      <p>{isAdmin ? t("Kelola layanan dan kegiatan SAP.") : t("Halaman ini hanya untuk akun admin.")}</p>
+      <p>{isAdmin ? t("Kelola layanan dan kegiatan VERGO.") : t("Halaman ini hanya untuk akun admin.")}</p>
     </header>
     {isAdmin && <nav className={s.adminCards} aria-label={t("Menu admin mobile")}>{adminNav.map(item => <MenuRow key={item.id} {...item} onClick={() => onNavigate(item.id)} />)}</nav>}
     <p className={s.accessNote}><LockKeyhole size={22} aria-hidden="true" /><span>{t("Menu ini tersedia untuk akun admin.")}</span></p>

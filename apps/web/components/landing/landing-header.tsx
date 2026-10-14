@@ -78,7 +78,7 @@ export default function LandingHeader() {
   return <>
     <header className={styles.header}>
       <div className={styles.bar}>
-        <a className={styles.brand} href="#beranda" aria-label={t("SAP Sustainable AI Platform")} onClick={() => setActive("#beranda")}><BrandLogo className={styles.brandImage} /></a>
+        <a className={styles.brand} href="#beranda" aria-label={t("VERGO — Verify and Go")} onClick={() => setActive("#beranda")}><BrandLogo className={styles.brandImage} /></a>
         <nav className={styles.links} aria-label={t("Navigasi utama")}>
           {links.map(link => <a key={link.href} href={link.href} aria-current={active === link.href ? "location" : undefined} onClick={() => setActive(link.href)}>{t(link.label)}</a>)}
         </nav>
@@ -90,11 +90,11 @@ export default function LandingHeader() {
     </header>
     <dialog ref={dialog} id="landing-mobile-menu" className={styles.menuDialog} aria-labelledby="landing-menu-title" onClose={() => setOpen(false)}>
       <div className={styles.menuHeader}>
-        <a href="#beranda" aria-label={t("SAP, kembali ke beranda")} onClick={() => setOpen(false)}><BrandLogo width={140} /></a>
+        <a href="#beranda" aria-label={t("VERGO, kembali ke beranda")} onClick={() => setOpen(false)}><BrandLogo width={140} /></a>
         <button type="button" className={styles.close} aria-label={t("Tutup menu")} onClick={() => setOpen(false)}><X aria-hidden="true" /></button>
       </div>
       <div className={styles.menuBody}>
-        <h2 id="landing-menu-title">{t("Jelajahi SAP")}</h2>
+        <h2 id="landing-menu-title">{t("Jelajahi VERGO")}</h2>
         <p className={styles.intro}>{t("Aksi untuk lingkungan dimulai di sini.")}</p>
         <nav className={styles.menuLinks} aria-label={t("Navigasi mobile")}>
           {links.map(({ label, href, icon: Icon }) => <a key={href} href={href} aria-current={active === href ? "location" : undefined} onClick={() => { setActive(href); setOpen(false); }}>
@@ -107,7 +107,7 @@ export default function LandingHeader() {
         <div className={styles.menuNote}>
           <Leaf aria-hidden="true" />
           <strong>{t("Satu langkah kecil untuk lingkungan yang lebih bersih.")}</strong>
-          <span>Sustainable AI Platform</span>
+          <span>Verify and Go</span>
         </div>
       </div>
     </dialog>

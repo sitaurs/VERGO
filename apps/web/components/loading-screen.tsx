@@ -11,7 +11,7 @@ import { useI18n } from "../lib/i18n/provider";
  * user sees the same animated, accessible loader whether the wait is the route
  * transition or the client data fetch — never a static logo alone.
  */
-export default function LoadingScreen({ message = "Menyiapkan ruang kerja SAP…" }: { message?: string }) {
+export default function LoadingScreen({ message = "Menyiapkan ruang kerja VERGO…" }: { message?: string }) {
   const { t } = useI18n();
   return (
     <div className={styles.screen} role="status" aria-live="polite" aria-busy="true">

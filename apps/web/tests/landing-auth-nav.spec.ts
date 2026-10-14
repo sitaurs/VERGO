@@ -12,7 +12,7 @@ test("authenticated landing users get one dashboard action", async ({ page }) =>
   await expect(banner.getByRole("link", { name: "Coba Sekarang", exact: true })).toHaveCount(0);
   if (test.info().project.name === "mobile") {
     await page.getByRole("button", { name: "Buka menu" }).click();
-    const menu = page.getByRole("dialog", { name: "Jelajahi SAP" });
+    const menu = page.getByRole("dialog", { name: "Jelajahi VERGO" });
     await expect(menu.getByRole("link", { name: "Ke Dashboard", exact: true })).toBeVisible();
     await expect(menu.getByRole("link", { name: "Masuk", exact: true })).toHaveCount(0);
     await expect(menu.getByRole("link", { name: "Coba Sekarang", exact: true })).toHaveCount(0);
@@ -29,7 +29,7 @@ test("guest landing users retain sign-in and sign-up actions", async ({ page }) 
   const banner = page.getByRole("banner");
   if (test.info().project.name === "mobile") {
     await page.getByRole("button", { name: "Buka menu" }).click();
-    const menu = page.getByRole("dialog", { name: "Jelajahi SAP" });
+    const menu = page.getByRole("dialog", { name: "Jelajahi VERGO" });
     await expect(menu.getByRole("link", { name: "Masuk", exact: true })).toBeVisible();
     await expect(menu.getByRole("link", { name: "Coba Sekarang", exact: true })).toBeVisible();
   } else {
@@ -45,7 +45,7 @@ test("landing navbar controls fit inside the floating bar and share its vertical
 
   const banner = page.getByRole("banner");
   const bar = banner.locator(":scope > div");
-  const brand = bar.getByRole("link", { name: "SAP Sustainable AI Platform" });
+  const brand = bar.getByRole("link", { name: "VERGO — Verify and Go" });
   const nav = bar.getByRole("navigation", { name: "Navigasi utama" });
   const actions = bar.locator(":scope > div").last();
   const menu = bar.getByRole("button", { name: "Buka menu" });

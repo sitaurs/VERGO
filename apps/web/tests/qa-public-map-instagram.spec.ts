@@ -36,7 +36,7 @@ for (const locale of ["id", "en"] as const) {
     await expect(detailDescription).toHaveText(summary);
     expect(await detailDescription.evaluate(node => getComputedStyle(node).webkitLineClamp)).toBe("none");
     await expect(page.locator("main")).toContainText(locale === "en" ? "0 community supporters" : "0 dukungan warga");
-    expect(await page.locator("main").innerText()).not.toMatch(/ADMIN SAP/i);
+    expect(await page.locator("main").innerText()).not.toMatch(/ADMIN (?:SAP|VERGO)/i);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     expect(requests.every(request => request.method === "GET")).toBe(true);
     await page.screenshot({ path: test.info().outputPath(`public-incidents-${locale}.png`), fullPage: true });
@@ -53,14 +53,14 @@ for (const locale of ["id", "en"] as const) {
     await page.goto("/activities");
     const card = page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Bersih taman · TEST" }) });
     await expect(card.locator('[class*="metadataItem"]').nth(2)).toHaveText(locale === "en" ? "0/1 participants · 1 places available" : "0/1 peserta · 1 tempat tersedia");
-    expect(await page.locator("main").innerText()).not.toMatch(/ADMIN SAP/i);
+    expect(await page.locator("main").innerText()).not.toMatch(/ADMIN (?:SAP|VERGO)/i);
     await page.goto(`/activities/${ids.activity}`);
     await expect(page.getByRole("heading", { name: "Bersih taman · TEST" })).toBeVisible();
     const participation = page.getByRole("complementary", { name: locale === "en" ? "Join activity" : "Ikut kegiatan" });
     await expect(participation.locator("strong")).toHaveText(locale === "en" ? "0 / 1 participants accepted" : "0 / 1 peserta diterima");
     await expect(participation.locator("p").first()).toHaveText(locale === "en" ? "1 places available" : "1 tempat tersedia");
     await expect(page.getByRole("link", { name: locale === "en" ? "Sign in to join" : "Masuk untuk ikut" })).toBeVisible();
-    expect(await page.locator("main").innerText()).not.toMatch(/ADMIN SAP/i);
+    expect(await page.locator("main").innerText()).not.toMatch(/ADMIN (?:SAP|VERGO)/i);
     expect(requests.every(request => request.method === "GET")).toBe(true);
   });
 }

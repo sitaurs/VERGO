@@ -24,6 +24,6 @@ export default function MobileBottomNav({ tab, sapaEnabled, onNavigate }: { tab:
         <span className={s.navLabel}>{t(label)}</span>
       </button>)}
     </nav>
-    <div className={s.supportSlot}>{!sapaEnabled && <button type="button" className={s.helpFallback} onClick={() => onNavigate("help")}><CircleHelp size={21} aria-hidden="true" /><span>{t("Pusat bantuan SAP")}</span><ChevronRight size={18} aria-hidden="true" /></button>}</div>
+    <div className={s.supportSlot}>{!sapaEnabled && <button type="button" className={s.helpFallback} onClick={() => onNavigate("help")}><CircleHelp size={21} aria-hidden="true" /><span>{t("Pusat bantuan VERGO")}</span><ChevronRight size={18} aria-hidden="true" /></button>}</div>
   </div>;
 }

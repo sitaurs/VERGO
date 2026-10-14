@@ -6,8 +6,8 @@ import AuthPage from "@/components/auth-page";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getSavedLocale();
   return {
-    title: translate(locale, "Masuk | SAP"),
-    description: translate(locale, "Masuk ke Sustainable AI Platform untuk melanjutkan aksi peduli lingkungan."),
+    title: translate(locale, "Masuk | VERGO"),
+    description: translate(locale, "Masuk ke VERGO untuk melanjutkan aksi peduli lingkungan."),
   };
 }
 

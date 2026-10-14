@@ -383,7 +383,7 @@ export default function ConditionForm({
                   }
                 />
                 {t("Saya mengizinkan penggunaan foto ini di")}{" "}
-                {channel === "web" ? t("halaman publik SAP") : "Instagram SAP"}{" "}
+                {channel === "web" ? t("halaman publik VERGO") : "Instagram VERGO"}{" "}
                 {t("setelah ditinjau.")}</label>
             ))}
             <button

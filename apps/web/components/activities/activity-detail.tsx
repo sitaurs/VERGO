@@ -72,7 +72,7 @@ export default function ActivityDetail({
 }) {
   const { t, intlLocale } = useI18n();
   const [tab, setTab] = useState("summary"),
-    [name, setName] = useState("Koordinator SAP"),
+    [name, setName] = useState("Koordinator VERGO"),
     [command, setCommand] = useState<(typeof commands)[number] | null>(null);
   const [reason, setReason] = useState(""),
     [busy, setBusy] = useState(false),
@@ -89,7 +89,7 @@ export default function ActivityDetail({
   const intentKey = useIntentKey();
   useEffect(() => {
     const c = new AbortController();
-    setName(admin ? a.coordinatorDisplayName || "Koordinator SAP" : "Koordinator SAP");
+    setName(admin ? a.coordinatorDisplayName || "Koordinator VERGO" : "Koordinator VERGO");
     if (!admin && a.status !== "draft")
       void getPublicActivity(a.id, c.signal)
         .then((p) => {
@@ -683,7 +683,7 @@ export default function ActivityDetail({
             </div>
           }
         >
-          <p>{t("Status akan diperbarui setelah tindakan diterima oleh SAP.")}</p>
+          <p>{t("Status akan diperbarui setelah tindakan diterima oleh VERGO.")}</p>
           {command.reason && (
             <label className={s.field}>
               {t("Alasan tindakan")}<textarea
