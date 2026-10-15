@@ -10,7 +10,7 @@ export default function MobileWorkflow() {
   const { t } = useI18n();
   return <div className={styles.mobileOnly}>
     <ol className={styles.steps} aria-label={t("Cara membuat laporan VERGO")}>
-      <li>
+      <li data-landing-enter="step" data-landing-step>
         <span className={styles.number} aria-hidden="true">1</span>
         <div className={styles.step}>
           <h3>{t("Foto dan kenali")}</h3><p>{t("Ambil foto atau unggah dari galeri.")}</p>
@@ -23,7 +23,7 @@ export default function MobileWorkflow() {
           </div>
         </div>
       </li>
-      <li>
+      <li data-landing-enter="step" data-landing-step>
         <span className={styles.number} aria-hidden="true">2</span>
         <div className={styles.step}>
           <h3>{t("Laporkan penumpukan")}</h3><p>{t("Lengkapi lokasi, waktu, dan catatan.")}</p>
@@ -38,7 +38,7 @@ export default function MobileWorkflow() {
           </div>
         </div>
       </li>
-      <li id="tinjauan-mobile">
+      <li data-landing-enter="step" data-landing-step id="tinjauan-mobile">
         <span className={styles.number} aria-hidden="true">3</span>
         <div className={styles.step}>
           <h3>{t("Tinjau sebelum kirim")}</h3><p>{t("Periksa informasi dan foto Anda.")}</p>

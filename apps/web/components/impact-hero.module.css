@@ -65,6 +65,11 @@
 .mapPreview { position: relative; display: block; flex: 1; min-height: 0; overflow: hidden; border-radius: 16px; background: #e7f6ed; }
 .mapPreview img { object-fit: cover; }
 .bottomRim { z-index: 1; left: -5%; right: -5%; bottom: -45px; height: 15%; border: 1px solid #c5e5ff; border-bottom: 0; border-radius: 50% 45% 0 0 / 75% 75% 0 0; background: #f9fdffb0; rotate: 1deg; }
+.motionToggle { position: absolute; z-index: 4; right: 4%; bottom: 14px; display: none; align-items: center; gap: 7px; min-height: 38px; padding: 8px 12px; border: 1px solid #d3e4f4; border-radius: 99px; color: #526b8c; background: #ffffffd9; font-size: 12px; cursor: pointer; }
+.motionToggle:hover { color: #086cf1; background: #fff; }
+.motionToggle:focus-visible { outline: 3px solid #064daf; outline-offset: 3px; }
+.scanLight { position: absolute; z-index: 1; inset: 0 0 auto; height: 22%; border-bottom: 2px solid #78e0ce; background: linear-gradient(transparent, #7cffe32b); opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { :global([data-landing-motion-state]) .motionToggle { display: inline-flex; } }
 @keyframes leaf-sway { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(3deg); } }
 @media (max-width: 1200px) {
   .frame { height: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 52px 6% 78px; }
@@ -89,6 +94,7 @@
   .leafLeft { left: 1%; top: 54%; }
   .leafRight { top: 6%; }
   .bottomRim { height: 74px; }
+  .motionToggle { right: 6%; }
 }
 @media (max-width: 760px) {
   .frame { grid-template-columns: minmax(0, 1fr); width: min(100%, 608px); gap: 26px; padding: 32px max(24px, env(safe-area-inset-right)) 36px max(24px, env(safe-area-inset-left)); }
@@ -110,6 +116,7 @@
   .leaf::after { display: none; }
   .leafLeft { left: -15px; top: 4%; }
   .leafRight { right: -18px; top: 2%; }
+  .motionToggle { position: relative; inset: auto; justify-self: center; grid-column: 1; grid-row: 2; margin-block: -10px; }
 }
 @media (max-width: 349px) {
   .frame { padding-right: 20px; padding-left: 20px; }

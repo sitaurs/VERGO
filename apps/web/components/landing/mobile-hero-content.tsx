@@ -17,13 +17,13 @@ const features = [
 export default function MobileHeroContent() {
   const { t } = useI18n();
   return <div className={styles.content}>
-    <div data-motion="card" className={styles.photo}>
+    <div data-landing-enter="card" data-motion="card" className={styles.photo}>
       <Image src="/images/landing-mobile/hero-camera.webp" alt={t("Ilustrasi memotret botol plastik dengan kamera VERGO. Contoh hasil scan: botol plastik.")} width={441} height={396} sizes="(max-width: 760px) calc(100vw - 48px), 1px" loading="eager" />
     </div>
     <p className={styles.eyebrow}>{t("Kenali fitur VERGO")}</p>
     <div className={styles.features}>
-      {features.map(({ title, description, href, icon: Icon, artwork, green }) => <a data-motion="card" data-motion-action key={title} className={styles.feature} href={href}>
-        <span className={`${styles.icon} ${green ? styles.green : ""}`}>{artwork ? <HeroFeatureIcon feature={artwork} className={styles.artwork} /> : <Icon aria-hidden="true" />}</span>
+      {features.map(({ title, description, href, icon: Icon, artwork, green }) => <a data-landing-enter="card" data-landing-feature data-motion="card" data-motion-action key={title} className={styles.feature} href={href}>
+        <span data-landing-artwork className={`${styles.icon} ${green ? styles.green : ""}`}>{artwork ? <HeroFeatureIcon feature={artwork} className={styles.artwork} /> : <Icon aria-hidden="true" />}</span>
         <strong>{t(title)}</strong><span className={styles.description}>{t(description)}</span>
       </a>)}
     </div>

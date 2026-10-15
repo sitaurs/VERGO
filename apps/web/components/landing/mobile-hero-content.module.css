@@ -1,6 +1,7 @@
 .content { display: none; }
 @media (max-width: 760px) {
   .content { display: block; grid-column: 1; grid-row: 2; min-width: 0; }
+  :global([data-landing-motion-state="running"]) .content, :global([data-landing-motion-state="paused"]) .content { grid-row: 3; }
   .photo { overflow: hidden; border-radius: 20px; background: #dbeedc; }
   .photo img { display: block; width: 100%; height: auto; }
   .eyebrow { margin: 26px 0 16px; color: #0869f8; font-size: 12px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; text-align: center; }

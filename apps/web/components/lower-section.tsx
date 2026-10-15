@@ -138,12 +138,12 @@ export function VerificationAndStories({ onOpen }: { onOpen: OpenDetail }) {
       >
         <div className={styles.verificationInner}>
           <p className={styles.eyebrow}>{t("Data yang bisa dipercaya")}</p>
-          <h2>{t("Dari laporan ke peta, melalui verifikasi")}{" "}<em>{t("yang jelas.")}</em></h2>
+          <h2 data-landing-enter="heading">{t("Dari laporan ke peta, melalui verifikasi")}{" "}<em>{t("yang jelas.")}</em></h2>
           <p className={styles.mobileIntro}>{t("Setiap laporan melewati pemeriksaan sebelum menjadi informasi publik.")}</p>
           <div className={styles.verificationGrid} aria-label={t("Tahapan verifikasi laporan")}>
             {verificationSteps.map((step, index) => (
               <button
-                className={`${styles.verificationCard} ${activeStep === index ? styles.verificationCardActive : ""}`}
+                data-landing-enter="card" data-landing-order={index} className={`${styles.verificationCard} ${activeStep === index ? styles.verificationCardActive : ""}`}
                 key={t(step.title)}
                 type="button"
                 onClick={() => setActiveStep(activeStep === index ? null : index)}
@@ -196,10 +196,10 @@ export function VerificationAndStories({ onOpen }: { onOpen: OpenDetail }) {
         className={`${styles.stories} ${storiesView.visible ? styles.visible : ""}`}
       >
         <p className={styles.eyebrow}>{t("Cerita pelanggan")}</p>
-        <h2>{t("Organisasi membangun masa depan yang lebih berkelanjutan dengan VERGO.")}</h2>
+        <h2 data-landing-enter="heading">{t("Organisasi membangun masa depan yang lebih berkelanjutan dengan VERGO.")}</h2>
         <div className={styles.storyGrid}>
           {testimonials.map((person, index) => (
-            <button className={styles.quoteCard} key={person.name} type="button" onClick={() => onOpen({ kind: "testimonial", index })} aria-label={t("Baca cerita {0}", { "0": person.name })}>
+            <button data-landing-enter="card" data-landing-order={index} className={styles.quoteCard} key={person.name} type="button" onClick={() => onOpen({ kind: "testimonial", index })} aria-label={t("Baca cerita {0}", { "0": person.name })}>
               <span className={styles.quoteText}>“{t(person.quote)}”</span>
               <span className={styles.personRow}>
                 <Image src={`/images/lower/${person.image}.png`} width={105} height={105} alt="" />
@@ -263,7 +263,7 @@ export function SiteFooter({ onOpen }: { onOpen: OpenDetail }) {
             <button type="button" onClick={() => onOpen({ kind: "footer", label })} key={label}>{t(label)}</button>
           )}
         </div>
-        <span className={styles.footerLeaf} aria-hidden="true" />
+        <span data-landing-float="leaf" className={styles.footerLeaf} aria-hidden="true" />
       </div>
       <MobileFooter groups={footerGroups} onOpen={label => onOpen({ kind: "footer", label })} />
     </footer>

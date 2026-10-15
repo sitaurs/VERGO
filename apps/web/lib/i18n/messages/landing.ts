@@ -1,4 +1,6 @@
 export const landing: Record<string, string> = {
+  "Jeda animasi": "Pause animations",
+  "Lanjutkan animasi": "Resume animations",
   "Bukti foto. Aksi lokal.": "Photo evidence. Local action.",
   "Bukti foto": "Photo evidence",
   "Konteks lokasi": "Location context",
