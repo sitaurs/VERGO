@@ -1,0 +1,24 @@
+{
+  "generator": "Built-in ImageGen",
+  "useCase": "background-extraction",
+  "reference": "Approved report-assignment dashboard mockup: exec-f214388a-5af3-45dc-a5b1-36dd252f8eb3.png",
+  "source": "exec-f51b216e-c5e1-4c42-a971-4b47acf639e2.png",
+  "prompt": "Use case: background-extraction\nAsset type: transparent standalone empty-state illustration for the VERGO report-assignment dashboard.\nInput image 1: approved UI mockup, edit target. Extract and faithfully recreate ONLY the central emerald clipboard with ivory checklist, small emerald clock standing in front of its lower-right corner, and one green leaf behind the right side.\nStyle/medium: polished restrained 2.5D product illustration, satin green surfaces, softly bevelled edges, ivory paper and clock face, three simple checkmarks, soft studio highlights, subtle grounding shadow. Match the object proportions and perspective of the reference.\nComposition: single centered object cluster, square canvas, about 80 percent occupied, generous transparent margins, complete silhouette, crisp at small dashboard size.\nScene/backdrop: genuinely transparent alpha background. Do not include the mint circle; that is drawn separately in CSS.\nConstraints: preserve the recognizable clipboard/clock/leaf design of the mockup. No UI, panels, headings, labels, lettering, numbers, logos, watermark, additional objects, opaque backdrop or checkerboard pattern. Only pictorial checkmarks and unlabeled clock hands.",
+  "assets": [
+    {
+      "file": "empty-clipboard.webp",
+      "role": "Decorative empty-state clipboard, clock and leaf",
+      "width": 480,
+      "height": 480,
+      "alpha": true,
+      "bytes": 31108,
+      "sha256": "28184b8f5894c59b6d9abf89ddfa240d0b3b0b510e0cfd0466c5a6f838df0868"
+    }
+  ],
+  "nativeElements": [
+    "Mint circle and botanical watermark: CSS",
+    "Controls, filters and workflow: semantic HTML",
+    "Interface icons: existing Lucide set",
+    "VERGO logo and VERA: existing project assets"
+  ]
+}

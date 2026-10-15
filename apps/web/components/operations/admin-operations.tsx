@@ -8,12 +8,13 @@ import { useI18n } from "../../lib/i18n/provider";
 import { MALANG_CENTER, MALANG_DEFAULT_ZOOM } from "../../lib/malang";
 import { STATUS_LABEL } from "../moderation/report-status";
 import styles from "./operations.module.css";
+import ReportAssignmentWorkspace from "./report-assignment-workspace";
 
 type Notify = (message: string) => void;
 type AdminUser = { id: string; displayName: string; email: string; role: "user" | "admin"; emailVerified: boolean; createdAt: string };
 type Assignment = { assigneeId: string | null; assigneeName: string | null; dueAt: string | null; note: string; revision: number; progress?: "assigned" | "accepted" | "working" | "done"; progressNote?: string; overdue: boolean; completed: boolean };
 type PendingReport = { id: string; status: SapReportStatus; description: string; lat: number | null; lon: number | null; createdAt: string; cellId?: string | null };
-type OperationReport = PendingReport & { revision: number; categoryId: string | null; updatedAt: string; assignment: Assignment | null };
+export type OperationReport = PendingReport & { revision: number; categoryId: string | null; updatedAt: string; assignment: Assignment | null };
 type Locality = { cellId: string; kelurahan: string; kecamatan: string; city: string };
 type Page<T> = { items: T[]; nextCursor: string | null };
 const statuses = Object.keys(STATUS_LABEL) as SapReportStatus[];
@@ -105,20 +106,13 @@ export default function AdminOperations({ view, notify }: { view: "users" | "rep
 }
 
 export function MyReportAssignments() {
-  const { t } = useI18n();
   const page = usePage<OperationReport>("/users/me/report-assignments?limit=50");
   const [active, setActive] = useState<OperationReport | null>(null);
   const [message, setMessage] = useState("");
-  return <section className={styles.page} aria-label={t("Tugas laporan saya")}>
-    <header className={styles.header}><h2>{t("Tugas laporan saya")}</h2><button type="button" className={styles.icon} title={t("Muat ulang")} aria-label={t("Muat ulang")} disabled={page.loading} onClick={() => void page.reload()}><RefreshCw size={18} /></button></header>
-    {message && <p className={styles.success} role="status">{t(message)}</p>}
-    {page.error && <p className={styles.error} role="alert">{t(page.error)}</p>}
-    <div className={styles.tableScroll} aria-busy={page.loading}><table className={styles.table}><thead><tr><th scope="col">{t("Laporan")}</th><th scope="col">{t("Status laporan")}</th><th scope="col">{t("Tenggat")}</th><th scope="col">{t("Progres tugas")}</th><th scope="col">{t("Tindakan")}</th></tr></thead><tbody>{page.items.map(report => <tr key={report.id}><td><strong>{report.description || t("Laporan")}</strong><small><DateLabel value={report.createdAt} /></small></td><td>{t(STATUS_LABEL[report.status])}</td><td><DateLabel value={report.assignment?.dueAt || null} />{report.assignment?.overdue && <small><span className={`${styles.badge} ${styles.overdue}`}>{t("Lewat tenggat")}</span></small>}</td><td><span className={`${styles.badge} ${report.assignment?.completed ? styles.complete : ""}`}>{t(report.assignment?.progress || "Belum tersedia")}</span>{report.assignment?.progressNote && <small>{report.assignment.progressNote}</small>}</td><td>{report.assignment && !report.assignment.completed && <button type="button" className={styles.button} onClick={() => setActive(report)}><Pencil size={16} />{t("Perbarui progres")}</button>}</td></tr>)}</tbody></table></div>
-    {page.loading && <div className={styles.empty} role="status"><Loader2 size={20} className={styles.spin} />{t("Memuat laporan...")}</div>}
-    {!page.loading && !page.error && !page.items.length && <div className={styles.empty}>{t("Belum ada tugas laporan.")}</div>}
-    <Pager count={page.items.length} cursor={page.cursor} loading={page.loading} more={() => void page.more()} />
+  return <>
+    <ReportAssignmentWorkspace items={page.items} cursor={page.cursor} loading={page.loading} error={page.error} message={message} onReload={() => void page.reload()} onMore={() => void page.more()} onUpdate={setActive} />
     {active?.assignment && <ProgressDialog report={active} assignment={active.assignment} onClose={() => setActive(null)} onSaved={() => { setActive(null); setMessage("Progres tugas diperbarui."); void page.reload(); }} onRefresh={() => { setActive(null); void page.reload(); }} />}
-  </section>;
+  </>;
 }
 
 function ProgressDialog({ report, assignment, onClose, onSaved, onRefresh }: { report: OperationReport; assignment: Assignment; onClose: () => void; onSaved: () => void; onRefresh: () => void }) {
