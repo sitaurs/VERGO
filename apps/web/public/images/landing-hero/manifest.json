@@ -1,0 +1,47 @@
+{
+  "purpose": "Independent assets for the approved VERGO landing hero; text and controls are native HTML.",
+  "generation": "Built-in imagegen; isolated and reconstructed from the approved dimensional-icon mockup.",
+  "imagery": "Bottle and map are illustrative examples, not real reports or geographic data.",
+  "assets": [
+    {
+      "file": "camera.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 17326,
+      "transparent": true,
+      "sha256": "2a8d329107b30498a6ede1ff49a0cbe9ce094acb8220e809451a841a1e836e7e"
+    },
+    {
+      "file": "report.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 9780,
+      "transparent": true,
+      "sha256": "49885e497245c5cd9232012ab1df8e587d70e6b3c164af061da1331fc3c7287e"
+    },
+    {
+      "file": "map.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 15500,
+      "transparent": true,
+      "sha256": "0d15645ab444d913935687231a1ef2ba3b123c6db333cea3f7a16b2abf957ad6"
+    },
+    {
+      "file": "bottle.webp",
+      "width": 480,
+      "height": 600,
+      "bytes": 68830,
+      "transparent": false,
+      "sha256": "781e142268e68a42f07d044a0aefff5007b8377eff3c44bbf092d9bff4ead61c"
+    },
+    {
+      "file": "map-preview.webp",
+      "width": 960,
+      "height": 417,
+      "bytes": 23400,
+      "transparent": false,
+      "sha256": "c1d1fd07bbf33e2764080eca823a92f1fbe77845c3f996d19e0378b219495f72"
+    }
+  ]
+}

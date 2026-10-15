@@ -1,4 +1,8 @@
 export const landing: Record<string, string> = {
+  "Bukti foto. Aksi lokal.": "Photo evidence. Local action.",
+  "Bukti foto": "Photo evidence",
+  "Konteks lokasi": "Location context",
+  "Tinjauan manusia": "Human review",
   "Scan dari foto": "Scan a photo",
   "Kenali jenis material": "Identify material types",
   "Mulai scan sampah, contoh hasil: botol plastik": "Start a waste scan, sample result: plastic bottle",
