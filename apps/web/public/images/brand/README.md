@@ -11,5 +11,7 @@ logo on white. These variants are rendered through Next.js metadata routes in
 
 `lib/brand.ts` defines the public identity. Static interface copy and its English
 translation aliases use VERGO. Existing user content, service names, API/storage
-identifiers, the current site domain, SAPA, and previously generated media keep
-their original values. The legacy logo asset remains available for cached clients.
+identifiers, the current site domain, and previously generated media keep their
+original values. The assistant display name is VERA; existing `sapa*` preference
+fields and artwork paths stay compatible. The legacy logo asset remains available
+for cached clients.

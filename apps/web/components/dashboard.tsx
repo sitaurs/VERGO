@@ -261,7 +261,7 @@ export default function Dashboard() {
       await saveSapaAccountPreference(next);
     } catch (cause) {
       setSapaEnabled(previous);
-      setToast(cause instanceof Error ? cause.message : "Preferensi SAPA belum tersimpan.");
+      setToast(cause instanceof Error ? cause.message : "Preferensi VERA belum tersimpan.");
     } finally {
       setSapaSaving(false);
     }

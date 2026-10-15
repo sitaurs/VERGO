@@ -175,7 +175,7 @@ function ScanSettingsPanel() {
     <section className={admin.panel}>
       <div className={admin.panelHead}><ShieldCheck size={22} /><h2>Vision LLM</h2></div>
       <div className={admin.switchRow}>
-        <div><strong>{t("Aktifkan vision LLM")}</strong><small>{t("Wajib untuk mode yang mengeskalasi ke LLM. Perlu gateway SAPA terkonfigurasi.")}</small></div>
+        <div><strong>{t("Aktifkan vision LLM")}</strong><small>{t("Wajib untuk mode yang mengeskalasi ke LLM. Perlu gateway VERA terkonfigurasi.")}</small></div>
         <button type="button" role="switch" aria-checked={draft.visionEnabled} aria-label={t("Aktifkan vision LLM")}
           className={`${styles.toggle} ${draft.visionEnabled ? styles.toggleOn : ""}`}
           onClick={() => patch({ visionEnabled: !draft.visionEnabled })}><span /></button>

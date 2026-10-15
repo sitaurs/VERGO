@@ -16,7 +16,8 @@ const catalogue: Record<string, string> = { ...common, ...landing, ...scan, ...r
 function productCopy(text: string) {
   return text.replaceAll("SAP Sustainable AI Platform", "VERGO — Verify and Go")
     .replaceAll("Sustainable AI Platform (SAP)", "VERGO")
-    .replaceAll("Sustainable AI Platform", "VERGO").replace(/\bSAP\b/g, "VERGO");
+    .replaceAll("Sustainable AI Platform", "VERGO").replace(/\bSAP\b/g, "VERGO")
+    .replace(/\bSAPA\b/g, "VERA");
 }
 // Alias only known static UI strings. Never rewrite arbitrary reports, captions or API data.
 // Legacy keys remain available to existing error adapters and cached callers.

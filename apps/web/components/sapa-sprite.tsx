@@ -14,7 +14,7 @@ function loadSheet(motion: SapaMotion) {
     promise = new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new window.Image();
       image.onload = () => resolve(image);
-      image.onerror = () => { images.delete(motion); reject(new Error("SAPA artwork unavailable")); };
+      image.onerror = () => { images.delete(motion); reject(new Error("VERA artwork unavailable")); };
       image.src = SAPA_ASSET_ROOT + SAPA_MOTIONS[motion].file;
     });
     images.set(motion, promise);

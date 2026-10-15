@@ -248,7 +248,7 @@ test("server email validation produces a specific signup error instead of a gene
   await expect(page.locator('p[role="alert"]')).toHaveCount(1);
 });
 
-test("SAPA sends and renders one reply for simultaneous submissions, then accepts another turn", async ({ page }, testInfo) => {
+test("VERA sends and renders one reply for simultaneous submissions, then accepts another turn", async ({ page }, testInfo) => {
   let replies = 0;
   let release!: () => void;
   const firstReply = new Promise<void>(resolve => { release = resolve; });
@@ -262,9 +262,9 @@ test("SAPA sends and renders one reply for simultaneous submissions, then accept
     return false;
   } });
   await page.goto("/dashboard");
-  await page.getByRole("button", { name: testInfo.project.name === "mobile" ? "Buka chat SAPA dari navbar" : "Buka chat SAPA", exact: true }).click();
-  await page.getByLabel("Pesan untuk SAPA").fill("How do I sort plastic?");
-  await page.getByLabel("Pesan untuk SAPA").evaluate(input => {
+  await page.getByRole("button", { name: testInfo.project.name === "mobile" ? "Buka chat VERA dari navbar" : "Buka chat VERA", exact: true }).click();
+  await page.getByLabel("Pesan untuk VERA").fill("How do I sort plastic?");
+  await page.getByLabel("Pesan untuk VERA").evaluate(input => {
     const form = input.closest("form")!;
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
@@ -272,10 +272,10 @@ test("SAPA sends and renders one reply for simultaneous submissions, then accept
   await expect.poll(() => replies).toBe(1);
   expect(requests.filter(request => request.path === "/assistant/chat")).toHaveLength(1);
   release();
-  const log = page.getByRole("log", { name: "Percakapan SAPA" });
+  const log = page.getByRole("log", { name: "Percakapan VERA" });
   await expect(log.getByText("Synthetic reply 1", { exact: true })).toHaveCount(1);
-  await page.getByLabel("Pesan untuk SAPA").fill("And glass?");
-  await page.getByRole("button", { name: "Kirim pesan ke SAPA" }).click();
+  await page.getByLabel("Pesan untuk VERA").fill("And glass?");
+  await page.getByRole("button", { name: "Kirim pesan ke VERA" }).click();
   await expect(log.getByText("Synthetic reply 2", { exact: true })).toHaveCount(1);
   expect(requests.filter(request => request.path === "/assistant/chat")).toHaveLength(2);
   expect(requests.filter(request => request.path === "/assistant/chat")[1].body).toMatchObject({ conversationId: ids.operation });

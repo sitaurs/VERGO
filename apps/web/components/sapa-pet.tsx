@@ -294,28 +294,28 @@ export default function SapaPet({ tab, backendLinked, activity, onNavigate, mobi
     {open && <section className={`${styles.panel} ${!docked && panelBelow ? styles.panelBelow : ""}`} style={docked ? undefined : { left: panelLeft - petX, right: "auto", maxHeight: panelMaxHeight }} id="sapa-chat-panel" role="dialog" aria-modal="false" aria-labelledby="sapa-chat-title">
       <header className={styles.header}>
         <span className={styles.headerAvatar}><Image src={SAPA_ARTWORK.avatar} alt="" width={42} height={42} /></span>
-        <span className={styles.heading}><strong id="sapa-chat-title">SAPA</strong><small>{t("Asisten VERGO")}</small></span>
-        <button className={styles.close} type="button" onClick={closePanel} aria-label={t("Minimalkan chat SAPA")}><X size={19} /></button>
+        <span className={styles.heading}><strong id="sapa-chat-title">VERA</strong><small>{t("Asisten VERGO")}</small></span>
+        <button className={styles.close} type="button" onClick={closePanel} aria-label={t("Minimalkan chat VERA")}><X size={19} /></button>
       </header>
 
       <div className={styles.body} ref={logRef}>
         {messages.length === 0 && <>
           <div className={styles.welcome}>
-            <Image src={SAPA_ARTWORK.master} alt="SAPA" width={86} height={83} />
-            <p>{t("Hai! Aku SAPA.")}<br /><strong>{t("Mau bantu apa hari ini?")}</strong></p>
+            <Image src={SAPA_ARTWORK.master} alt="VERA" width={86} height={83} />
+            <p>{t("Hai! Aku VERA.")}<br /><strong>{t("Mau bantu apa hari ini?")}</strong></p>
           </div>
-          <div className={styles.quickActions} aria-label={t("Bantuan cepat SAPA")}>
+          <div className={styles.quickActions} aria-label={t("Bantuan cepat VERA")}>
             <button type="button" disabled={sending} onClick={() => void sendMessage(t("Bagaimana cara pilah sampah?"))}><Recycle size={18} /><span>{t("Cara pilah sampah")}</span><ArrowRight size={16} /></button>
             <button type="button" onClick={() => navigate("reports")}><FilePlus2 size={18} /><span>{t("Buat laporan")}</span><ArrowRight size={16} /></button>
             <button type="button" onClick={() => navigate("map")}><Map size={18} /><span>{t("Lihat peta area")}</span><ArrowRight size={16} /></button>
           </div>
         </>}
 
-        {messages.length > 0 && <div className={styles.messages} role="log" aria-label={t("Percakapan SAPA")} aria-live="polite">
+        {messages.length > 0 && <div className={styles.messages} role="log" aria-label={t("Percakapan VERA")} aria-live="polite">
           {messages.map(item => item.role === "assistant"
             ? <div className={styles.assistantTurn} key={item.id}>
                 <p className={styles.assistantMessage}>{item.content}</p>
-                {item.citations && item.citations.length > 0 && <ul className={styles.citations} aria-label={t("Sumber jawaban SAPA")}>
+                {item.citations && item.citations.length > 0 && <ul className={styles.citations} aria-label={t("Sumber jawaban VERA")}>
                   {item.citations.map(citation => <li className={styles.citation} key={citation.id}>
                     <span className={styles.citationSource}>{citation.source}</span>
                     <span className={styles.citationTitle}>
@@ -344,21 +344,21 @@ export default function SapaPet({ tab, backendLinked, activity, onNavigate, mobi
       <div className={styles.composerArea}>
         {error && <p className={styles.error} role="alert">{t(error)}</p>}
         <form className={styles.composer} onSubmit={submit}>
-          <input ref={inputRef} value={draft} maxLength={2000} onChange={event => { setDraft(event.target.value); if (error) setError(""); }} placeholder={t("Tulis pesan untuk SAPA…")} aria-label={t("Pesan untuk SAPA")} />
-          <button type="submit" disabled={!draft.trim() || sending} aria-label={t("Kirim pesan ke SAPA")}><Send size={19} /></button>
+          <input ref={inputRef} value={draft} maxLength={2000} onChange={event => { setDraft(event.target.value); if (error) setError(""); }} placeholder={t("Tulis pesan untuk VERA…")} aria-label={t("Pesan untuk VERA")} />
+          <button type="submit" disabled={!draft.trim() || sending} aria-label={t("Kirim pesan ke VERA")}><Send size={19} /></button>
         </form>
         {!backendLinked && <p className={styles.connectionNote}>{t("Chat AI memerlukan akun backend yang terhubung.")}</p>}
       </div>
     </section>}
 
-    <button ref={launchRef} className={`${styles.launcher} ${dragging ? styles.dragging : ""}`} type="button" onPointerDown={onPointerDown} onPointerEnter={event => { if (event.pointerType === "mouse") attention(); }} onFocus={attention} onClick={() => activate()} onDragStart={event => event.preventDefault()} aria-label={open ? t("Tutup chat SAPA") : t("Buka chat SAPA")} aria-expanded={open} aria-controls="sapa-chat-panel" title={t("{0} chat SAPA · Seret untuk memindahkan", { "0": open ? t("Tutup") : t("Buka") })}>
+    <button ref={launchRef} className={`${styles.launcher} ${dragging ? styles.dragging : ""}`} type="button" onPointerDown={onPointerDown} onPointerEnter={event => { if (event.pointerType === "mouse") attention(); }} onFocus={attention} onClick={() => activate()} onDragStart={event => event.preventDefault()} aria-label={open ? t("Tutup chat VERA") : t("Buka chat VERA")} aria-expanded={open} aria-controls="sapa-chat-panel" title={t("{0} chat VERA · Seret untuk memindahkan", { "0": open ? t("Tutup") : t("Buka") })}>
       <span className={styles.character}><SapaSprite motion={motion} playId={reaction?.id ?? 0} paused={dragging} calm={open} onComplete={finishReaction} /></span>
-      <span className={`${styles.petLabel} ${working ? styles.workingLabel : ""}`} aria-hidden="true">{working ? t("AI bekerja") : "SAPA"}</span>
+      <span className={`${styles.petLabel} ${working ? styles.workingLabel : ""}`} aria-hidden="true">{working ? t("AI bekerja") : "VERA"}</span>
     </button>
   </div>
-    {mobileDock && <button ref={dockLaunchRef} type="button" className={styles.mobileDockLauncher} onClick={() => activate("dock")} aria-label={open ? t("Tutup chat SAPA dari navbar") : t("Buka chat SAPA dari navbar")} aria-expanded={open} aria-controls="sapa-chat-panel">
+    {mobileDock && <button ref={dockLaunchRef} type="button" className={styles.mobileDockLauncher} onClick={() => activate("dock")} aria-label={open ? t("Tutup chat VERA dari navbar") : t("Buka chat VERA dari navbar")} aria-expanded={open} aria-controls="sapa-chat-panel">
       <Sparkles size={19} aria-hidden="true" />
-      <span>{working ? t("SAPA sedang memproses…") : t("SAPA siap membantu")}</span>
+      <span>{working ? t("VERA sedang memproses…") : t("VERA siap membantu")}</span>
       <ChevronRight size={18} aria-hidden="true" />
     </button>}
   </>;

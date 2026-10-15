@@ -5,11 +5,13 @@ import { expect, test, type Page } from "@playwright/test";
 import { translate } from "../lib/i18n/translate";
 import { activity, fixtureApi, ids } from "./r1-fixtures";
 
-test("brand aliases translate static copy while preserving supplied content and SAPA", () => {
+test("brand aliases translate static copy while preserving supplied content and assistant compatibility", () => {
   expect(translate("en", "Pilih bahasa tampilan VERGO.")).toBe("Choose your VERGO display language.");
   expect(translate("en", "Pilih bahasa tampilan SAP.")).toBe("Choose your VERGO display language.");
   expect(translate("id", "Tentang VERGO")).toBe("Tentang VERGO");
-  expect(translate("en", "Buka chat SAPA")).toBe("Open SAPA chat");
+  expect(translate("en", "Buka chat VERA")).toBe("Open VERA chat");
+  expect(translate("en", "Buka chat SAPA")).toBe("Open VERA chat");
+  expect(translate("en", "Pertanyaan warga mengenai SAPA.")).toBe("Pertanyaan warga mengenai SAPA.");
   expect(translate("en", "Akun {0}", { "0": "SAP Warga" })).toBe("Account of SAP Warga");
   expect(translate("en", activity.description)).toBe(activity.description);
   expect(translate("en", "https://sap.venlab.tech/api/v1")).toBe("https://sap.venlab.tech/api/v1");
