@@ -10,9 +10,10 @@ import { evidence } from "./evidence";
 import { impact } from "./impact";
 import { instagram } from "./instagram";
 import { misc } from "./misc";
+import { notifications } from "./notifications";
 import { dynamic } from "./dynamic";
 import { errors } from "./errors";
-const catalogue: Record<string, string> = { ...common, ...landing, ...scan, ...reports, ...activities, ...community, ...evidence, ...impact, ...instagram, ...misc, ...dynamic, ...errors, ...volunteer, ...communityDesign };
+const catalogue: Record<string, string> = { ...common, ...landing, ...scan, ...reports, ...activities, ...community, ...evidence, ...impact, ...instagram, ...misc, ...dynamic, ...errors, ...volunteer, ...communityDesign, ...notifications };
 function productCopy(text: string) {
   return text.replaceAll("SAP Sustainable AI Platform", "VERGO — Verify and Go")
     .replaceAll("Sustainable AI Platform (SAP)", "VERGO")

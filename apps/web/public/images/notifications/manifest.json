@@ -1,0 +1,16 @@
+{
+  "generator": "Built-in ImageGen",
+  "reference": "Approved VERGO notifications mockup",
+  "prompt": "Use case: background-extraction. Image 1 is the approved notification-page mockup and the visual source. Extract/recreate ONLY the small emerald 2.5D notification bell illustration in its central empty state as a standalone production web asset on a genuinely transparent background. Preserve the bell's satin emerald ceramic finish, rounded sculpted form, subtle tilted perspective, loop handle, dark green bell opening and clapper, two small green leaves floating near its upper right, and one tiny four-point emerald sparkle to its right. Keep a very soft minimal contact shadow beneath the bell, fading to actual alpha. Exclude the pale mint circular backdrop (it will be built in CSS). No screenshot pixels, no interface, no white rectangle, no circular plate, no text, no logo, no border. Center the complete composition with comfortable transparent margins on a square canvas. Crisp clean alpha edges, refined environmental civic-tech aesthetic, faithful to the reference. Asset only, not a new UI mockup.",
+  "assets": [
+    {
+      "file": "empty-bell.webp",
+      "role": "Decorative empty inbox illustration",
+      "width": 480,
+      "height": 480,
+      "alpha": true,
+      "bytes": 29430,
+      "sha256": "97e35b0a96afef77e86f0c2dc67ec51632d0c9dcfee3f912ab132e90d2480c63"
+    }
+  ]
+}

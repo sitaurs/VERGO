@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Bell, Check, Loader2, Mail, MailOpen, RefreshCw } from "lucide-react";
+import { ArrowUpRight, Bell, CircleAlert, Loader2, Mail, MailOpen, RefreshCw } from "lucide-react";
 import { apiGet, apiMutate } from "../lib/api/client";
 import { notifications as listNotifications, readNotification as setNotificationRead } from "../lib/api/community";
 import type { R1 } from "../lib/api/r1";
 import { useI18n } from "../lib/i18n/provider";
-import styles from "./operations/operations.module.css";
+import NotificationEmptyState from "./notifications/notification-empty-state";
+import EmailPreferencesCard from "./notifications/email-preferences-card";
+import styles from "./notifications/notifications.module.css";
 
 type Notification = R1["Notification"];
 const messageFor = (cause: unknown) => cause instanceof Error ? cause.message : "Permintaan belum berhasil. Coba lagi.";
@@ -96,24 +98,51 @@ export default function NotificationsPage({ notify }: { notify?: (message: strin
   }
 
   const visible = unreadOnly ? items.filter(item => !item.read) : items;
+  const unreadCount = items.filter(item => !item.read).length;
   return <section className={styles.page} aria-label={t("Notifikasi")}>
-    <header className={styles.header}><h2>{t("Notifikasi")}</h2><button type="button" className={styles.icon} disabled={loading || pending.size > 0} onClick={() => void load()} aria-label={t("Muat ulang")} title={t("Muat ulang")}><RefreshCw size={18} /></button></header>
-    <form className={styles.preference} onSubmit={event => { event.preventDefault(); void savePreference(); }}>
-      <label className={styles.check}><input type="checkbox" checked={emailDraft} disabled={emailEnabled === null || preferenceLoading || saving} onChange={event => setEmailDraft(event.target.checked)} /><Mail size={18} />{t("Notifikasi laporan melalui email")}</label>
-      <button type="submit" className={styles.button} disabled={emailEnabled === null || preferenceLoading || saving || emailEnabled === emailDraft}>{saving ? <Loader2 size={17} className={styles.spin} /> : <Check size={17} />}{t("Simpan preferensi")}</button>
-      {preferenceLoading && <span className={styles.muted} role="status">{t("Memuat preferensi...")}</span>}
-    </form>
-    {preferenceError && <div className={styles.error} role="alert">{t(preferenceError)} <button type="button" className={styles.button} onClick={() => setPreferenceReload(value => value + 1)} disabled={saving || preferenceLoading}>{t("Coba lagi")}</button></div>}
-    {message && <p className={styles.success} role="status">{t(message)}</p>}
-    <div className={styles.toolbar}><label className={styles.check}><input type="checkbox" checked={unreadOnly} onChange={event => setUnreadOnly(event.target.checked)} />{t("Belum dibaca saja")}</label></div>
-    {error && <p className={styles.error} role="alert">{t(error)}</p>}
-    <ul className={styles.inbox} aria-busy={loading}>{visible.map(item => {
-      const target = safeNotificationTarget(item.targetPath || (item as Notification & { target_path?: string }).target_path);
-      const date = new Date(item.createdAt);
-      return <li key={item.id} className={styles.notification} data-unread={!item.read}><Bell size={21} aria-hidden="true" /><div><h3>{t(item.title)}</h3><p>{t(item.message)}</p>{Number.isFinite(date.getTime()) && <time dateTime={item.createdAt}>{new Intl.DateTimeFormat(intlLocale, { dateStyle: "medium", timeStyle: "short" }).format(date)}</time>}<div className={styles.actions}>{!item.read && <span className={styles.badge}>{t("Belum dibaca")}</span>}{target && <a className={styles.button} href={target} onClick={() => { if (!item.read) void mark(item, true); }}>{t("Buka")}<ArrowUpRight size={16} /></a>}</div></div><button type="button" className={styles.icon} disabled={pending.has(item.id)} onClick={() => void mark(item, !item.read)} title={t(item.read ? "Tandai belum dibaca" : "Tandai dibaca")} aria-label={t(item.read ? "Tandai belum dibaca" : "Tandai dibaca")}>{pending.has(item.id) ? <Loader2 size={18} className={styles.spin} /> : item.read ? <Mail size={18} /> : <MailOpen size={18} />}</button></li>;
-    })}</ul>
-    {loading && <div className={styles.empty} role="status"><Loader2 size={20} className={styles.spin} />{t("Memuat notifikasi...")}</div>}
-    {!loading && !error && !visible.length && <div className={styles.empty}>{t(unreadOnly ? "Tidak ada notifikasi belum dibaca pada halaman yang dimuat." : "Belum ada notifikasi.")}</div>}
-    <div className={styles.pager}><span className={styles.muted}>{t("{0} ditampilkan", { "0": visible.length })}</span>{cursor && <button type="button" className={styles.button} disabled={loading || pending.size > 0} onClick={() => void load(cursor)}>{t("Muat lagi")}</button>}{error && <button type="button" className={styles.button} disabled={loading || pending.size > 0} onClick={() => void load()}>{t("Coba lagi")}</button>}</div>
+    <header data-motion="heading" className={styles.header}>
+      <div><p className={styles.eyebrow}>{t("Pusat aktivitas")}</p><h1>{t("Notifikasi")}</h1><p className={styles.intro}>{t("Pantau perkembangan laporan dan aktivitas Anda.")}</p></div>
+      <button type="button" className={`${styles.button} ${styles.reload}`} disabled={loading || pending.size > 0} onClick={() => void load()} aria-label={t("Muat ulang")}>
+        <RefreshCw size={19} className={loading ? styles.spin : undefined} aria-hidden="true" /><span>{t("Muat ulang")}</span>
+      </button>
+    </header>
+    <div className={styles.layout}>
+      <section data-motion="card" className={styles.inboxPanel} aria-label={t("Daftar notifikasi")}>
+        <header className={styles.inboxHeader}>
+          <div className={styles.filters} role="group" aria-label={t("Filter notifikasi")}>
+            <button type="button" className={styles.filter} aria-pressed={!unreadOnly} onClick={() => setUnreadOnly(false)}>{t("Semua")}<span className={styles.count} aria-hidden="true">{loading && !items.length ? "—" : items.length}</span></button>
+            <button type="button" className={styles.filter} aria-pressed={unreadOnly} onClick={() => setUnreadOnly(true)}>{t("Belum dibaca")}<span className={styles.count} aria-hidden="true">{loading && !items.length ? "—" : unreadCount}</span></button>
+          </div>
+          <p className={styles.countLabel}>{loading && !items.length ? t("Memuat notifikasi...") : t(cursor ? "{0} dimuat" : "{0} notifikasi", { "0": items.length })}</p>
+        </header>
+        {error && <div className={styles.error} role="alert"><CircleAlert size={19} aria-hidden="true" /><div><p>{t(error)}</p><button type="button" className={styles.retryButton} disabled={loading || pending.size > 0} onClick={() => void load()}>{t("Coba lagi")}</button></div></div>}
+        <ul className={styles.inbox} aria-busy={loading}>{visible.map(item => {
+          const target = safeNotificationTarget(item.targetPath || (item as Notification & { target_path?: string }).target_path);
+          const date = new Date(item.createdAt);
+          return <li key={item.id} className={styles.notification} data-unread={!item.read}>
+            <span className={styles.notificationIcon}><Bell size={21} aria-hidden="true" /></span>
+            <div><h3>{t(item.title)}</h3><p>{t(item.message)}</p>
+              {Number.isFinite(date.getTime()) && <time dateTime={item.createdAt}>{new Intl.DateTimeFormat(intlLocale, { dateStyle: "medium", timeStyle: "short" }).format(date)}</time>}
+              <div className={styles.actions}>{!item.read && <span className={styles.badge}>{t("Belum dibaca")}</span>}
+                {target && <a className={styles.itemLink} href={target} onClick={() => { if (!item.read) void mark(item, true); }}>{t("Buka")}<ArrowUpRight size={16} aria-hidden="true" /></a>}
+              </div>
+            </div>
+            <button type="button" className={styles.iconButton} disabled={pending.has(item.id)} onClick={() => void mark(item, !item.read)} title={t(item.read ? "Tandai belum dibaca" : "Tandai dibaca")} aria-label={t(item.read ? "Tandai belum dibaca" : "Tandai dibaca")}>
+              {pending.has(item.id) ? <Loader2 size={18} className={styles.spin} aria-hidden="true" /> : item.read ? <Mail size={18} aria-hidden="true" /> : <MailOpen size={18} aria-hidden="true" />}
+            </button>
+          </li>;
+        })}</ul>
+        {loading && <div className={styles.loading} role="status"><Loader2 size={21} className={styles.spin} aria-hidden="true" />{t("Memuat notifikasi...")}</div>}
+        {!loading && !error && !visible.length && <NotificationEmptyState unreadOnly={unreadOnly} onShowAll={() => setUnreadOnly(false)} />}
+        {(items.length > 0 || cursor) && <footer className={styles.pager}><div><span>{t("{0} ditampilkan", { "0": visible.length })}</span>{cursor && <small>{t("Jumlah sesuai notifikasi yang sudah dimuat.")}</small>}</div>
+          {cursor && <button type="button" className={styles.button} disabled={loading || pending.size > 0} onClick={() => void load(cursor)}>{t("Muat lagi")}</button>}
+        </footer>}
+      </section>
+      <EmailPreferencesCard enabled={emailEnabled} draft={emailDraft} loading={preferenceLoading} saving={saving} error={preferenceError} message={message}
+        onChange={value => { setEmailDraft(value); setMessage(""); }} onSave={savePreference} onRetry={() => {
+          if (emailEnabled !== null && emailEnabled !== emailDraft) void savePreference();
+          else setPreferenceReload(value => value + 1);
+        }} />
+    </div>
   </section>;
 }
