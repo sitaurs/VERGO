@@ -1,4 +1,6 @@
-# DEPLOYMENT — SAP
+# DEPLOYMENT — VERGO
+
+Identitas publik: **VERGO — Verify and Go**; asisten: **VERA**. Nama variabel `SAP_*`/`SAPA_*`, package `@sap/*`, serta path layanan yang sudah ada tetap dipakai untuk kompatibilitas.
 
 v1.0 · Pemilik API/data/worker: backend; build frontend: frontend. Target awal satu origin HTTPS dengan reverse proxy.
 
@@ -32,7 +34,7 @@ Status aktual ada di [ENVIRONMENT_READINESS.md](ENVIRONMENT_READINESS.md); smoke
 | `ML_USERNAME`, `ML_PASSWORD` | Worker | HTTP Basic reverse proxy; secret |
 | `ML_TIMEOUT_MS` | Worker | `90000` baseline |
 | `DB_HEALTH_TIMEOUT_MS` | API | `10000`; cold-start budget probe readiness DB (Neon scale-to-zero) |
-| `SAPA_FEATURE_ENABLED` | API | `false` kill switch SAPA; `true` wajib set trio `SAPA_LLM_*` |
+| `SAPA_FEATURE_ENABLED` | API | `false` kill switch VERA; `true` wajib set trio `SAPA_LLM_*` |
 | `SAPA_LLM_BASE_URL` | API | Base URL provider OpenAI-compatible (`{BASE_URL}/chat/completions`) |
 | `SAPA_LLM_API_KEY` | API | Bearer key provider; secret, hanya di env/secret manager |
 | `SAPA_LLM_MODEL` | API | Nama model chat completions |
@@ -50,15 +52,18 @@ API mencatat `APP_ORIGIN` dan `API_INTERNAL_URL` yang teresolusi saat startup (l
 
 ## 3. Repository dan bootstrap
 
-Target: [github.com/sitaurs/sap](https://github.com/sitaurs/sap), hanya berisi:
+Target: [github.com/sitaurs/VERGO](https://github.com/sitaurs/VERGO), dengan struktur implementasi:
 
 ```text
 apps/web
 apps/api
 apps/worker
-packages/api-client
+apps/api/migrations
+packages/config
 contracts
-db
+deploy
+scripts
+services/hermes-review
 docs
 ```
 

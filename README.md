@@ -1,18 +1,19 @@
 <p align="center">
   <a href="https://sap.venlab.tech/">
-    <img src="apps/web/public/images/sapa/SAPA_Welcome_Sticker.png" alt="SAPA, SAP's friendly green assistant, waving hello" width="160" />
+    <img src="docs/assets/vergo-brand-card.png" alt="VERGO — Verify and Go" width="520" />
   </a>
 </p>
 
-<h1 align="center">SAP · Sustainable AI Platform</h1>
+<h1 align="center">VERGO · Verify and Go</h1>
 
 <p align="center">
-  <strong>A small photo. A clearer picture. A cleaner community.</strong><br />
-  AI waste recognition, verified local reports, and tools for community action.
+  <strong>Photo evidence. Verified reports. Community action.</strong><br />
+  Multimodal AI and geospatial intelligence for waste reporting and follow-up.
 </p>
 
 <p align="center">
-  <a href="https://sap.venlab.tech/"><img src="https://img.shields.io/badge/Explore_SAP-sap.venlab.tech-087F5B?style=for-the-badge&amp;logo=leaflet&amp;logoColor=white" alt="Explore SAP at sap.venlab.tech" /></a>
+  <a href="https://sap.venlab.tech/"><img src="https://img.shields.io/badge/Explore_VERGO-sap.venlab.tech-087F5B?style=for-the-badge&amp;logo=leaflet&amp;logoColor=white" alt="Explore VERGO at sap.venlab.tech" /></a>
+  <a href="https://github.com/sitaurs/VERGO"><img src="https://img.shields.io/badge/Source-sitaurs%2FVERGO-123B30?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="VERGO source code on GitHub" /></a>
 </p>
 
 <p align="center">
@@ -26,7 +27,7 @@
 
 <p align="center">
   <a href="#the-idea">The idea</a> ·
-  <a href="#built-around-real-actions">Features</a> ·
+  <a href="#features">Features</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#getting-started">Quick start</a> ·
   <a href="#documentation">Documentation</a>
@@ -36,11 +37,25 @@
 
 ## The idea
 
-**SAP turns everyday observations into environmental information people can act on.** A photo helps identify waste. A report adds the location and context. Human review determines what becomes public evidence. Community and volunteer tools help organize the next step.
+**VERGO turns everyday observations into environmental information people can act on.** A photo helps identify waste. A report adds the location and context. Human review determines what becomes public evidence. Community and volunteer tools help organize the next step.
 
-The platform brings these flows together with a personal dashboard, geographic insights, and **SAPA**, a friendly AI companion for waste-related guidance.
+The platform brings these flows together with a personal dashboard, geographic insights, and **VERA**, the virtual assistant for guidance on VERGO and environmental topics.
+
+The project's research focus is **“Optimalisasi Pelaporan Sampah Terverifikasi Berbasis Multimodal Artificial Intelligence dan Geospatial Intelligence Menuju Good Health and Well-being 2030.”** It connects evidence-based reporting and community participation with the goal of healthier environments, in support of SDG 3: Good Health and Well-being.
 
 **Visit the website: [sap.venlab.tech](https://sap.venlab.tech/).** The interface defaults to English; users can choose Indonesian in Settings, and saved language preferences are preserved.
+
+**Source repository: [sitaurs/VERGO](https://github.com/sitaurs/VERGO).**
+
+## Features
+
+| Feature | What it does |
+| --- | --- |
+| **Waste recognition** | Capture or upload a photo and receive AI-assisted material classification. |
+| **Evidence-based reports** | Submit photos, location, and context; track the report through human moderation. |
+| **Public incidents and area maps** | Explore verified reports and geographic summaries, with public visibility controlled separately from private evidence. |
+| **Personal dashboard** | View scan and report history, points, achievements, notifications, and account settings. |
+| **VERA assistant** | Ask for feature guidance and environmental information; suggestions and permitted account tools remain read-only. |
 
 ### Community and operations modules
 
@@ -58,7 +73,7 @@ These modules are controlled by feature flags and require their associated migra
 
 **Notice → Scan → Add context → Submit → Review → Explore → Take action**
 
-Public reports pass through moderation. Geographic summaries describe recorded conditions and historical patterns. SAPA provides guidance without changing account data or report status, and Hermes recommendations remain subject to human review.
+Public reports pass through moderation. Geographic summaries describe recorded conditions and historical patterns. VERA provides guidance without changing account data or report status, and Hermes recommendations remain subject to human review.
 
 ## Architecture
 
@@ -73,7 +88,7 @@ flowchart LR
     Worker --> DB
     API --> Storage[Private R2 / S3 storage]
     Worker --> Storage
-    API --> SAPA[SAPA LLM provider]
+    API --> VERA[VERA / LLM provider]
     Worker --> Hermes[Private Hermes reviewer]
 ```
 
@@ -108,7 +123,13 @@ flowchart LR
 └── docs/                  Product, design, integration, and operations guides
 ```
 
-SAP is a fresh implementation informed by EcoLens. Legacy `ecoLens` and `ecoLens_ML` source remains reference material and must not be copied into this repository or added as a submodule or subtree. The existing model supplies waste inference through the Gradio integration.
+VERGO is a fresh implementation informed by EcoLens. Legacy `ecoLens` and `ecoLens_ML` source remains reference material and must not be copied into this repository or added as a submodule or subtree. The existing model supplies waste inference through the Gradio integration.
+
+### Branding and technical compatibility
+
+The public product name is **VERGO — Verify and Go**, and the assistant's display name is **VERA**. Earlier documents may still use the former names SAP and SAPA.
+
+Existing technical identifiers remain unchanged: npm packages such as `@sap/web`, environment variables prefixed with `SAP_` or `SAPA_`, the `sapaEnabled` preference field, asset paths, and deployment paths such as `/etc/sap/`. Use these names exactly as documented when configuring the application; the rebrand does not rename APIs, database fields, or services.
 
 ## Getting started
 
@@ -124,6 +145,13 @@ Use **Node.js 22 or later** and npm. Before starting the API and worker, prepare
 The included [PostgreSQL Dockerfile](deploy/postgres.Dockerfile) packages PostGIS and pgvector. The [deployment compose file](deploy/compose.yml) uses operator-managed configuration under `/etc/sap/` and a private ML network; follow the [deployment guide](docs/DEPLOYMENT.md) when preparing that environment.
 
 ### 2. Configure the application
+
+For a new checkout:
+
+```sh
+git clone https://github.com/sitaurs/VERGO.git
+cd VERGO
+```
 
 For a fresh checkout, run from the repository root. Keep existing configured environment files if you already have them.
 
@@ -167,12 +195,12 @@ Run each command in a separate terminal from the repository root:
 | Worker | `npm run dev:worker` | Background process |
 | Web | `npm run dev:web` | `http://localhost:3000` |
 
-Open **[localhost:3000](http://localhost:3000)**. Check **[the proxied health endpoint](http://localhost:3000/api/v1/health)** and confirm `data.status` is `ok`. Create an account and verify the emailed code before using the dashboard. Complete scanning requires healthy storage, Redis, the worker, and Gradio.
+Open **[localhost:3000](http://localhost:3000)**. Check **[API readiness](http://localhost:3000/api/v1/health/ready)**, confirm `data.ready` is `true`, and inspect the dependency states. Create an account and verify the emailed code before using the dashboard. Complete scanning requires healthy Redis and private storage, a running worker, and a healthy Gradio integration.
 
 <details>
 <summary><strong>Enable optional capabilities</strong></summary>
 
-Enable SAPA with `SAPA_FEATURE_ENABLED=true` and configure `SAPA_LLM_BASE_URL`, `SAPA_LLM_API_KEY`, and `SAPA_LLM_MODEL`. Read the [SAPA guide](docs/SAPA_ASSISTANT.md) before enabling hybrid retrieval.
+Enable VERA with `SAPA_FEATURE_ENABLED=true` and configure `SAPA_LLM_BASE_URL`, `SAPA_LLM_API_KEY`, and `SAPA_LLM_MODEL`. These configuration names retain their original `SAPA_` prefix. Read the [assistant guide](docs/SAPA_ASSISTANT.md) before enabling hybrid retrieval.
 
 Community and activities use `SAP_EXTENSION_ENABLED` together with `SAP_COMMUNITY_ENABLED` and `SAP_ACTIVITIES_ENABLED`. Hermes uses `SAP_HERMES_ENABLED` and its [private service configuration](services/hermes-review/README.md). Instagram rendering and publishing have separate flags and require the Meta integration, consent, and approval workflow.
 
@@ -210,7 +238,7 @@ Run these commands from the repository root:
 | `npm run test:r1 -w @sap/web` | Run the web Playwright suite. |
 | `npm run check` | Run contract validation, typechecks, tests, backend builds, and route checks. |
 
-Run `npm run check` before committing. The Hermes test script uses POSIX shell syntax and `python3`; on Windows, run the full check from WSL or Git Bash with Python available. Playwright requires its browser dependencies and the environment expected by its configuration. Database integration tests require a dedicated test database; see the [test plan](docs/TEST_PLAN.md).
+For application changes, run `npm run check` before committing. For documentation-only updates, check links, referenced assets, and command examples. The Hermes test script uses POSIX shell syntax and `python3`; on Windows, run the full check from WSL or Git Bash with Python available. Playwright requires its browser dependencies and the environment expected by its configuration. Database integration tests require a dedicated test database; see the [test plan](docs/TEST_PLAN.md).
 
 The published API contract is `1.1.0`; the R1 extension schema is a `1.2.0` draft. Keep handlers, schemas, fixtures, and generated frontend types aligned when changing API behavior. Local checks verify the repository; external-service and deployment acceptance is tracked separately in the [production checklist](docs/PRODUCTION_BACKEND_TODO.md).
 
@@ -221,6 +249,7 @@ The published API contract is `1.1.0`; the R1 extension schema is a `1.2.0` draf
 | [Documentation index](docs/README.md) | The full specification and handoff collection. |
 | [Product requirements](docs/PRD.md) | Goals, users, and product scope. |
 | [Frontend handoff](docs/FRONTEND_HANDOFF.md) | Pages, states, and integration behavior. |
+| [VERA assistant guide](docs/SAPA_ASSISTANT.md) | Assistant behavior, API contract, and configuration under the original technical filename. |
 | [Published API contract](contracts/openapi.json) | Machine-readable baseline schemas. |
 | [R1 extension draft](contracts/r1/openapi.json) | Community, activity, moderation, and publication schemas. |
 | [Integration agreement](docs/CONTRACT_ZAKA_ZAMANI.md) | Shared frontend/backend responsibilities and workflows. |
@@ -234,5 +263,5 @@ The published API contract is `1.1.0`; the R1 extension schema is a `1.2.0` draf
 
 <p align="center">
   <strong>Every cleaner place starts with someone who notices.</strong><br />
-  <a href="https://sap.venlab.tech/">Explore SAP →</a>
+  <a href="https://sap.venlab.tech/">Explore VERGO →</a>
 </p>
