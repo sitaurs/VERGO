@@ -1,0 +1,54 @@
+{
+  "tool": "built-in imagegen",
+  "purpose": "Individual transparent 2.5D landing illustrations; UI text remains native HTML.",
+  "assets": {
+    "hero": {
+      "file": "hero.webp",
+      "width": 1400,
+      "height": 1050,
+      "bytes": 216578,
+      "alpha": true,
+      "sha256": "b5f36abbab0ba2f59b36ae676a94552a20188a0d4e2447cbcc3e7c96aca01837"
+    },
+    "scan": {
+      "file": "scan.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 98006,
+      "alpha": true,
+      "sha256": "4806c4abe0dfdf84acb65e8427a877dc908cb47866abb4b27a9f79d2b34c42b4"
+    },
+    "report": {
+      "file": "report.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 66676,
+      "alpha": true,
+      "sha256": "e0431f162e2f79920aaa323397c27ca67bc33d85262a2640eed172c6a1c6c7f4"
+    },
+    "review": {
+      "file": "review.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 74338,
+      "alpha": true,
+      "sha256": "b17e78c5dee8d468611925b2fd2651177848650b72b17d49a036cfad2c884e6c"
+    },
+    "map": {
+      "file": "map.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 81874,
+      "alpha": true,
+      "sha256": "62f74667ad9a4ed6b0dde855515ba708ba48984464fabb25e86feb57f86fca81"
+    },
+    "community": {
+      "file": "community.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 94042,
+      "alpha": true,
+      "sha256": "0f2c04e91f8019f7e4eb6716bfd7dc3c92abf807f982f72395067a36eefb50b3"
+    }
+  }
+}

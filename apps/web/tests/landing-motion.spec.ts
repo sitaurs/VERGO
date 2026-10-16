@@ -65,29 +65,29 @@ test("scroll reveals each section once and stops offscreen hero motion", async (
   await page.locator("#peta").scrollIntoViewIfNeeded();
   await expect.poll(() => page.locator("#beranda").evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === "running").length)).toBe(0);
   await page.locator("#verifikasi").scrollIntoViewIfNeeded();
-  await expect.poll(() => page.evaluate(() => (window as unknown as { landingEntries: string[] }).landingEntries.some(text => text.includes("Dari laporan ke peta")))).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as unknown as { landingEntries: string[] }).landingEntries.some(text => text.includes("AI membantu.")))).toBe(true);
   await page.locator("#beranda").scrollIntoViewIfNeeded();
   await page.locator("#verifikasi").scrollIntoViewIfNeeded();
-  expect(await page.evaluate(() => (window as unknown as { landingEntries: string[] }).landingEntries.filter(text => text.includes("Dari laporan ke peta")).length)).toBe(1);
+  expect(await page.evaluate(() => (window as unknown as { landingEntries: string[] }).landingEntries.filter(text => text.includes("AI membantu.")).length)).toBe(1);
 });
 
-test("floating interactive cards settle under hover and keyboard focus", async ({ page }, info) => {
-  test.skip(info.project.name === "mobile", "Desktop floating cards are intentionally hidden on phones.");
+test("2.5D decoration settles under hover and controls never float", async ({ page }, info) => {
+  test.skip(info.project.name === "mobile", "Pointer hover is a desktop interaction.");
   await fixtureApi(page, { guest: true });
   await page.goto("/");
-  const card = page.locator('[data-landing-float="card"]').first();
+  const card = page.locator('[data-landing-float="shape"]').first();
   await expect(card).toBeVisible();
   const state = () => card.evaluate(element => element.getAnimations().filter(animation => animation.id === "vergo-ambient").map(animation => animation.playState));
   await expect.poll(state).toEqual(["running"]);
-  await expect.poll(() => page.locator("[data-landing-scan]").evaluate(element => Number(element.getAnimations().find(animation => animation.id === "vergo-ambient")?.currentTime ?? 0))).toBeGreaterThan(4800);
+  await expect(page.locator('[data-landing-float] a, [data-landing-float] button')).toHaveCount(0);
   // A real pointer can enter a moving surface; locator.hover waits for all motion to finish.
   const box = (await card.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await expect.poll(state).toEqual(["paused"]);
-  await card.focus();
+  const action = page.locator('#beranda a[href="/dashboard?view=scan"]');
+  await action.focus();
   await page.mouse.move(1, 1);
-  await expect.poll(state).toEqual(["paused"]);
-  await expect(card).toBeFocused();
+  await expect(action).toBeFocused();
   await page.locator("h1").click();
   await expect.poll(state).toEqual(["running"]);
 });

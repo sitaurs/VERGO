@@ -88,3 +88,26 @@
 }
 @media (max-height: 600px) { .menuBody { padding-top: 20px; } .intro { margin-bottom: 16px; } .menuLinks a { min-height: 52px; } }
 @media (prefers-reduced-motion: reduce) { .links a, .loginAction, .primaryAction { transition: none; } }
+
+/* The public landing header follows the approved VERGO 2.5D layout. */
+.header { height:80px; padding:0; border-bottom:1px solid #e8eee8; background:#fffffff5; backdrop-filter:blur(12px); }
+.bar { width:min(1280px,calc(100% - 80px)); height:80px; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; backdrop-filter:none; gap:15px; }
+.brand { height:auto; padding:0; border:0; border-radius:0; box-shadow:none; background:transparent; }
+.bar .brandImage { width:142px; }
+.links { gap:2px; }
+.links a { min-height:40px; padding-inline:12px; font-size:12px; font-weight:600; }
+.links a:hover { background:#f2f8f3; color:#087f5b; }
+.links a[aria-current="location"] { background:#eaf5ee; color:#087f5b; box-shadow:none; }
+.loginAction { min-height:42px; padding-inline:11px; font-size:12px; }
+.primaryAction { min-height:42px; padding-inline:16px; border-color:#087f5b; border-radius:9px; background:#087f5b; box-shadow:0 3px 9px #087f5b14; font-size:12px; }
+.primaryAction:hover { background:#056747; box-shadow:0 5px 12px #087f5b22; }
+.languageControl { display:inline-flex; align-items:center; }
+.languageControl button { min-height:42px; }
+.menuTrigger { border-radius:10px; border-color:#dcebe0; background:#f0f8f2; }
+.actionsPending { width:auto; }
+.actionPlaceholder { width:130px; height:42px; border-radius:9px; }
+.feedback { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@media(max-width:1199px) { .bar { width:calc(100% - 56px); } }
+@media(max-width:760px) { .header,.bar { height:76px; } .bar { width:calc(100% - 40px); gap:9px; padding:0; } .bar .brandImage { width:120px; } .brand { height:auto; padding:0; } .actions { gap:6px; } .primaryAction { min-height:40px; padding:9px 10px; font-size:10px; } .primaryAction svg { width:13px; height:13px; } .languageControl button { min-height:40px; } .menuTrigger { width:40px; height:40px; } .actionPlaceholder { width:95px; height:40px; } }
+@media(max-width:360px) { .bar { width:calc(100% - 32px); gap:7px; } .bar .brandImage { width:110px; } .actions .primaryAction,.actionPlaceholder { display:none; } .actionsPending { min-width:0; } }
+@media(max-width:760px) { .menuTrigger { width:44px; height:44px; } .primaryAction,.languageControl button { min-height:44px; } }

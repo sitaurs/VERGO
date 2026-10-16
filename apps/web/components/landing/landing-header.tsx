@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronRight, FileText, GraduationCap, House, Info, LayoutDashboard, LayoutGrid, Leaf, MapPin, Menu, X } from "lucide-react";
 import BrandLogo from "../brand-logo";
+import LanguageSwitcher from "../language-switcher/language-switcher";
 import styles from "./landing-header.module.css";
 import { useI18n } from "../../lib/i18n/provider";
 import { getMe } from "../../lib/api/client";
@@ -20,6 +21,7 @@ const links = [
 export default function LandingHeader() {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
+  const [feedback, setFeedback] = useState("");
   const [active, setActive] = useState("#beranda");
   const [authState, setAuthState] = useState<"checking" | "guest" | "authenticated">("checking");
   const dialog = useRef<HTMLDialogElement>(null);
@@ -84,10 +86,12 @@ export default function LandingHeader() {
         </nav>
         <div className={`${styles.actions} ${authState === "checking" ? styles.actionsPending : ""}`} aria-busy={authState === "checking"}>
           {authActions()}
+          <span className={styles.languageControl}><LanguageSwitcher onFeedback={setFeedback} /></span>
         </div>
         <button className={styles.menuTrigger} type="button" aria-label={t("Buka menu")} aria-haspopup="dialog" aria-expanded={open} aria-controls="landing-mobile-menu" onClick={() => { setActive(window.location.hash || "#beranda"); setOpen(true); }}><Menu aria-hidden="true" /></button>
       </div>
     </header>
+    <span className={styles.feedback} role="status">{t(feedback)}</span>
     <dialog ref={dialog} id="landing-mobile-menu" className={styles.menuDialog} aria-labelledby="landing-menu-title" onClose={() => setOpen(false)}>
       <div className={styles.menuHeader}>
         <a href="#beranda" aria-label={t("VERGO, kembali ke beranda")} onClick={() => setOpen(false)}><BrandLogo width={140} /></a>

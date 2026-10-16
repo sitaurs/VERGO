@@ -31,7 +31,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1672, 1920]) {
       await scan.focus();
       await expect(scan).toBeFocused();
       await expect(hero.getByRole("link", { name: locale === "en" ? "Public incidents" : "Kejadian publik", exact: true })).toHaveAttribute("href", "/incidents");
-      await expect(hero.getByRole("link", { name: /Area map|Peta area/ }).last()).toHaveAttribute("href", "#peta");
+      await expect(hero.getByRole("link", { name: locale === "en" ? "Explore the map" : "Jelajahi peta", exact: true })).toHaveAttribute("href", "#peta");
       await hero.getByRole("heading", { level: 1 }).click();
       await expect.poll(() => hero.evaluate(element => document.getAnimations().filter(animation =>
         animation.id === "sap-entry" && animation.effect instanceof KeyframeEffect &&
