@@ -5,7 +5,6 @@ export const landing25d: Record<string, string> = {
   "Aksi yang tepat.": "The right action.",
   "Kenali sampah dengan AI, petakan lokasinya, dan ikuti laporan yang ditinjau manusia.": "Identify waste with AI, map its location, and follow reports reviewed by people.",
   "Jelajahi peta": "Explore the map",
-  "Ilustrasi alur VERGO": "VERGO workflow illustration",
   "Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO": "Illustration of waste photos, location context, and human review in VERGO",
   "Lihat masalahnya.": "See the problem.",
   "Tentukan langkahnya.": "Find your next step.",

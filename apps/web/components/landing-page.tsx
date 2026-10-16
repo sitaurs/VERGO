@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Camera, Check, ChevronDown, Clock3, FileText, Leaf, LockKeyhole, MapPin, Pause, Play, Recycle, ShieldCheck, UsersRound, CalendarDays } from "lucide-react";
+import { ArrowRight, Camera, Check, ChevronDown, Clock3, FileText, Leaf, LockKeyhole, MapPin, Recycle, ShieldCheck, UsersRound, CalendarDays } from "lucide-react";
 import LandingHeader from "./landing/landing-header";
 import PublicMapSection from "./public-map-section";
 import BrandLogo from "./brand-logo";
@@ -59,9 +59,8 @@ function ReportPreview() {
 export default function LandingPage() {
   const { t } = useI18n();
   const rootRef = useRef<HTMLDivElement>(null);
-  const [motionPaused, setMotionPaused] = useState(false);
   const [bottomDetail, setBottomDetail] = useState<BottomDetail | null>(null);
-  useLandingMotion(rootRef, motionPaused);
+  useLandingMotion(rootRef, false);
   return <div ref={rootRef} data-motion-ignore data-landing-motion className={`${s.root} ${motionStyles.root}`}>
     <a className="skip-link" href="#beranda">{t("Lewati navigasi")}</a><LandingHeader />
     <main>
@@ -72,8 +71,7 @@ export default function LandingPage() {
           <div className={s.heroActions} data-landing-enter="actions" data-landing-order="3"><a className={s.primary} data-landing-action href="/dashboard?view=scan"><Camera size={21} />{t("Mulai scan")}<ArrowRight size={19} /></a><a className={s.secondary} data-landing-action href="#peta">{t("Jelajahi peta")}<ArrowRight size={19} /></a></div>
           <ul className={s.assurances} data-landing-enter="assurances" data-landing-order="4"><li><Camera />{t("Bukti foto")}</li><li><MapPin />{t("Konteks lokasi")}</li><li><UsersRound />{t("Tinjauan manusia")}</li></ul><a className={s.incidentLink} href="/incidents">{t("Kejadian publik")}<ArrowRight size={15} /></a>
         </div>
-        <div className={s.heroVisual} data-landing-enter="hero-card"><span className={s.visualNote}>{t("Ilustrasi alur VERGO")}</span><div data-landing-float="shape"><Artwork name="hero" alt={t("Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO")} eager className={s.heroArtwork} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 55vw, 780px" /></div></div>
-        <button type="button" className={s.motionToggle} data-landing-motion-toggle aria-pressed={motionPaused} onClick={() => setMotionPaused(value => !value)}>{motionPaused ? <Play size={14} /> : <Pause size={14} />}{t(motionPaused ? "Lanjutkan animasi" : "Jeda animasi")}</button>
+        <div className={s.heroVisual} data-landing-enter="hero-card"><div data-landing-float="shape"><Artwork name="hero" alt={t("Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO")} eager className={s.heroArtwork} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 55vw, 780px" /></div></div>
       </div></section>
       <section id="cara-kerja" className={`${s.section} ${s.container}`} aria-labelledby="workflow-title">
         <div className={`${s.heading} ${s.centered}`} data-landing-enter="heading"><span className={s.pill}>{t("Cara kerja")}</span><h2 id="workflow-title">{t("Lihat masalahnya.")} <em>{t("Tentukan langkahnya.")}</em></h2></div>

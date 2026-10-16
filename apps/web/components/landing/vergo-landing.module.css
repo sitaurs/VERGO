@@ -27,8 +27,6 @@
 .artwork { position:relative; min-width:0; width:100%; aspect-ratio:1; }
 .artwork img { object-fit:contain; }
 .heroArtwork { aspect-ratio:4/3; width:112%; max-width:none; margin-left:-5%; }
-.visualNote { position:absolute; right:6px; top:10px; z-index:1; padding:7px 12px; border:1px solid #e4eee7; border-radius:99px; background:#edf7f0d9; color:#587b6d; font-size:10px; }
-.motionToggle { position:absolute; right:0; bottom:14px; display:inline-flex; align-items:center; gap:6px; min-height:32px; padding:5px 10px; border:1px solid #dce9e0; border-radius:8px; background:#ffffffc7; color:#5a7468; font-size:10px; }
 .heading { margin-bottom:24px; }
 .heading h2 { margin-top:11px; font-size:clamp(26px,2.55vw,35px); line-height:1.22; letter-spacing:-.04em; font-weight:800; }
 .heading > p { margin-top:12px; color:var(--landing-muted); font-size:15px; line-height:1.7; }
@@ -162,8 +160,6 @@
   .incidentLink { margin-top:10px; font-size:11px; }
   .heroVisual { margin-top:12px; padding-top:8px; }
   .heroArtwork { width:110%; margin-left:-5%; }
-  .visualNote { top:0; right:0; font-size:9px; padding:5px 9px; }
-  .motionToggle { right:0; bottom:8px; min-height:32px; }
   .heading { margin-bottom:24px; }
   .heading h2 { font-size:clamp(26px,6.7vw,35px); line-height:1.2; margin-top:11px; }
   .heading > p { font-size:14px; }
@@ -247,7 +243,7 @@
   .footerBottom a { gap:5px; }
 }
 @media(max-width:360px) { .container { width:calc(100% - 32px); } .heroCopy h1 { font-size:32px; } .assurances { justify-content:flex-start; gap:9px 11px; } .assurances li { font-size:9px; } .steps li { grid-template-columns:100px minmax(0,1fr); gap:12px; } .steps h3 { font-size:15px; } .feature { padding:14px 12px 14px 6px; gap:10px; grid-template-columns:.85fr 1.15fr; } .feature h3 { font-size:15px; } .feature p { font-size:11px; } .verificationSteps li { grid-template-columns:90px 1fr; gap:12px; } .verificationSteps h3 { font-size:14px; } .verificationSteps p { font-size:12px; } .preview { grid-template-columns:85px 1fr; padding:9px; } }
-@media(prefers-reduced-motion:reduce) { .root *, .root *::before, .root *::after { scroll-behavior:auto!important; } .motionToggle { display:none; } .primary,.secondary { transition:none; } }
+@media(prefers-reduced-motion:reduce) { .root *, .root *::before, .root *::after { scroll-behavior:auto!important; } .primary,.secondary { transition:none; } }
 @media(max-width:760px) {
   .assurances li { font-size:11px; }
   .steps p,.feature p,.verificationSteps p,.communityCard p { font-size:14px; }

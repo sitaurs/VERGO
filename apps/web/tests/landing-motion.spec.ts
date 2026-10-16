@@ -9,7 +9,7 @@ async function animationState(page: Page) {
   })));
 }
 
-test("ambient motion can pause and resume without replaying content or changing links", async ({ page }) => {
+test("hero omits the removed controls and label while preserving motion and links", async ({ page }) => {
   const requests = await fixtureApi(page, { guest: true });
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -17,36 +17,27 @@ test("ambient motion can pause and resume without replaying content or changing 
   const root = page.locator("[data-landing-motion]");
   await expect(root).toHaveAttribute("data-landing-motion-state", "running");
   await expect.poll(async () => (await animationState(page)).some(animation => animation.id === "vergo-ambient" && animation.state === "running")).toBe(true);
-  const title = await page.locator("h1").innerText();
-  await page.getByRole("button", { name: "Jeda animasi", exact: true }).click();
-  await expect(root).toHaveAttribute("data-landing-motion-state", "paused");
-  await expect(page.getByRole("button", { name: "Lanjutkan animasi" })).toHaveAttribute("aria-pressed", "true");
-  expect((await animationState(page)).every(animation => animation.state !== "running")).toBe(true);
-  await page.getByRole("button", { name: "Lanjutkan animasi" }).click();
-  await expect(root).toHaveAttribute("data-landing-motion-state", "running");
-  await expect.poll(async () => (await animationState(page)).some(animation => animation.id === "vergo-ambient" && animation.state === "running")).toBe(true);
-  expect(await page.locator("h1").innerText()).toBe(title);
+  await expect(page.locator("[data-landing-motion-toggle]")).toHaveCount(0);
+  await expect(page.getByText(/^(Ilustrasi alur VERGO|VERGO workflow illustration)$/)).toHaveCount(0);
+  await expect(page.locator("h1")).toBeVisible();
   await expect(page.getByRole("link", { name: "Mulai scan", exact: true })).toHaveAttribute("href", "/dashboard?view=scan");
   await expect(page.getByRole("link", { name: "Kejadian publik", exact: true }).first()).toHaveAttribute("href", "/incidents");
   expect(errors).toEqual([]);
   expect(requests.filter(request => !["GET", "HEAD"].includes(request.method))).toEqual([]);
 });
 
-test("live reduced-motion changes settle decoration immediately and keep the user's pause choice", async ({ page }) => {
+test("live reduced-motion changes settle decoration and restore motion when allowed", async ({ page }) => {
   await fixtureApi(page, { guest: true });
   await page.goto("/");
   const root = page.locator("[data-landing-motion]");
   await expect(root).toHaveAttribute("data-landing-motion-state", "running");
-  await page.getByRole("button", { name: "Jeda animasi", exact: true }).click();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(root).toHaveAttribute("data-landing-motion-state", "reduced");
   await expect.poll(() => animationState(page)).toEqual([]);
-  await expect(page.locator("[data-landing-motion-toggle]")).toBeHidden();
+  await expect(page.locator("[data-landing-motion-toggle]")).toHaveCount(0);
   await expect(page.locator("h1")).toBeVisible();
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect(root).toHaveAttribute("data-landing-motion-state", "paused");
-  expect(await animationState(page)).toEqual([]);
-  await page.getByRole("button", { name: "Lanjutkan animasi" }).click();
+  await expect(root).toHaveAttribute("data-landing-motion-state", "running");
   await expect.poll(async () => (await animationState(page)).some(animation => animation.state === "running")).toBe(true);
 });
 
