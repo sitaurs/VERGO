@@ -25,7 +25,7 @@ function invalid(): never {
   throw new ApiError(
     502,
     "INVALID_INSTAGRAM_RESPONSE",
-    "Respons publikasi tidak sesuai kontrak R1. Hubungi pengelola SAP.",
+    "Respons publikasi tidak sesuai kontrak R1. Hubungi pengelola VERGO.",
   );
 }
 function validatePost(p: InstagramPost) {

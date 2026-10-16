@@ -1,5 +1,5 @@
 export const volunteer: Record<string, string> = {
-  "SAP · KEGIATAN RELAWAN": "SAP · VOLUNTEER ACTIVITIES",
+  "VERGO · KEGIATAN RELAWAN": "VERGO · VOLUNTEER ACTIVITIES",
   "Cari kegiatan, pantau pendaftaran, dan kelola penugasan koordinator.": "Explore activities, track registrations, and manage coordinator assignments.",
   "Pantau status permintaan dan persiapkan kegiatan Anda.": "Track your requests and prepare for your activities.",
   "Tinjau tugas sebelum menerima. Kegiatan dapat dikelola setelah penugasan diterima.": "Review assignments before accepting. Activities can be managed after you accept an assignment.",
@@ -30,7 +30,7 @@ export const volunteer: Record<string, string> = {
   "Cari kegiatan dan kelola pendaftaran.": "Explore activities and manage registrations.",
   "Memuat ruang relawan…": "Loading volunteer workspace…",
   "Buka kronologi publik dan kirim pembaruan warga": "View the public timeline and submit a community update",
-  "Fitur kegiatan relawan belum diaktifkan oleh pengelola SAP.": "Volunteer activities have not been enabled by SAP administrators.",
+  "Fitur kegiatan relawan belum diaktifkan oleh pengelola VERGO.": "Volunteer activities have not been enabled by VERGO administrators.",
   "Permintaan bergabung dikirim ke koordinator.": "Your join request has been sent to the coordinator.",
   "Pendaftaran Anda dibatalkan.": "Your registration has been cancelled.",
   "Penugasan koordinator diterima.": "Coordinator assignment accepted.",

@@ -197,7 +197,7 @@ function invalid(): never {
   throw new ApiError(
     502,
     "INVALID_COMMUNITY_RESPONSE",
-    "Respons komunitas belum lengkap. Muat ulang halaman atau hubungi pengelola SAP.",
+    "Respons komunitas belum lengkap. Muat ulang halaman atau hubungi pengelola VERGO.",
   );
 }
 

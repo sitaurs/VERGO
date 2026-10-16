@@ -19,7 +19,7 @@ export const adminNav: NavigationItem<AdminTab>[] = [
   { id: "admin-moderation", label: "Moderasi laporan", icon: ShieldCheck, description: "Tinjau laporan yang masuk." },
   { id: "admin-operations", label: "Penugasan & SLA", icon: ClipboardList, description: "Tugaskan laporan dan pantau tenggat." },
   { id: "admin-pending-map", label: "Peta laporan menunggu", icon: Map, description: "Lihat laporan yang belum diverifikasi." },
-  { id: "admin-users", label: "Pengguna & peran", icon: Users, description: "Kelola akses pengguna SAP." },
+  { id: "admin-users", label: "Pengguna & peran", icon: Users, description: "Kelola akses pengguna VERGO." },
   { id: "admin-community", label: "Komunitas & Hermes", icon: MessageCircle, description: "Tinjau pembaruan warga dan rekomendasi Hermes." },
   { id: "admin-activities", label: "Kegiatan relawan", icon: Leaf, description: "Kelola kegiatan dan peserta." },
   { id: "admin-impact", label: "Dampak", icon: BarChart3, description: "Pantau hasil aksi lingkungan." },

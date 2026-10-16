@@ -130,7 +130,7 @@ Halaman berikutnya|Next page
 Publikasi yang dapat ditelusuri|Traceable publishing
 Waktu masuk draf dicatat saat tersimpan. Waktu terposting dicatat setelah publikasi Instagram berhasil.|Draft creation time is recorded when saved. Posting time is recorded after successful Instagram publication.
 Tautan otorisasi sudah kedaluwarsa. Mulai koneksi kembali.|The authorisation link has expired. Start connecting again.
-Tautan otorisasi Instagram belum valid. Hubungi pengelola SAP.|The Instagram authorisation link is invalid. Contact the SAP administrator.
+Tautan otorisasi Instagram belum valid. Hubungi pengelola VERGO.|The Instagram authorisation link is invalid. Contact the VERGO administrator.
 Akun belum dapat dihubungkan.|The account could not be connected.
 ADMIN · PUBLIKASI|ADMIN · PUBLISHING
 Publikasi Instagram|Instagram publishing
@@ -140,7 +140,7 @@ Perlu dihubungkan ulang|Reconnection needed
 Belum terhubung|Not connected
 Akun Instagram berhasil dihubungkan.|Instagram account connected.
 Permintaan login kedaluwarsa atau sudah pernah digunakan.|The login request has expired or was already used.
-SAP sudah menerima akun publikasi. Muat ulang informasi akun bila status belum berubah.|SAP has received the publishing account. Reload account information if its status has not changed.
+VERGO sudah menerima akun publikasi. Muat ulang informasi akun bila status belum berubah.|VERGO has received the publishing account. Reload account information if its status has not changed.
 Mulai lagi dari tombol Hubungkan akun. Jangan membuka ulang URL callback dari percobaan sebelumnya.|Start again using Connect account. Do not reopen a callback URL from an earlier attempt.
 Coba hubungkan lagi|Try connecting again
 Postingan|Posts
@@ -149,13 +149,13 @@ Publikasi Instagram belum diaktifkan|Instagram publishing is not enabled
 Pengelola perlu menyiapkan layanan R1. Penyimpanan, persetujuan, dan publish belum tersedia.|The administrator needs to prepare the R1 service. Saving, approval, and publishing are unavailable.
 Informasi publikasi belum tersedia|Publishing information is unavailable
 Pengaturan publikasi tersimpan.|Publishing settings saved.
-Tujuan publikasi SAP.|SAP publishing destination.
+Tujuan publikasi VERGO.|VERGO publishing destination.
 Hubungkan ulang akun|Reconnect account
 Hubungkan akun|Connect account
-Hubungkan akun publikasi SAP|Connect SAP publishing account
+Hubungkan akun publikasi VERGO|Connect VERGO publishing account
 Akun terhubung ke layanan publikasi.|The account is connected to the publishing service.
 Akun diperlukan untuk menerbitkan foto dan caption ke Instagram.|An account is required to publish photos and captions to Instagram.
-Lanjutkan melalui halaman otorisasi resmi Meta. Kata sandi dan token tidak dimasukkan di SAP.|Continue through Meta’s official authorisation page. Passwords and tokens are not entered in SAP.
+Lanjutkan melalui halaman otorisasi resmi Meta. Kata sandi dan token tidak dimasukkan di VERGO.|Continue through Meta’s official authorisation page. Passwords and tokens are not entered in VERGO.
 Koneksi akun belum diaktifkan oleh pengelola. Foto laporan tetap tersedia untuk ditinjau.|Account connection is not enabled by the administrator. Report photos remain available for review.
 Terhubung|Connected
 Putuskan koneksi akun|Disconnect account

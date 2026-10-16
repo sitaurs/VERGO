@@ -1,11 +1,11 @@
 export const errors: Record<string, string> = Object.fromEntries(`
-Preferensi SAPA belum tersimpan di akun.|The SAPA preference could not be saved to your account.
-Chat SAPA sementara tidak tersedia. Coba lagi nanti atau buka Bantuan.|SAPA chat is temporarily unavailable. Try again later or open Help.
-Respons SAPA tidak sesuai kontrak.|The SAPA response does not match the contract.
+Preferensi VERA belum tersimpan di akun.|The VERA preference could not be saved to your account.
+Chat VERA sementara tidak tersedia. Coba lagi nanti atau buka Bantuan.|VERA chat is temporarily unavailable. Try again later or open Help.
+Respons VERA tidak sesuai kontrak.|The VERA response does not match the contract.
 Pemuatan terlalu lama. Coba muat ulang.|Loading took too long. Try reloading.
 Hasil permintaan belum diketahui. Periksa versi terbaru sebelum mencoba lagi.|The request outcome is unknown. Check the latest version before retrying.
 Fitur belum tersedia. Pengelola perlu menyiapkan dan mengaktifkan layanan R1.|This feature is unavailable. The administrator needs to prepare and enable the R1 service.
-Layanan belum dapat dihubungi. Coba muat ulang atau hubungi pengelola SAP.|The service cannot be reached. Try reloading or contact the SAP administrator.
+Layanan belum dapat dihubungi. Coba muat ulang atau hubungi pengelola VERGO.|The service cannot be reached. Try reloading or contact the VERGO administrator.
 Sesi berakhir. Masuk kembali untuk melanjutkan.|Your session has ended. Sign in again to continue.
 Verifikasi email diperlukan. Masuk kembali dan selesaikan verifikasi.|Email verification is required. Sign in again and complete verification.
 Sesi keamanan tidak valid. Muat ulang halaman sebelum melanjutkan.|The security session is invalid. Reload the page before continuing.
@@ -34,9 +34,9 @@ Kejadian sudah ditutup untuk tindakan ini.|This incident is closed for this acti
 Tindakan belum tersedia pada status saat ini.|The action is unavailable for the current status.
 Akun ini bukan koordinator kegiatan.|This account is not the activity coordinator.
 Tindakan belum tersedia. Hubungi pengelola untuk memeriksa izin dan kesiapan layanan.|The action is unavailable. Contact the administrator to check permissions and service readiness.
-Respons API SAP tidak lengkap.|The SAP API response is incomplete.
+Respons API VERGO tidak lengkap.|The VERGO API response is incomplete.
 Tanggal akhir harus sama atau setelah tanggal mulai.|The end date must be on or after the start date.
 Pilih periode paling lama 366 hari.|Choose a period of up to 366 days.
-Masukkan ID sel H3 yang valid dari peta area SAP.|Enter a valid H3 cell ID from the SAP area map.
-Respons publikasi tidak sesuai kontrak R1. Hubungi pengelola SAP.|The publishing response does not match the R1 contract. Contact the SAP administrator.
+Masukkan ID sel H3 yang valid dari peta area VERGO.|Enter a valid H3 cell ID from the VERGO area map.
+Respons publikasi tidak sesuai kontrak R1. Hubungi pengelola VERGO.|The publishing response does not match the R1 contract. Contact the VERGO administrator.
 `.trim().split("\n").map(line => line.split("|")));

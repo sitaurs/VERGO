@@ -77,10 +77,10 @@ Penugasan diterima|Assignment accepted
 Menunggu jawaban penugasan|Awaiting assignment response
 Tinjau dan kelola|Review and manage
 Belum tersedia|Not available yet
-Beranda SAP|SAP home
+Beranda VERGO|VERGO home
 Navigasi publik|Public navigation
 Aktivitas saya|My activity
-SAP · Aksi warga|SAP · Community action
+VERGO · Aksi warga|VERGO · Community action
 Masuk / verifikasi email|Sign in / verify email
 Belum ada bukti yang disetujui untuk publik.|No evidence approved for public viewing yet.
 Bukti yang disetujui|Approved evidence
@@ -114,7 +114,7 @@ Tutup · simpan draf|Close · keep draft
 ← Tugas saya|← My assignments
 Memuat penugasan…|Loading assignment…
 Koordinator ·|Coordinator ·
-SAP · KOORDINATOR KEGIATAN|SAP · ACTIVITY COORDINATOR
+VERGO · KOORDINATOR KEGIATAN|VERGO · ACTIVITY COORDINATOR
 Jawab penugasan|Respond to assignment
 Saya mengizinkan nama saya ditampilkan sebagai koordinator pada kegiatan ini.|I allow my name to be displayed as coordinator of this activity.
 Terima penugasan|Accept assignment

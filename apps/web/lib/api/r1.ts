@@ -60,7 +60,7 @@ export function r1Error(error: unknown): string {
     if (error.code === "FEATURE_UNAVAILABLE")
       return "Fitur belum tersedia. Pengelola perlu menyiapkan dan mengaktifkan layanan R1.";
     if (error.status >= 500)
-      return "Layanan belum dapat dihubungi. Coba muat ulang atau hubungi pengelola SAP.";
+      return "Layanan belum dapat dihubungi. Coba muat ulang atau hubungi pengelola VERGO.";
     if (error.status === 401)
       return "Sesi berakhir. Masuk kembali untuk melanjutkan.";
     if (["EMAIL_NOT_VERIFIED", "EMAIL_UNVERIFIED"].includes(error.code))

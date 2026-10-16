@@ -1,4 +1,4 @@
-/** Report form adapter using the generated SAP v1 contract types. */
+/** Report form adapter using the generated VERGO v1 contract types. */
 import { createReport as createSapReport, getCsrfToken, getMe, uploadMedia, type ReportInput } from "../lib/api/client";
 
 export async function getReportCsrf(): Promise<string> {

@@ -56,7 +56,7 @@ Menunggu tinjauan|Awaiting review
 Tinjau hasil|Review results
 Muat hasil berikutnya|Load more results
 Belum ditentukan|Not set
-Koordinator SAP|SAP coordinator
+Koordinator VERGO|VERGO coordinator
 Koordinator kegiatan|Activity coordinator
 Belum ditugaskan|Not assigned
 Status kegiatan berhasil diperbarui.|Activity status updated.
@@ -111,7 +111,7 @@ Menunggu penerimaan penugasan|Awaiting assignment acceptance
 Laporkan hasil aksi|Report action results
 Tambahkan bukti sebelum dan sesudah serta catatan hasil kegiatan.|Add before and after evidence along with activity result notes.
 Kirim hasil kegiatan|Submit activity results
-Status akan diperbarui setelah tindakan diterima oleh SAP.|The status will update after SAP accepts the action.
+Status akan diperbarui setelah tindakan diterima oleh VERGO.|The status will update after VERGO accepts the action.
 Alasan tindakan|Action reason
 Jelaskan alasan tindakan (minimal 5 karakter).|Explain the reason for this action (at least 5 characters).
 /1000 karakter|/1000 characters
@@ -143,7 +143,7 @@ Laporan sampah|Waste report
 Laporan tidak ditemukan|Report not found
 Muat laporan berikutnya atau ubah kata kunci pencarian.|Load more reports or change the search keyword.
 Muat laporan berikutnya|Load more reports
-Draf dapat disusun terlebih dahulu. Publikasi memerlukan laporan utama yang terbuka untuk publik serta memenuhi persyaratan SAP.|You can prepare a draft first. Publishing requires a public primary report that meets SAP requirements.
+Draf dapat disusun terlebih dahulu. Publikasi memerlukan laporan utama yang terbuka untuk publik serta memenuhi persyaratan VERGO.|You can prepare a draft first. Publishing requires a public primary report that meets VERGO requirements.
 Nama kegiatan|Activity name
 Contoh: Aksi bersih bantaran sungai|Example: Riverside cleanup
 /150 karakter|/150 characters
@@ -238,6 +238,6 @@ Simpan kehadiran|Save attendance
 Status belum dicatat tidak dihitung sebagai tidak hadir.|Unrecorded attendance does not count as absent.
 Pilih peserta|Select participant
 Tinjau permintaan, alasan keputusan, dan kehadiran dalam panel ini.|Review requests, decision reasons, and attendance in this panel.
-ADMIN SAP · KEGIATAN RELAWAN|SAP ADMIN · VOLUNTEER ACTIVITIES
+ADMIN VERGO · KEGIATAN RELAWAN|VERGO ADMIN · VOLUNTEER ACTIVITIES
 Memuat informasi kegiatan…|Loading activity information…
 `.trim().split("\n").map(line => line.split("|")));

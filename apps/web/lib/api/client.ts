@@ -32,7 +32,7 @@ function checkContractVersion(response: Response) {
   const seen = response.headers.get("x-contract-version");
   if (seen && seen !== EXPECTED_CONTRACT_VERSION) {
     contractDriftWarned = true;
-    console.warn(`SAP contract drift: UI expects ${EXPECTED_CONTRACT_VERSION}, API responded with ${seen}. Regenerate lib/api/schema.d.ts.`);
+    console.warn(`VERGO contract drift: UI expects ${EXPECTED_CONTRACT_VERSION}, API responded with ${seen}. Regenerate lib/api/schema.d.ts.`);
   }
 }
 
@@ -55,7 +55,7 @@ async function readEnvelope<T>(response: Response): Promise<T> {
     const message = envelope?.error?.message || "Permintaan belum berhasil. Coba lagi.";
     throw new ApiError(response.status, code, message, envelope?.error?.fields, Number(response.headers.get("retry-after")) || undefined);
   }
-  if (!envelope || !("data" in envelope)) throw new ApiError(response.status, "INVALID_RESPONSE", "Respons API SAP tidak lengkap.");
+  if (!envelope || !("data" in envelope)) throw new ApiError(response.status, "INVALID_RESPONSE", "Respons API VERGO tidak lengkap.");
   return envelope.data as T;
 }
 

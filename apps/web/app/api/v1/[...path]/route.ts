@@ -1,4 +1,4 @@
-/** Same-origin transport for the SAP v1 API. Credentials stay on the server. */
+/** Same-origin transport for the VERGO v1 API. Credentials stay on the server. */
 // API_INTERNAL_URL is the canonical name shared with the backend config; SAPA_API_BASE_URL
 // is kept as a legacy alias so existing deployments keep working.
 const backendOrigin = process.env.API_INTERNAL_URL || process.env.SAPA_API_BASE_URL || "http://localhost:3001";
@@ -45,7 +45,7 @@ async function proxy(request: Request) {
     for (const cookie of upstream.headers.getSetCookie()) responseHeaders.append("set-cookie", cookie);
     return new Response(await upstream.arrayBuffer(), { status: upstream.status, headers: responseHeaders });
   } catch {
-    return Response.json({ error: { code: "BACKEND_UNAVAILABLE", message: "Layanan SAP belum dapat dihubungi." } }, { status: 503 });
+    return Response.json({ error: { code: "BACKEND_UNAVAILABLE", message: "Layanan VERGO belum dapat dihubungi." } }, { status: 503 });
   }
 }
 

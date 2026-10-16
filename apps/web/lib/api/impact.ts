@@ -16,7 +16,7 @@ export function validateImpactQuery(query: ImpactQuery): string | null {
   if (to - from > 366 * 86_400_000)
     return "Pilih periode paling lama 366 hari.";
   if (query.cellId && !/^[0-9a-f]{15}$/i.test(query.cellId))
-    return "Masukkan ID sel H3 yang valid dari peta area SAP.";
+    return "Masukkan ID sel H3 yang valid dari peta area VERGO.";
   return null;
 }
 

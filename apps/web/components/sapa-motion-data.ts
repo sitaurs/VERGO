@@ -1,4 +1,4 @@
-// Playback metadata from the supplied SAPA Leaf Guardian v2 manifest.
+// Playback metadata from the supplied VERA Leaf Guardian v2 manifest.
 // Original PNGs remain unchanged; fractional cells and foot anchors are preserved.
 export const SAPA_ASSET_ROOT = "/images/sapa/animation-v2-guardian/";
 export const SAPA_ARTWORK = {

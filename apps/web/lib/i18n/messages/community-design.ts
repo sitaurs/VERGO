@@ -1,7 +1,7 @@
 export const communityDesign: Record<string, string> = {
-  "Tentang SAP": "About",
+  "Tentang VERGO": "About",
   "Bersama untuk lingkungan yang lebih bersih.": "Together for a cleaner tomorrow.",
-  "Pelajari cara kerja SAP": "Discover how SAP works",
+  "Pelajari cara kerja VERGO": "Discover how VERGO works",
   "Opsi untuk {title}": "Options for {title}",
   "Lihat detail": "View details",
   "Salin tautan": "Copy link",
@@ -17,7 +17,7 @@ export const communityDesign: Record<string, string> = {
   "Terbaru": "Latest",
   "Terlama": "Oldest",
   "Dukungan terbanyak": "Most supported",
-  "Bukti yang disetujui SAP": "SAP-approved evidence",
+  "Bukti yang disetujui VERGO": "VERGO-approved evidence",
   "Coba kata kunci lain atau perluas pilihan status dan kategori.": "Try another search, or broaden the status and category filters.",
   "Pilih kegiatan lingkungan dan ajukan keikutsertaan Anda. Bersama, kita wujudkan lingkungan yang lebih bersih, sehat, dan berkelanjutan.": "Choose an environmental activity and apply to join. Together we can create cleaner, healthier, and more sustainable communities.",
   "Filter kegiatan relawan": "Volunteer activity filters",

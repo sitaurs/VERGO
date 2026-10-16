@@ -1,4 +1,4 @@
-/** VERA adapter for the authenticated SAP v1 assistant endpoint. */
+/** VERA adapter for the authenticated VERGO v1 assistant endpoint. */
 import { ApiError, apiMutate, getMe, updateSapaPreference } from "../lib/api/client";
 
 export type SapaPageContext =

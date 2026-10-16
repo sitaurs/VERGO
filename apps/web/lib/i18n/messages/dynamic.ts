@@ -22,7 +22,7 @@ Sepatu|Shoes
 Residu|Residual waste
 Sampah lainnya|Other waste
 Tidak diketahui|Unknown
-Fitur kegiatan relawan belum diaktifkan oleh pengelola SAP.|Volunteer activities have not been enabled by the SAP administrator.
+Fitur kegiatan relawan belum diaktifkan oleh pengelola VERGO.|Volunteer activities have not been enabled by the VERGO administrator.
 Data berubah sejak Anda membuka halaman. Muat versi terbaru, periksa kembali input, lalu simpan ulang.|The data has changed since you opened the page. Load the latest version, review your input, and save again.
 Kuota telah penuh. Muat peserta terbaru atau pilih cadangan.|Capacity is full. Load the latest participants or choose the waiting list.
 Laporan sumber belum memenuhi syarat publikasi atau izinnya sudah berubah.|The source report does not meet publishing requirements or its consent has changed.
@@ -76,7 +76,7 @@ Mengunggah foto {0} dari {1}…|Uploading photo {0} of {1}…
 Foto bukti {0}|Evidence photo {0}
 Hapus foto {0}|Remove photo {0}
 Bukti temuan {0}|Finding evidence {0}
-{0} chat SAPA · Seret untuk memindahkan|{0} SAPA chat · Drag to move
+{0} chat VERA · Seret untuk memindahkan|{0} VERA chat · Drag to move
 Material dikelompokkan ke kategori {0}.|The material is classified as {0}.
 Lihat detail {0}, {1}, {2}|View details: {0}, {1}, {2}
 Menampilkan {0} dari {1} hasil scan|Showing {0} of {1} scan results

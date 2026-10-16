@@ -1,9 +1,9 @@
 export const impact: Record<string, string> = Object.fromEntries(`
-Ringkasan dampak belum diaktifkan oleh pengelola SAP.|Impact summaries have not been enabled by the SAP administrator.
+Ringkasan dampak belum diaktifkan oleh pengelola VERGO.|Impact summaries have not been enabled by the VERGO administrator.
 Layanan dampak belum tersedia. Coba muat ulang beberapa saat lagi.|The impact service is unavailable. Try reloading shortly.
 Ringkasan dampak belum dapat dimuat.|The impact summary could not be loaded.
 Isi ID sel H3 untuk memilih area tertentu.|Enter an H3 cell ID to select a specific area.
-ADMIN SAP · DAMPAK|SAP ADMIN · IMPACT
+ADMIN VERGO · DAMPAK|VERGO ADMIN · IMPACT
 Dampak|Impact
 Pantau hasil aksi lingkungan dari bukti yang telah disetujui.|Track environmental action results using approved evidence.
 Mockup · data contoh|Mockup · sample data
@@ -20,17 +20,17 @@ Dari tanggal|From date
 Sampai tanggal|To date
 ID sel area H3|Area H3 cell ID
 Contoh: 8928308280fffff|Example: 8928308280fffff
-Gunakan ID sel dari peta area SAP.|Use a cell ID from the SAP area map.
+Gunakan ID sel dari peta area VERGO.|Use a cell ID from the VERGO area map.
 Memuat ringkasan dampak…|Loading impact summary…
 Ringkasan belum tersedia|Summary not available yet
 Ringkasan diperbarui untuk periode|Summary updated for the period
 Belum ada sumber publik yang disetujui dalam periode dan area ini. Pilih filter lain untuk melihat data.|No approved public sources for this period and area. Choose other filters to view data.
 Angka contoh untuk pratinjau desain · tidak berasal dari data produksi.|Sample figures for design preview · not production data.
 Ringkasan hanya mencakup sumber publik yang disetujui.|The summary includes only approved public sources.
-METODE DAMPAK SAP|SAP IMPACT METHOD
+METODE DAMPAK VERGO|VERGO IMPACT METHOD
 Angka yang dapat ditelusuri|Traceable figures
 Tutup metode perhitungan|Close calculation method
-Ringkasan mengikuti periode dan area yang dipilih. Hanya sumber publik yang memenuhi ketentuan SAP yang dihitung.|The summary follows the selected period and area. Only public sources meeting SAP requirements are counted.
+Ringkasan mengikuti periode dan area yang dipilih. Hanya sumber publik yang memenuhi ketentuan VERGO yang dihitung.|The summary follows the selected period and area. Only public sources meeting VERGO requirements are counted.
 Laporan terselesaikan|Resolved reports
 Laporan publik yang bukan duplikat dan berstatus selesai dalam periode terpilih.|Public, nonduplicate reports resolved within the selected period.
 Kegiatan, relawan, dan kehadiran|Activities, volunteers, and attendance

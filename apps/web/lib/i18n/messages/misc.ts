@@ -6,7 +6,7 @@ Peta laporan menunggu|Pending report map
 Pengguna & peran|Users & roles
 Tugaskan laporan dan pantau tenggat.|Assign reports and track deadlines.
 Lihat laporan yang belum diverifikasi.|View reports awaiting verification.
-Kelola akses pengguna SAP.|Manage SAP user access.
+Kelola akses pengguna VERGO.|Manage VERGO user access.
 Memuat operasional laporan…|Loading report operations…
 Memuat notifikasi…|Loading notifications…
 Memuat tugas laporan…|Loading report assignments…
@@ -15,7 +15,7 @@ Muat lagi|Load more
 Cari pengguna|Search users
 Nama atau email|Name or email
 {0} ({1})|{0} ({1})
-Petugas adalah admin SAP dengan email terverifikasi.|Assignees must be SAP administrators with verified email.
+Petugas adalah admin VERGO dengan email terverifikasi.|Assignees must be VERGO administrators with verified email.
 Memuat pengguna...|Loading users...
 Tidak ada admin terverifikasi pada halaman yang dimuat.|No verified administrators on the loaded page.
 Pengguna dan peran|Users and roles
@@ -91,77 +91,77 @@ Streak|Streak
 {0} hari|{0} days
 Tutup panel|Close panel
 Peta Laporan|Report map
-Pengguna SAP|SAP user
+Pengguna VERGO|VERGO user
 Sedang keluar…|Signing out…
 Halaman ini hanya untuk akun admin.|This page is only available to administrators.
 Kembali ke Akun dan menu|Back to Account and menu
 Menu admin mobile|Mobile administrator menu
 Navigasi utama mobile|Mobile main navigation
-Pusat bantuan SAP|SAP help centre
+Pusat bantuan VERGO|VERGO help centre
 Tutup pencarian|Close search
 Buka pencarian|Open search
-Asisten SAP|SAP assistant
-Minimalkan chat SAPA|Minimise SAPA chat
-SAPA melambaikan tangan|SAPA waving
-Hai! Aku SAPA.|Hi! I’m SAPA.
+Asisten VERA|VERA assistant
+Minimalkan chat VERA|Minimise VERA chat
+VERA melambaikan tangan|VERA waving
+Hai! Aku VERA.|Hi! I’m VERA.
 Mau bantu apa hari ini?|How can I help today?
-Bantuan cepat SAPA|SAPA quick help
+Bantuan cepat VERA|VERA quick help
 Cara pilah sampah|How to sort waste
 Lihat peta area|View area map
-Percakapan SAPA|SAPA conversation
-Sumber jawaban SAPA|SAPA answer sources
-Tulis pesan untuk SAPA…|Write a message to SAPA…
-Pesan untuk SAPA|Message for SAPA
-Kirim pesan ke SAPA|Send message to SAPA
+Percakapan VERA|VERA conversation
+Sumber jawaban VERA|VERA answer sources
+Tulis pesan untuk VERA…|Write a message to VERA…
+Pesan untuk VERA|Message for VERA
+Kirim pesan ke VERA|Send message to VERA
 Chat AI memerlukan akun backend yang terhubung.|AI chat requires a connected backend account.
 Memahami pertanyaan|Understanding your question
 Mencari info|Looking up information
 Menyusun jawaban|Preparing an answer
 Pesan belum dapat dikirim.|The message could not be sent.
 Bagaimana cara pilah sampah?|How do I sort waste?
-Tutup chat SAPA|Close SAPA chat
-Buka chat SAPA|Open SAPA chat
+Tutup chat VERA|Close VERA chat
+Buka chat VERA|Open VERA chat
 AI bekerja|AI working
-Tutup chat SAPA dari navbar|Close SAPA chat from navigation
-Buka chat SAPA dari navbar|Open SAPA chat from navigation
-SAPA sedang memproses…|SAPA is processing…
-SAPA siap membantu|SAPA is ready to help
+Tutup chat VERA dari navbar|Close VERA chat from navigation
+Buka chat VERA dari navbar|Open VERA chat from navigation
+VERA sedang memproses…|VERA is processing…
+VERA siap membantu|VERA is ready to help
 Menyiapkan dashboard…|Preparing dashboard…
-SAP — Kode pemulihan|SAP — Recovery codes
+VERGO — Kode pemulihan|VERGO — Recovery codes
 Simpan di tempat aman. Setiap kode hanya dapat digunakan sekali.|Store these safely. Each code can only be used once.
-SAP — Kenali sampah, laporkan lokasi, pahami area|SAP — Identify waste, report locations, understand your area
-SAP membantu mengenali jenis sampah, mengirim laporan penumpukan, dan melihat area dengan laporan terverifikasi.|SAP helps identify waste, report waste accumulation, and explore areas with verified reports.
+VERGO — Kenali sampah, laporkan lokasi, pahami area|VERGO — Identify waste, report locations, understand your area
+VERGO membantu mengenali jenis sampah, mengirim laporan penumpukan, dan melihat area dengan laporan terverifikasi.|VERGO helps identify waste, report waste accumulation, and explore areas with verified reports.
 Kenali sampah, laporkan penumpukan, dan lihat data area terverifikasi.|Identify waste, report waste accumulation, and explore verified area data.
 Masuk ke Sustainable AI Platform untuk melanjutkan aksi peduli lingkungan.|Sign in to Sustainable AI Platform to continue your environmental action.
 Buat akun Sustainable AI Platform untuk mengenali sampah dan memantau area.|Create a Sustainable AI Platform account to identify waste and monitor your area.
 Dari laporan yang jelas, tim kami lebih mudah menentukan langkah untuk lingkungan.|Clear reports help our team decide on the next environmental action.
 Foto, lokasi, dan catatan membantu tim kami memahami laporan sebelum menindaklanjutinya.|Photos, locations, and notes help our team understand reports before taking action.
 Izin Meta belum disetujui.|Meta permissions have not been granted.
-Mulai hubungkan lagi dan setujui permintaan akses akun SAP.|Connect again and approve SAP’s account access request.
+Mulai hubungkan lagi dan setujui permintaan akses akun VERGO.|Connect again and approve VERGO’s account access request.
 Izin Instagram belum lengkap.|Instagram permissions are incomplete.
 Pastikan izin instagram_basic, instagram_content_publish, pages_show_list, dan pages_read_engagement diminta dan disetujui.|Ensure instagram_basic, instagram_content_publish, pages_show_list, and pages_read_engagement permissions are requested and approved.
 Instagram belum ditemukan pada Facebook Page.|No Instagram account was found on the Facebook Page.
 Pastikan akun Instagram bertipe Professional (Business atau Creator), sudah ditautkan ke Facebook Page, dan akun Facebook yang dipakai memiliki akses ke Page tersebut.|Ensure Instagram is a Professional account (Business or Creator), linked to a Facebook Page, and that your Facebook account has access to that Page.
 Ada lebih dari satu akun Instagram yang tertaut.|More than one Instagram account is linked.
-Hubungi admin SAP untuk memilih Facebook Page tujuan publikasi.|Contact the SAP administrator to select the publishing Facebook Page.
+Hubungi admin VERGO untuk memilih Facebook Page tujuan publikasi.|Contact the VERGO administrator to select the publishing Facebook Page.
 Meta membatasi sementara permintaan ini.|Meta has temporarily limited this request.
 Tunggu sebentar, lalu coba hubungkan lagi.|Wait a moment, then try connecting again.
-SAP belum menerima jawaban dari Meta.|SAP has not received a response from Meta.
-Periksa koneksi internet lalu coba lagi. Jika berulang, kirim kode admin di bawah ke pengelola SAP.|Check your internet connection and try again. If this repeats, send the administrator code below to the SAP administrator.
+VERGO belum menerima jawaban dari Meta.|VERGO has not received a response from Meta.
+Periksa koneksi internet lalu coba lagi. Jika berulang, kirim kode admin di bawah ke pengelola VERGO.|Check your internet connection and try again. If this repeats, send the administrator code below to the VERGO administrator.
 Token dari Meta sudah kedaluwarsa.|The Meta token has expired.
 Mulai ulang proses Hubungkan akun agar Meta memberikan token baru.|Restart Connect account so Meta can issue a new token.
 Meta tidak memberikan token yang dapat digunakan.|Meta did not provide a usable token.
-Coba hubungkan ulang. Jika gagal lagi, kirim kode admin di bawah ke pengelola SAP.|Try reconnecting. If it fails again, send the administrator code below to the SAP administrator.
+Coba hubungkan ulang. Jika gagal lagi, kirim kode admin di bawah ke pengelola VERGO.|Try reconnecting. If it fails again, send the administrator code below to the VERGO administrator.
 Meta tidak mengirim kode izin.|Meta did not send an authorisation code.
 Mulai ulang proses Hubungkan akun.|Restart Connect account.
-Konfigurasi Meta di SAP belum lengkap.|SAP’s Meta configuration is incomplete.
-Hubungi pengelola SAP dan kirim kode admin di bawah.|Contact the SAP administrator and send the administrator code below.
-Versi Graph API SAP tidak valid.|SAP’s Graph API version is invalid.
+Konfigurasi Meta di VERGO belum lengkap.|VERGO’s Meta configuration is incomplete.
+Hubungi pengelola VERGO dan kirim kode admin di bawah.|Contact the VERGO administrator and send the administrator code below.
+Versi Graph API VERGO tidak valid.|VERGO’s Graph API version is invalid.
 Meta menolak permintaan koneksi.|Meta rejected the connection request.
 Coba lagi. Jika gagal lagi, kirim kode admin di bawah agar pengelola bisa memeriksa izin dan konfigurasi Meta.|Try again. If it fails again, send the administrator code below so the administrator can check Meta permissions and configuration.
 Meta belum berhasil menghubungkan akun.|Meta has not connected the account successfully.
-Kirim kode admin di bawah ke pengelola SAP agar penyebabnya bisa diperiksa.|Send the administrator code below to the SAP administrator so the cause can be investigated.
-Coba hubungkan lagi. Jika gagal, pengelola SAP perlu memeriksa log koneksi Meta.|Try connecting again. If it fails, the SAP administrator needs to inspect the Meta connection logs.
+Kirim kode admin di bawah ke pengelola VERGO agar penyebabnya bisa diperiksa.|Send the administrator code below to the VERGO administrator so the cause can be investigated.
+Coba hubungkan lagi. Jika gagal, pengelola VERGO perlu memeriksa log koneksi Meta.|Try connecting again. If it fails, the VERGO administrator needs to inspect the Meta connection logs.
 Bagaimana area dibentuk?|How are areas formed?
 Laporan dikelompokkan berdasarkan lokasi ke sel grid H3 resolusi 9. Ukuran grid tetap saat peta diperbesar; bukan radius dari titik laporan atau batas kelurahan/kecamatan.|Reports are grouped by location into H3 resolution 9 grid cells. Cell size stays fixed when you zoom; this is not a radius around a report or a neighborhood boundary.
 Ringkasan menghitung laporan terverifikasi, dalam penanganan, dan selesai sesuai periode serta kategori yang dipilih.|The summary counts verified, in-progress, and resolved reports for the selected period and category.
@@ -222,7 +222,7 @@ Pesan kepada pelapor|Message to the reporter
 Jelaskan klarifikasi atau bukti yang diperlukan (5–1000 karakter).|Describe the clarification or evidence needed (5–1,000 characters).
 Permintaan ini tidak mengubah status laporan atau izin publikasi foto.|This request does not change the report status or photo publication permissions.
 Izin foto|Photo permissions
-Publik SAP|Public on SAP
+Publik VERGO|Public on VERGO
 Menyimpan izin…|Saving permissions…
 KEGIATAN RELAWAN|VOLUNTEER ACTIVITIES
 Muat ulang bukti|Reload evidence
@@ -231,6 +231,6 @@ Batalkan peserta yang diterima?|Cancel an accepted participant?
 Peserta akan kehilangan status diterima dan kapasitas kegiatan akan tersedia kembali. Alasan yang Anda isi akan dicatat.|The participant will lose their accepted status and the activity capacity will become available again. Your reason will be recorded.
 Ya, batalkan peserta|Yes, cancel participant
 `.trim().split("\n").map(line => line.split("|"))),
-  "Masuk | SAP": "Sign in | SAP",
-  "Daftar | SAP": "Sign up | SAP",
+  "Masuk | VERGO": "Sign in | VERGO",
+  "Daftar | VERGO": "Sign up | VERGO",
 };

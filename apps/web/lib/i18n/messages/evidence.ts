@@ -48,14 +48,14 @@ Mengunggah & mengirim…|Uploading & submitting…
 Kirim untuk ditinjau|Submit for review
 Bukti tersimpan|Saved evidence
 Izinkan foto ini untuk|Allow this photo on
-halaman publik SAP|SAP public pages
+halaman publik VERGO|VERGO public pages
 setelah ditinjau.|after review.
 Tambah foto|Add photo
 1–3 foto · JPEG, PNG, WebP|1–3 photos · JPEG, PNG, WebP
 Hasil ini terhubung dengan kegiatan lain. Buka melalui antrean hasil yang sesuai.|This result is linked to another activity. Open it through the appropriate results queue.
 Versi terbaru dimuat. Periksa keputusan dan pilih kembali versi foto publik sebelum menyimpan.|The latest version has been loaded. Review the decision and select public photo versions again before saving.
 Tuliskan 1–3 permintaan bukti, maksimal 300 karakter per baris.|Enter 1–3 evidence requests, up to 300 characters per line.
-Hasil selesai memerlukan foto sesudah dengan versi publik siap untuk web. Izin pemilik akan diperiksa oleh SAP.|Completed results require an after photo with a public version ready for the web. SAP will check the owner’s consent.
+Hasil selesai memerlukan foto sesudah dengan versi publik siap untuk web. Izin pemilik akan diperiksa oleh VERGO.|Completed results require an after photo with a public version ready for the web. VERGO will check the owner’s consent.
 Keputusan hasil kegiatan tersimpan.|Activity result decision saved.
 Keputusan berat sampah tersimpan secara terpisah dari hasil kegiatan.|Waste weight decision saved separately from activity results.
 Tinjau hasil kegiatan|Review activity results
@@ -71,7 +71,7 @@ Klaim: sebagian|Claim: partial
 Versi publik & izin|Public versions & consent
 Versi dipilih ·|Selected version ·
 bukti publik laporan sebelumnya juga digunakan sebagai bukti sebelum kegiatan.|previous public report evidence is also used as before evidence.
-Foto asli hanya untuk peninjauan. Untuk publikasi, pilih versi publik yang siap. SAP memeriksa izin pemilik pada setiap kanal saat keputusan disimpan.|Original photos are for review only. Select a ready public version for publishing. SAP checks the owner’s consent for each channel when the decision is saved.
+Foto asli hanya untuk peninjauan. Untuk publikasi, pilih versi publik yang siap. VERGO memeriksa izin pemilik pada setiap kanal saat keputusan disimpan.|Original photos are for review only. Select a ready public version for publishing. VERGO checks the owner’s consent for each channel when the decision is saved.
 Catatan hasil kegiatan|Activity result notes
 Bukti tambahan yang diminta|Requested additional evidence
 Alasan keputusan terakhir|Last decision reason
@@ -124,7 +124,7 @@ Versi foto untuk publik|Public photo versions
 Periksa privasi foto dan pilih kanal publikasi.|Review photo privacy and choose publishing channels.
 Versi publik belum siap atau kedaluwarsa. Muat ulang versi dan tinjau kembali.|The public version is not ready or has expired. Reload versions and review again.
 Simpan pilihan foto|Save photo selection
-Izin pemilik diperlukan untuk setiap kanal. Panel ini menyiapkan versi publik; izin pemilik tetap diperiksa oleh SAP saat keputusan hasil disimpan.|Owner consent is required for each channel. This panel prepares public versions; SAP checks owner consent when result decisions are saved.
+Izin pemilik diperlukan untuk setiap kanal. Panel ini menyiapkan versi publik; izin pemilik tetap diperiksa oleh VERGO saat keputusan hasil disimpan.|Owner consent is required for each channel. This panel prepares public versions; VERGO checks owner consent when result decisions are saved.
 1. Siapkan versi publik|1. Prepare public version
 Seret pada foto untuk menutupi wajah, pelat nomor, atau informasi pribadi. Hingga 20 area dapat ditutup.|Drag on the photo to cover faces, licence plates, or personal information. Up to 20 areas can be covered.
 Foto asli: seret untuk memilih area yang akan ditutupi|Original photo: drag to select an area to cover
@@ -151,6 +151,6 @@ area ditutupi · #|areas covered · #
 Belum ada versi publik. Siapkan versi terlebih dahulu.|No public version yet. Prepare one first.
 Muat versi berikutnya|Load more versions
 3. Kanal publikasi|3. Publishing channels
-Web SAP|SAP web
+Web VERGO|VERGO web
 Kosongkan kanal untuk tidak menggunakan foto ini dalam publikasi.|Clear the channels to exclude this photo from publishing.
 `.trim().split("\n").map(line => line.split("|")));

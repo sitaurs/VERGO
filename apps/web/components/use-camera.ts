@@ -154,7 +154,7 @@ export default function useCamera() {
     if (ticket !== generation.current) throw new DOMException("Capture cancelled", "AbortError");
     if (!blob) throw new Error("Foto belum dapat disimpan. Silakan ambil ulang.");
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    return new File([blob], `SAP-scan-${stamp}.jpg`, { type: "image/jpeg" });
+    return new File([blob], `VERGO-scan-${stamp}.jpg`, { type: "image/jpeg" });
   }
 
   return { videoRef, status, error, devices, activeDeviceId, torchAvailable, torchOn, markReady, restart, chooseDevice, switchCamera, toggleTorch, capture, stop };

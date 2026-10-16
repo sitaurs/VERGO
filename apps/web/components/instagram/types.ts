@@ -42,5 +42,5 @@ export const PREVIEW_SETTINGS: PublicationSettings = {
   publishMode: "approval_required",
   captionTemplate:
     "Temuan {jenis_sampah}.\n\n{ringkasan_laporan}\n\nMari jaga lingkungan dan pilah sampah dengan bijak.",
-  hashtags: "#SAP #PilahSampah #PeduliLingkungan",
+  hashtags: "#VERGO #PilahSampah #PeduliLingkungan",
 };
