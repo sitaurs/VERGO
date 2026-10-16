@@ -1,5 +1,9 @@
 export const common: Record<string, string> = {
   "Bahasa": "Language",
+  "Ubah bahasa": "Change language",
+  "Ubah bahasa, saat ini {0}": "Change language, current: {0}",
+  "Pilih bahasa": "Choose language",
+  "Bahasa aktif": "Active language",
   "Pilih bahasa tampilan SAP.": "Choose your SAP display language.",
   "Bahasa antarmuka": "Interface language",
   "Perubahan langsung diterapkan. Pilihan bahasa tersimpan di browser ini.": "Changes apply immediately. Your language preference is saved in this browser.",

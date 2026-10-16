@@ -26,6 +26,7 @@
 .searchResults>button:hover{background:#edf8f3}
 .searchResults>button span{display:flex;flex-direction:column;gap:2px}.searchResults small{color:#7a889a}
 .headerTools{display:flex;align-items:center;gap:13px;margin-left:auto}
+.languageDivider{width:1px;height:27px;flex:none;background:#dfe8ef}
 .popoverAnchor{position:relative}
 .iconButton{display:grid;place-items:center;width:48px;height:48px;border:1px solid #dfe8f1;border-radius:50%;background:#fff;color:#30455e;transition:transform .2s,box-shadow .2s,color .2s}
 .iconButton:hover,.profileButton:hover{transform:translateY(-2px);box-shadow:0 8px 17px #2b587817;color:#0d6b52}

@@ -45,6 +45,7 @@ import { saveSapaAccountPreference } from "./sapa-client";
 import { ApiError, getAchievements, getMe, getStats, listCategories, listReports, listScans, logout, updateProfile, type SapAchievement, type SapCategory, type SapReport, type SapScan, type SapStats, type SapUser } from "../lib/api/client";
 import { useI18n, UiText } from "../lib/i18n/provider";
 import AnimatedNumber from "./motion/animated-number";
+import LanguageSwitcher from "./language-switcher/language-switcher";
 
 
 const InstagramPublication = dynamic(() => import("./instagram/publication-page"), {
@@ -295,7 +296,7 @@ export default function Dashboard() {
 
     <div className={styles.mainColumn}>
       <header className={styles.topbar}>
-        <MobileHeader displayName={displayName} avatarMediaId={user?.avatarMediaId ?? null} searchOpen={mobileSearchOpen} onSearch={() => setMobileSearchOpen(value => !value)} onHome={() => openTab("dashboard")} onAccount={() => openTab("account")} />
+        <MobileHeader displayName={displayName} avatarMediaId={user?.avatarMediaId ?? null} searchOpen={mobileSearchOpen} onSearch={() => setMobileSearchOpen(value => !value)} onHome={() => openTab("dashboard")} onAccount={() => openTab("account")} onLanguageFeedback={setToast} />
         <div id="dashboard-search" className={`${styles.searchBox} ${mobileSearchOpen ? styles.mobileSearchVisible : ""}`}><Search size={22} /><input ref={searchInputRef} type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder={t("Cari laporan atau area")} aria-label={t("Cari laporan atau area")} />{search && <button type="button" onClick={() => setSearch("")} aria-label={t("Hapus pencarian")}><X size={18} /></button>}
           {search && <div className={styles.searchResults}>
             <strong>{t("Hasil pencarian lokal")}</strong>
@@ -306,6 +307,8 @@ export default function Dashboard() {
           </div>}
         </div>
         <div className={styles.headerTools}>
+          <LanguageSwitcher onOpen={() => setProfileOpen(false)} onFeedback={setToast} />
+          <span className={styles.languageDivider} aria-hidden="true" />
           <div className={styles.popoverAnchor}><button className={styles.profileButton} type="button" onClick={() => setProfileOpen(value => !value)} aria-expanded={profileOpen} aria-label={t("Buka menu akun {0}", { "0": displayName })}><span className={styles.avatar}>{user?.avatarMediaId ? <MediaThumbnail mediaId={user.avatarMediaId} alt={t("Foto profil {0}", { "0": displayName })} className={styles.headerAvatarPhoto} fallback={<UserRound size={21} aria-hidden="true" />} /> : <UserRound size={21} aria-hidden="true" />}</span><span>{displayName}</span><ChevronDown size={18} /></button>{profileOpen && <div data-motion="feedback" className={styles.popover}><strong>{t("Akun VERGO")}</strong><p>{user?.email}</p><button className={styles.popoverAction} type="button" onClick={() => openTab("settings")}>{t("Pengaturan")}</button><button className={styles.popoverAction} type="button" onClick={() => void signOut()}>{t("Keluar")}</button></div>}</div>
         </div>
       </header>
