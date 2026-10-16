@@ -17,11 +17,18 @@ test("2.5D landing keeps complete readable content, artwork and real destination
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
     }
     await page.locator("footer").scrollIntoViewIfNeeded();
+    const featureTitles = page.locator("#fitur h3");
+    expect(await featureTitles.evaluateAll(titles => titles.every(title => Number(getComputedStyle(title).fontWeight) >= 700))).toBe(true);
+    const firstFeature = page.locator("#fitur a").first();
+    const artwork = await firstFeature.locator("img").boundingBox();
+    const copy = await firstFeature.locator("h3").boundingBox();
+    expect(artwork!.x + artwork!.width).toBeLessThanOrEqual(copy!.x);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await expect(page.locator("h1")).toHaveCount(1);
     await expect.poll(() => page.locator('img[src*="landing-25d"]').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
     await expect(page.locator("#aksi-warga").getByRole("link").filter({ has: page.getByRole("heading", { name: "Kegiatan warga", exact: true }) })).toHaveAttribute("href", "/activities");
     if ([390, 1440].includes(width)) {
+      await page.locator("#fitur").screenshot({ path: info.outputPath(`features-25d-${width}.png`) });
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
       await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
       await page.screenshot({ path: info.outputPath(`landing-25d-${width}.png`), fullPage: true });

@@ -127,10 +127,10 @@
 @media (prefers-reduced-motion: reduce) { .section *, .section *::before, .section *::after { scroll-behavior: auto !important; transition-duration: 0s !important; } }
 
 /* Landing visual refresh; data fetching, geography and map controls are unchanged. */
-.section { background:#fdfefd; color:#17382b; padding-block:58px; }
+.section { background:#fdfefd; color:#10283b; padding-block:44px; }
 .heading,.frame,.footnote { width:min(1280px,calc(100% - 80px)); }
 .heading { padding:0; }
-.heading h2 { color:#17382b; font-size:clamp(28px,2.8vw,38px); font-weight:750; }
+.heading h2 { color:#10283b; font-size:clamp(28px,2.55vw,35px); font-weight:800; }
 .heading > p:last-child { color:#61766f; font-size:15px; }
 .heading .eyebrow { color:#087f5b; }
 .frame { grid-template-columns:minmax(0,1.8fr) minmax(340px,1fr); height:720px; border-color:#dce8de; border-radius:17px; background:#f0f7f1; box-shadow:0 7px 0 -3px #e5eee5,0 16px 25px -22px #325e422b; }
