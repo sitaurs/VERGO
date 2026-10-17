@@ -1,8 +1,8 @@
 # Ringkasan VERGO dan keputusan implementasi
 
-Diperbarui **17 Oktober 2026**. Baseline sebelum fitur kompetisi: `4d3553b`. Implementasi trust UX dalam sesi ini sudah divalidasi secara lokal; catatan commit/deployment ditambahkan setelah rilis.
+Diperbarui **17 Oktober 2026**. Fitur trust UX ada pada commit `a0687b5`, sudah di-push ke `main` dan di-deploy ke VPS `srv3`. Migration ledger produksi berakhir di `0023_report_appeals_and_trust`; readiness pascadeploy melaporkan database, Redis, dan object storage `ok`.
 
-Dokumen ini menggantikan rencana selesai, handoff lama, riset rancangan dan laporan status bertanggal yang telah dikonsolidasikan. Keberadaan kode dibedakan dari bukti integrasi serta keadaan deployment. `npm run check`, build web produksi, dan tes API relevan sudah berjalan di lokal; ini belum membuktikan alur visual browser atau penerimaan pascadeploy.
+Dokumen ini menggantikan rencana selesai, handoff lama, riset rancangan dan laporan status bertanggal yang telah dikonsolidasikan. Keberadaan kode dibedakan dari bukti integrasi serta keadaan deployment. `npm run check`, build web produksi, dan tes API relevan lulus di lokal. Pascadeploy, homepage HTTP memberi 200 dan readiness API lulus; penerimaan alur visual browser tetap menunggu QA agent pengguna.
 
 ## 1. Produk dan identitas
 

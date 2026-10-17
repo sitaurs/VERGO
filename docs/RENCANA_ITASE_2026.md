@@ -1,6 +1,6 @@
 # Rencana VERGO untuk ITASE 7.0 dan kepercayaan laporan
 
-Tanggal **17 Oktober 2026**. **Status: implementasi utama selesai di lokal; validasi lulus; menunggu commit, push, dan deploy VPS.** Baseline implementasi `4d3553b`. Kemampuan existing, keputusan terbaru, dan batas bukti: [RINGKASAN_PROYEK.md](RINGKASAN_PROYEK.md).
+Tanggal **17 Oktober 2026**. **Status: implementasi `a0687b5` sudah di-push ke `main` dan di-deploy ke VPS `srv3`; browser QA pengguna masih menunggu.** Kemampuan existing, keputusan terbaru, dan batas bukti: [RINGKASAN_PROYEK.md](RINGKASAN_PROYEK.md).
 
 ## Catatan pelaksanaan 17 Oktober 2026
 
@@ -18,7 +18,9 @@ Checklist berikut adalah kriteria produk. Status pekerjaan sesi ini:
 | P1-02 | Pesan/form dan terjemahan terkait diperbarui; pemeriksaan visual lintas browser/perangkat diserahkan kepada QA agent pengguna. |
 | P1-03 | Tidak membuat data pilot, nama PIC, kemitraan, atau hasil lapangan rekaan. Demo kompetisi harus menyebut simulasi bila memakai data contoh. |
 
-**Validasi lokal:** `npm run check` lulus; `npm run build -w @sap/web` lulus; 61 tes API relevan lulus. Browser test sengaja tidak dijalankan karena akan dilakukan QA agent khusus. Versi kontrak publik tetap 1.1.0; draft R1 1.2.0 mencatat perluasan rute dan schema. Hasil tes bukan bukti deployment sampai pemeriksaan pascadeploy.
+**Validasi lokal:** `npm run check` lulus; `npm run build -w @sap/web` lulus; 61 tes API relevan lulus. Versi kontrak publik tetap 1.1.0; draft R1 1.2.0 mencatat perluasan rute dan schema. Browser test tidak dijalankan karena akan dilakukan QA agent khusus.
+
+**Pascadeploy di `srv3`:** source `a0687b5`; migration diuji lebih dulu pada salinan database, backup S3 diverifikasi, migration produksi selesai sampai `0023_report_appeals_and_trust`, dan container API/worker/web berjalan. HTTP homepage `200`, readiness API `ok` untuk database/Redis/object storage, dan endpoint trust policy publik merespons dengan seluruh pengaturan opsional masih kosong.
 
 ## 1. Tujuan dan keputusan produk
 
@@ -219,7 +221,7 @@ Ini mewarisi pekerjaan terbuka lama tanpa menganggapnya masih gagal ataupun suda
 | A-14 | Mobile/keyboard/reduced motion, izin ditolak/koneksi gagal, alur dan istilah dipahami pengguna; hambatan utama ditutup. |
 | A-15 | Proposal/video/deck cocok dengan demo; data nyata berizin/sintetis berlabel, provenance/lisensi dan klaim dapat dipertanggungjawabkan. |
 
-Catat tanggal, commit web/API/kontrak, lingkungan, skenario, hasil dan batas fixture/provider pada backlog terkait. Push dan deployment VPS untuk commit implementasi ini telah diminta pemilik proyek; tidak ada publikasi konten Instagram atau klaim pilot nyata.
+Catat tanggal, commit web/API/kontrak, lingkungan, skenario, hasil dan batas fixture/provider pada backlog terkait. Deployment ini tidak memublikasikan konten Instagram dan tidak mengklaim pilot nyata.
 
 ## 9. Referensi
 
