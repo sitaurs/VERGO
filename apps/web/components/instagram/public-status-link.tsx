@@ -13,15 +13,21 @@ export default function PublicStatusLink({ source, record }: { source: Publicati
   const [qr, setQr] = useState("");
   const [feedback, setFeedback] = useState("");
   const url = source.publicUrl;
+  const syntheticQa = record?.actions.publish.reasonCode === "SYNTHETIC_QA_SOURCE";
   useEffect(() => {
     let active = true;
     setQr("");
     setFeedback("");
-    if (url) void import("qrcode").then(({ default: QRCode }) => QRCode.toDataURL(url, {
+    if (url && !syntheticQa) void import("qrcode").then(({ default: QRCode }) => QRCode.toDataURL(url, {
       width: 200, margin: 4, errorCorrectionLevel: "M", color: { dark: "#122d4d", light: "#ffffff" },
     })).then(value => { if (active) setQr(value); }).catch(() => { /* The readable link remains usable. */ });
     return () => { active = false; };
-  }, [url]);
+  }, [url, syntheticQa]);
+  if (syntheticQa) return <Notice warning>
+    <strong>{t("Data uji QA · bukan kejadian nyata")}</strong>
+    <p>{t("Laporan ini hanya tersedia untuk pengujian internal. Halaman status publik dan QR tidak tersedia; draf tidak dapat disetujui atau diposting ke Instagram.")}</p>
+    <p>{t("Gunakan Buka moderasi laporan untuk memeriksa data uji. Label QA harus tetap dipertahankan.")}</p>
+  </Notice>;
   if (!url) return null;
   return <div className={ui.publicStatus}>
     <strong>{t("Halaman status publik VERGO")}</strong>

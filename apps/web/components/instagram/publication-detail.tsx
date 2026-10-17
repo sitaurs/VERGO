@@ -142,6 +142,7 @@ export default function PublicationDetail({
   }, [final]);
   const source = record?.source ?? preview?.source;
   if (!source) return null;
+  const syntheticQa = record?.actions.publish.reasonCode === "SYNTHETIC_QA_SOURCE";
   const editable = !record || record.actions.edit.allowed,
     valid =
       caption.trim().length > 0 &&
@@ -298,6 +299,7 @@ export default function PublicationDetail({
       ? "Perlu ditinjau ulang" : approved ? "Disetujui" : "Belum disetujui";
   const footerHint = busy ? "Memproses tindakan…"
     : loading ? "Memuat versi terbaru…"
+    : syntheticQa ? "Data uji QA tidak dapat dipublikasikan. Periksa melalui moderasi laporan."
     : !available ? "Publikasi belum tersedia"
     : latest ? "Tinjau versi terbaru sebelum menyimpan."
     : uncertain ? "Periksa status terbaru sebelum melanjutkan."
@@ -349,7 +351,8 @@ export default function PublicationDetail({
         <PostPreviewPanel source={source} record={record} kind={record?.kind ?? preview?.kind ?? "initial"}
           url={final?.rendition.status === "ready" && final.rendition.url && !expired ? final.rendition.url : null}
           altText={final?.altText ?? altText}
-          fallback={!record ? "Simpan draf untuk menghasilkan preview gambar final."
+          fallback={syntheticQa ? "Data uji QA tidak dapat dipublikasikan. Periksa melalui moderasi laporan."
+            : !record ? "Simpan draf untuk menghasilkan preview gambar final."
             : expired ? "Preview kedaluwarsa. Perbarui informasi untuk mengambil URL baru."
             : final?.rendition.status === "failed" ? "Pembuatan gambar final gagal. Hubungi pengelola."
             : record.rendition.status === "queued" || final?.rendition.status === "queued" ? "Gambar VERGO sedang dibuat. Pratinjau akan diperbarui otomatis; bila belum muncul setelah beberapa saat, pilih Perbarui."

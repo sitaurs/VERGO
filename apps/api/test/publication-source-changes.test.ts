@@ -2,6 +2,25 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { PublicationsService } from '../src/publications/publications.service.js';
 
+test('existing QA drafts cannot be edited, approved, published or delivered even with approved evidence',async()=>{
+ for(const fields of [{description:'QA TEST: laporan sintetis',public_summary:'Ringkasan'}, {description:'Catatan internal',public_summary:'[DATA UJI QA] simulasi'}]){
+  const service=Object.create(PublicationsService.prototype) as PublicationsService;
+  const report={id:'report-1',revision:3,status:'verified',public_visibility:'public',instagram_allowed:true,...fields};
+  let signed=0;
+  Object.assign(service,{config:{APP_ORIGIN:'https://vergo.example'},store:{db:async()=>[{media_id:'photo',id:'approval'}]},evidence:{subject:async()=>report},objects:{createSignedGetUrl:async()=>{signed++;return {url:'https://objects.invalid/photo',expiresAt:new Date()};}}});
+  const dto=Reflect.get(service,'dto') as (post:Record<string,unknown>)=>Promise<Record<string,any>>;
+  const result=await dto.call(service,{id:'post-1',report_id:report.id,kind:'initial',source_revision:3,source_snapshot:{reportId:report.id},status:'draft',published_at:null,created_at:new Date(),updated_at:new Date(),retracted_at:null,rendition_status:'ready',rendition_object_key:'poster.jpg',approval:{status:'approved'}});
+  for(const action of ['edit','approve','publish']){
+   assert.equal(result.actions[action].allowed,false,action);
+   assert.equal(result.actions[action].reasonCode,'SYNTHETIC_QA_SOURCE');
+  }
+  assert.equal(result.rendition.url,null);
+  assert.equal(signed,0);
+  assert.equal(result.actions.cancel.allowed,true,'admin may still cancel an unpublished test draft');
+  await assert.rejects(service.sourceAsset((async()=>{throw new Error('must reject before looking up media');}) as never,report,'photo'),(error:any)=>error.getStatus()===409&&error.getResponse().code==='SOURCE_NOT_APPROVED');
+ }
+});
+
 test('a withdrawn resolution milestone remains visible to admin as affected material instead of breaking the publication list',async()=>{
  const service=Object.create(PublicationsService.prototype) as PublicationsService;
  const db=async()=>[];

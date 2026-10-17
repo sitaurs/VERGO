@@ -4,6 +4,12 @@ Diperbarui **17 Oktober 2026**. Fitur trust UX ada pada commit `a0687b5`, sudah 
 
 Dokumen ini menggantikan rencana selesai, handoff lama, riset rancangan dan laporan status bertanggal yang telah dikonsolidasikan. Keberadaan kode dibedakan dari bukti integrasi serta keadaan deployment. `npm run check`, build web produksi, dan tes API relevan lulus di lokal. Pascadeploy, homepage HTTP memberi 200 dan readiness API lulus; penerimaan alur visual browser tetap menunggu QA agent pengguna.
 
+### Tindak lanjut QA Instagram, 17 Oktober 2026
+
+Laporan uji `f388e2a7` diperiksa lewat SSH `srv3`: rendition sudah `ready` pada 20.49 WIB, template VERGO v5, error kosong, approval invalidated, belum dipublikasikan. Kegagalan `MAP_PROVIDER_UNAVAILABLE` sebelumnya tidak dapat direproduksi dari keadaan tersimpan ini; penyebab gangguan provider belum terbukti. Endpoint publik memberikan 404 karena sumber berlabel QA, sesuai pengecualian data sintetis.
+
+Celah yang ditemukan: worker pembuat draf otomatis belum menerapkan pengecualian QA yang sudah ada pada feed dan pemilihan sumber manual. Perbaikan menyamakan penanda QA pada worker, menolak sumber QA di gerbang render/publish dan API persetujuan/edit/delivery, serta mengganti tautan/QR draf QA dengan penjelasan pengujian internal. Draf lama tetap dapat diperiksa lewat moderasi dan dibatalkan oleh admin. Perbaikan ini tidak memerintahkan publish/retract Instagram atau mengubah keputusan laporan.
+
 ## 1. Produk dan identitas
 
 **VERGO — Verify and Go**, dengan asisten **VERA**, menghubungkan pengenalan material sampah, laporan berlokasi, pemeriksaan manusia, informasi publik dan tindak lanjut warga.

@@ -6,6 +6,11 @@ import type {ObjectStore} from './object-store.js';
 type Row=Record<string,any>;
 type Event={topic:string;aggregate_id:string;payload_minimal:Record<string,unknown>};
 type Executor=Sql|TransactionSql;
+/** Keep the same explicit leading markers as api/reports/synthetic-qa.ts. */
+export function isSyntheticQaSource(report:Row):boolean {
+ const marker=/^\s*(?:\[\s*DATA\s+UJI\s+QA\s*\]|QA\s+TEST\b)/i;
+ return [report.description,report.public_summary].some(value=>typeof value==='string'&&marker.test(value));
+}
 export function selectPublicationAsset(assets:Row[],sources:Row[]):Row|undefined{
  return assets.find(asset=>sources.some(source=>(source.media_id===undefined||source.media_id===asset.media_id)&&source.subject_type===asset.subject_type&&source.subject_id===asset.subject_id));
 }
@@ -227,6 +232,8 @@ export class PublicationProcessor{
   });
  }
  private async eligible(post:Row,db:Executor=this.sql):Promise<boolean>{
+  const [source]=await db`SELECT description,public_summary FROM reports WHERE id=${post.report_id}`;
+  if(!source||isSyntheticQaSource(source))return false;
   const [r]=await db`SELECT p.id FROM instagram_posts p JOIN reports r ON r.id=p.report_id JOIN media_publication_approvals a ON a.report_id=r.id AND a.media_id=p.media_id AND a.rendition_id=p.evidence_rendition_id AND a.channel='instagram' JOIN evidence_renditions er ON er.id=a.rendition_id JOIN media_consents mc ON mc.media_id=a.media_id JOIN media m ON m.id=a.media_id WHERE p.id=${post.id} AND r.revision=p.source_revision AND r.public_visibility='public' AND r.instagram_allowed AND r.status IN ('verified','in_progress','resolved') AND r.duplicate_of_id IS NULL AND r.public_summary IS NOT NULL AND a.approved AND er.status='ready' AND 'instagram'=ANY(mc.channels) AND m.state='stored' AND m.deleted_at IS NULL AND p.status IN ('draft','failed','publishing','published')`;
   if(!r)return false;
   const milestone=post.kind==='resolution'?await this.milestone(db,post.report_id,post.milestone_id):null;
@@ -334,12 +341,19 @@ export class PublicationProcessor{
    const posts=await tx`SELECT * FROM instagram_posts WHERE report_id=${reportId} AND status NOT IN ('cancelled','retracted') ORDER BY id FOR UPDATE`;
    const [account]=await tx`SELECT * FROM instagram_accounts WHERE singleton=true FOR SHARE`,[settings]=await tx`SELECT payload FROM instagram_settings WHERE singleton=true FOR SHARE`;
    const publicEligible=report.public_visibility==='public'&&report.instagram_allowed&&['verified','in_progress','resolved'].includes(report.status)&&!report.duplicate_of_id&&!!report.public_summary;
+   const syntheticQa=isSyntheticQaSource(report);
    const assets=await tx`SELECT a.media_id,a.rendition_id,a.subject_type,a.subject_id FROM media_publication_approvals a JOIN evidence_renditions er ON er.id=a.rendition_id AND er.media_id=a.media_id AND er.subject_type=a.subject_type AND er.subject_id=a.subject_id JOIN media_consents mc ON mc.media_id=a.media_id JOIN media m ON m.id=a.media_id WHERE a.report_id=${reportId} AND a.channel='instagram' AND a.approved AND er.status='ready' AND 'instagram'=ANY(mc.channels) AND m.state='stored' AND m.deleted_at IS NULL ORDER BY a.updated_at,a.id`;
    for(const post of posts){
     const milestone=post.milestone_id?await this.milestone(tx,reportId,post.milestone_id):null;
     const asset=selectPublicationAsset(assets,this.evidenceSources(reportId,post.media_id,post.kind,milestone));
     const invalid=!publicEligible||!asset||(post.kind==='resolution'&&!milestone)||(asset.rendition_id!==post.evidence_rendition_id&&!!post.published_at);
     if(invalid||!asset){await this.requestRetraction(tx,post,report.public_visibility==='public'?'unaffected':'hidden');continue;}
+    // A QA marker blocks draft use, without requesting retraction of historical posts.
+    // Consent/visibility withdrawal above continues to follow the existing privacy rules.
+    if(syntheticQa&&['draft','failed'].includes(post.status)&&!post.published_at){
+     await tx`UPDATE instagram_posts SET approval=${tx.json(INVALID)},revision=revision+1,updated_at=now() WHERE id=${post.id} AND approval->>'status' IS DISTINCT FROM 'invalidated'`;
+     continue;
+    }
     if(post.source_revision===report.revision&&asset.rendition_id===post.evidence_rendition_id)continue;
     if(['draft','failed'].includes(post.status)){
      const [prior]=await tx`SELECT stage FROM instagram_operations WHERE post_id=${post.id} AND kind='publish' ORDER BY created_at DESC LIMIT 1`;
@@ -349,7 +363,7 @@ export class PublicationProcessor{
      if(changed)await tx`INSERT INTO outbox_events(topic,aggregate_id,payload_minimal,dedup_key) VALUES('instagram.render.requested',${post.id},${tx.json({aggregateRevision:changed.content_revision})},${`instagram.render.requested:${post.id}:${changed.content_revision}`}) ON CONFLICT DO NOTHING`;
     }else await tx`UPDATE instagram_posts SET approval=${tx.json(INVALID)},revision=revision+1,updated_at=now() WHERE id=${post.id}`;
    }
-   if(suppressDraft||!this.config.SAP_INSTAGRAM_RENDER_ENABLED||!publicEligible||!this.accountReady(account,['instagram_basic'])||settings?.payload?.draftGeneration!=='automatic'||!assets.length)return;
+   if(syntheticQa||suppressDraft||!this.config.SAP_INSTAGRAM_RENDER_ENABLED||!publicEligible||!this.accountReady(account,['instagram_basic'])||settings?.payload?.draftGeneration!=='automatic'||!assets.length)return;
    const milestoneIds=await tx`SELECT id FROM activity_results WHERE report_id=${reportId} AND status='approved'
     UNION ALL SELECT d.id FROM moderation_decisions d WHERE d.report_id=${reportId} AND d.decision_payload->>'nextStatus'='resolved' AND ${report.status==='resolved'}`;
    const milestones=(await Promise.all(milestoneIds.map(m=>this.milestone(tx,reportId,m.id)))).filter((m):m is Row=>!!m);

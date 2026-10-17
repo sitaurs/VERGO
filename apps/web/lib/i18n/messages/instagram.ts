@@ -1,4 +1,8 @@
 export const instagram: Record<string, string> = Object.fromEntries(`
+Data uji QA · bukan kejadian nyata|QA test data · not a real incident
+Data uji QA tidak dapat dipublikasikan. Periksa melalui moderasi laporan.|QA test data cannot be published. Inspect it through report moderation.
+Laporan ini hanya tersedia untuk pengujian internal. Halaman status publik dan QR tidak tersedia; draf tidak dapat disetujui atau diposting ke Instagram.|This report is only available for internal testing. Its public status page and QR are unavailable; the draft cannot be approved or posted to Instagram.
+Gunakan Buka moderasi laporan untuk memeriksa data uji. Label QA harus tetap dipertahankan.|Use Open report moderation to inspect the test data. Keep its QA label in place.
 Dalam antrean|Queued
 Operasi selesai|Operation completed
 Operasi gagal|Operation failed
