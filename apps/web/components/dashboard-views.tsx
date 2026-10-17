@@ -244,7 +244,7 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
               <div className={styles.reportFinding}>
                 <MediaThumbnail className={styles.reportPhoto} mediaId={report.mediaIds[0]} alt={t("Foto laporan {0}", { "0": report.description })} />
                 <div>
-                  <strong>{report.description.length > 180 ? `${report.description.slice(0, 180).replace(/\s+\S*$/, "")}…` : report.description}</strong>
+                  <strong>{report.description.length > 180 ? `${report.description.slice(0, 179).replace(/\s+\S*$/, "")}…` : report.description}</strong>
                   {report.description.length > 180 && <span className={styles.reportReadMore}>{t("Baca selengkapnya")}<ChevronRight size={14} aria-hidden="true" /></span>}
                   <span className={styles.reportMobileLabel}>{t("Lokasi")}</span>
                   <span>{report.location.latitude.toFixed(4)}, {report.location.longitude.toFixed(4)}</span>

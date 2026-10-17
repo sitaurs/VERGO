@@ -12,6 +12,22 @@ const report: SapReport = {
   timeline: [],
 };
 
+test("long report previews stay bounded and read more opens the full report", async ({ page }) => {
+  const description = "Laporan sintetis untuk memeriksa tampilan teks panjang. ".repeat(36);
+  const longReport: SapReport = { ...report, description, mediaIds: [] };
+  await fixtureApi(page, { handler: async (route, path) => {
+    if (path === "/reports/mine") { await json(route, { items: [longReport], nextCursor: null }); return true; }
+    if (path === `/reports/${ids.incident}`) { await json(route, longReport); return true; }
+    return false;
+  } });
+  await page.goto("/dashboard?view=reports");
+  const row = page.getByRole("button", { name: /Lihat detail laporan/ });
+  await expect(row.getByText("Baca selengkapnya", { exact: true })).toBeVisible();
+  expect((await row.locator("strong").innerText()).length).toBeLessThanOrEqual(180);
+  await row.getByText("Baca selengkapnya", { exact: true }).click();
+  await expect(page.getByRole("dialog").getByText(description, { exact: true })).toBeVisible();
+});
+
 test("report detail refreshes an expired signed photo URL without reloading the report", async ({ page }) => {
   let urlRequests = 0;
   const image = Buffer.from(
