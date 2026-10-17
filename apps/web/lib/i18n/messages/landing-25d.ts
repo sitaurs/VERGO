@@ -55,6 +55,7 @@ export const landing25d: Record<string, string> = {
   "Lihat kejadian publik": "View public incidents",
   "Yang sering ditanyakan.": "Frequently asked questions.",
   "Kenali cara kerja dan privasi laporan Anda.": "Understand how your reports work and how your privacy is protected.",
+  "Pelajari alur laporan": "Explore the report workflow",
   "Apakah hasil AI langsung terverifikasi?": "Are AI results automatically verified?",
   "Tidak. AI membantu mengenali material, sedangkan laporan diperiksa moderator sebelum masuk ke ringkasan publik.": "No. AI helps identify materials, while a moderator reviews reports before they enter public summaries.",
   "Apakah foto dan lokasi saya langsung tampil?": "Are my photos and location immediately visible?",

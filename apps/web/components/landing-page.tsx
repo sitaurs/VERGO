@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Camera, Check, ChevronDown, Clock3, FileText, Leaf, LockKeyhole, MapPin, Recycle, ShieldCheck, UsersRound, CalendarDays } from "lucide-react";
+import { ArrowRight, Camera, Check, Clock3, FileText, Leaf, LockKeyhole, MapPin, Recycle, ShieldCheck, UsersRound, CalendarDays } from "lucide-react";
 import LandingHeader from "./landing/landing-header";
+import LandingFaq from "./landing/landing-faq";
 import PublicMapSection from "./public-map-section";
 import BrandLogo from "./brand-logo";
 import { DetailDialog, type BottomDetail } from "./lower-section";
@@ -31,15 +32,6 @@ const verification = [
   { art: "report", title: "Laporan dikirim", copy: "Foto dan konteks lokasi dikirim oleh pengguna." },
   { art: "review", title: "Moderator memeriksa", copy: "Bukti diperiksa sebelum diputuskan." },
   { art: "map", title: "Area tampil di peta", copy: "Laporan yang disetujui masuk ke ringkasan publik." },
-] as const;
-const questions = [
-  { title: "Apakah hasil AI langsung terverifikasi?", answer: "Tidak. AI membantu mengenali material, sedangkan laporan diperiksa moderator sebelum masuk ke ringkasan publik." },
-  { title: "Apakah foto dan lokasi saya langsung tampil?", answer: "Tidak. Foto dan koordinat presisi tidak otomatis ditampilkan. Peta publik menampilkan ringkasan per area; publikasi bukti mengikuti persetujuan dan pemeriksaan yang berlaku." },
-  { title: "Bagaimana laporan muncul di peta?", answer: "Setelah diperiksa dan disetujui moderator, laporan masuk ke ringkasan area sesuai lokasi dan periode yang dipilih." },
-  { title: "Apa arti Terverifikasi moderator?", answer: "Bukti dan konteks laporan telah diperiksa. Kondisi dapat berubah; lihat waktu pembaruan. Status ini tidak menjamin semua dugaan benar atau sampah sudah dibersihkan." },
-  { title: "Apakah area tanpa laporan berarti bersih?", answer: "Belum ada laporan terverifikasi pada periode ini berarti data belum tersedia, bukan bukti area bersih. Warna peta merangkum kejadian yang dilaporkan, bukan tingkat risiko penyakit." },
-  { title: "Bagaimana jika laporan keliru atau lokasi sudah bersih?", answer: "Buka kejadian publik, lalu pilih Perbarui kondisi atau Laporkan informasi keliru. Masuk bila diminta dan sertakan waktu pengamatan serta bukti yang relevan. Moderator memeriksa pembaruan sebelum kondisi berubah; jumlah dukungan tidak menentukan kebenaran." },
-  { title: "Siapa yang menangani laporan?", answer: "Moderator memeriksa laporan dan penanggung jawab yang ditugaskan mencatat tindak lanjut. Pengiriman laporan tidak menjamin penanganan langsung. Jika belum ada pelaksana, laporan belum mempunyai penanggung jawab." },
 ] as const;
 function StatusTimeline({ compact = false }: { compact?: boolean }) {
   const { t } = useI18n();
@@ -101,7 +93,7 @@ export default function LandingPage() {
         <div className={s.heading} data-landing-enter="heading"><span className={s.pill}>{t("Aksi bersama")}</span><h2 id="community-title">{t("Dari laporan,")} <em>{t("menjadi aksi bersama.")}</em></h2><p>{t("Bantu lingkungan sekitar melalui bukti dan kegiatan warga.")}</p></div>
         <div className={s.communityGrid}><Artwork name="community" className={s.communityArtwork} alt={t("Ilustrasi warga membersihkan lingkungan bersama")} sizes="(max-width: 760px) 100vw, 460px" /><div className={s.communityLinks}><a href="/activities" className={s.communityCard} data-landing-enter="card"><span className={s.communityIcon}><CalendarDays /></span><div><h3>{t("Kegiatan warga")}</h3><p>{t("Temukan kegiatan bersih lingkungan.")}</p><span className={s.textLink}>{t("Lihat kegiatan warga")}<ArrowRight size={17} /></span></div></a><a href="/incidents" className={s.communityCard} data-landing-enter="card" data-landing-order="1"><span className={s.communityIcon}><Leaf /></span><div><h3>{t("Pembaruan kondisi")}</h3><p>{t("Ikuti pembaruan pada kejadian publik yang telah ditinjau.")}</p><span className={s.textLink}>{t("Lihat kejadian publik")}<ArrowRight size={17} /></span></div></a></div></div>
       </div></section>
-      <section id="edukasi" className={`${s.section} ${s.container} ${s.faq}`} aria-labelledby="faq-title"><div className={s.heading} data-landing-enter="heading"><span className={s.pill}>FAQ</span><h2 id="faq-title">{t("Yang sering ditanyakan.")}</h2><p>{t("Kenali cara kerja dan privasi laporan Anda.")}</p></div><div className={s.questions}>{questions.map((question, index) => <details key={question.title} name="vergo-landing-faq" open={index === 0}><summary>{t(question.title)}<ChevronDown size={19} aria-hidden="true" /></summary><p>{t(question.answer)}</p></details>)}</div></section>
+      <LandingFaq />
       <section className={`${s.container} ${s.closing}`} aria-labelledby="closing-title"><div><h2 id="closing-title">{t("Mulai dari satu foto.")}</h2><p>{t("Ambil langkah kecil untuk lingkungan yang lebih baik.")}</p></div><a className={s.primary} data-landing-action href="/dashboard?view=reports&compose=report"><FileText size={21} />{t("Laporkan tumpukan sampah")}<ArrowRight size={20} /></a><Artwork name="scan" className={s.closingArtwork} /></section>
     </main>
     <footer className={s.footer}><div className={`${s.container} ${s.footerGrid}`}><div className={s.footerBrand}><a href="#beranda" aria-label={t("VERGO, kembali ke beranda")}><BrandLogo width={148} /></a><p>{t("Kenali sampah, laporkan kondisi, dan pantau lingkungan bersama.")}</p></div><nav aria-label={t("Navigasi footer")}><div><h3>{t("Produk")}</h3><a href="/dashboard?view=scan">{t("Scan")}</a><a href="#peta">{t("Peta Laporan")}</a><a href="/incidents">{t("Kejadian publik")}</a><a href="/activities">{t("Kegiatan warga")}</a></div><div><h3>{t("Tentang")}</h3><a href="#cara-kerja">{t("Cara kerja")}</a><a href="#verifikasi">{t("Verifikasi")}</a><a href="#edukasi">{t("Edukasi")}</a></div><div><h3>{t("Bantuan")}</h3>{["Kebijakan Privasi", "Ketentuan Layanan", "Pengaturan Cookie"].map(label => <button type="button" key={label} onClick={() => setBottomDetail({ kind: "footer", label })}>{t(label)}</button>)}</div></nav><div className={s.footerBottom}><span>© {new Date().getFullYear()} VERGO</span><a href="/dashboard">{t("Buka dashboard")}<ArrowRight size={16} /></a><span>Verify and Go</span></div></div></footer>

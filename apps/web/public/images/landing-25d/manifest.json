@@ -49,6 +49,14 @@
       "bytes": 94042,
       "alpha": true,
       "sha256": "0f2c04e91f8019f7e4eb6716bfd7dc3c92abf807f982f72395067a36eefb50b3"
+    },
+    "faq": {
+      "file": "faq-illustration.webp",
+      "width": 1200,
+      "height": 800,
+      "bytes": 97208,
+      "alpha": true,
+      "sha256": "8d7366897f02a498a8ce491dee12fcd6d6170ea8f08ddf29749f3d9791090092"
     }
   }
 }
