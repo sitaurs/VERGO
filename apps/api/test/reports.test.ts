@@ -5,7 +5,7 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import type { HttpException } from '@nestjs/common';
 import { ReportsService } from '../src/reports/reports.service.js';
-import { isOccurredAtValid, type ReportRecord } from '../src/reports/report.types.js';
+import { isOccurredAtValid, toReportView, type ReportRecord } from '../src/reports/report.types.js';
 import { toH3Cell } from '../src/reports/geo.js';
 import { ReportInputDto, ReportUpdateInputDto } from '../src/reports/dto.js';
 import type { UpdateReportResult } from '../src/reports/report.repository.js';
@@ -16,7 +16,7 @@ function errorCode(error: unknown): string {
 }
 
 const KEY = '11111111-1111-1111-1111-111111111111';
-const MEDIA = '22222222-2222-2222-2222-222222222222';
+const MEDIA = '22222222-2222-4222-8222-222222222222';
 const REPORT = '33333333-3333-3333-3333-333333333333';
 
 function record(over: Partial<ReportRecord> = {}): ReportRecord {
@@ -27,6 +27,11 @@ function record(over: Partial<ReportRecord> = {}): ReportRecord {
     categoryId: null,
     scanId: null,
     description: 'x'.repeat(25),
+    observationSource: null,
+    inference: null,
+    sourceReference: null,
+    contextFlags: [],
+    photoUnavailableReason: null,
     reportedSeverity: 'small',
     latitude: -6.2,
     longitude: 106.8,
@@ -77,7 +82,7 @@ function makeService(opts: {
       createArgs.push(input);
       return { view: {} as never, replayed: opts.createReplayed ?? false };
     },
-    findForViewer: async () => opts.found ?? null,
+    findForViewer: async () => opts.found === undefined ? record() : opts.found,
     listByOwner: async (_u: string, limit: number) => (opts.listRows ?? []).slice(0, limit),
     updateOwnedSubmitted: async (reportId: string, _u: string, revision: number, changes: Record<string, unknown>) => {
       updateArgs.push({ reportId, revision, changes });
@@ -103,6 +108,7 @@ function input(over: Partial<ReportInputDto> = {}): ReportInputDto {
     location: { latitude: -6.2, longitude: 106.8 },
     occurredAt: nowIso(-60_000),
     reportedSeverity: 'small',
+    observationSource: 'firsthand',
     ...over,
   } as ReportInputDto;
 }
@@ -252,7 +258,7 @@ test('updateReport passes the If-Match revision through and validates new media'
   await stub.service.updateReport('u1', REPORT, 7, { mediaIds: [MEDIA] } as ReportUpdateInputDto);
   assert.equal(stub.updateArgs[0]?.reportId, REPORT);
   assert.equal(stub.updateArgs[0]?.revision, 7);
-  assert.deepEqual(stub.updateArgs[0]?.changes, { mediaIds: [MEDIA] });
+  assert.deepEqual(stub.updateArgs[0]?.changes, { mediaIds: [MEDIA], photoUnavailableReason: null });
 });
 
 test('updateReport ignores an own categoryId property whose transformed value is undefined', async () => {
@@ -276,4 +282,124 @@ test('updateReport allows explicitly clearing or changing categoryId', async () 
   const changed = makeService();
   await changed.service.updateReport('u1', REPORT, 1, { categoryId: 'plastic' } as ReportUpdateInputDto);
   assert.deepEqual(changed.updateArgs[0]?.changes, { categoryId: 'plastic' });
+});
+
+
+test('new reports require an explicit observation source in DTO and service', async () => {
+  for (const observationSource of [undefined, null, 'legacy', 'ai']) {
+    const dto = input({ observationSource } as never);
+    assert.ok((await validate(plainToInstance(ReportInputDto, dto))).some(error => error.property === 'observationSource'));
+    const stub = makeService();
+    await assert.rejects(stub.service.createReport('u1', dto, KEY), error => errorCode(error) === 'VALIDATION_ERROR');
+    assert.equal(stub.state.created, 0);
+  }
+});
+
+test('private observation assertions are persisted separately from observed facts', async () => {
+  const stub = makeService();
+  await stub.service.createReport('u1', input({
+    observationSource: 'secondhand',
+    sourceReference: 'Informasi dari pengurus lingkungan, dengan izin.',
+    inference: 'Diduga terbawa aliran air, belum dipastikan.',
+    contextFlags: ['near_waterway', 'sharp_objects'],
+  }), KEY);
+  assert.equal(stub.createArgs[0]?.observationSource, 'secondhand');
+  assert.equal(stub.createArgs[0]?.sourceReference, 'Informasi dari pengurus lingkungan, dengan izin.');
+  assert.equal(stub.createArgs[0]?.inference, 'Diduga terbawa aliran air, belum dipastikan.');
+  assert.deepEqual(stub.createArgs[0]?.contextFlags, ['near_waterway', 'sharp_objects']);
+  assert.equal(stub.createArgs[0]?.description, input().description);
+});
+
+test('firsthand reports cannot carry a third-party source reference', async () => {
+  const stub = makeService();
+  await assert.rejects(stub.service.createReport('u1', input({ sourceReference: 'A private contact' }), KEY), error => errorCode(error) === 'VALIDATION_ERROR');
+});
+
+test('all new assertions participate in the idempotency hash', async () => {
+  const stub = makeService();
+  const base = input({ observationSource: 'secondhand' });
+  for (const extra of [{}, { inference: 'Possible cause, not observed.' }, { sourceReference: 'Private source with permission.' }, { contextFlags: ['burning'] as const }, { observationSource: 'firsthand' as const }]) {
+    await stub.service.createReport('u1', { ...base, ...extra } as ReportInputDto, KEY);
+  }
+  assert.equal(new Set(stub.createArgs.map(args => args.requestHash)).size, 5);
+});
+
+test('context flags allow observable assertions only, without duplicates or null', async () => {
+  assert.equal((await validate(plainToInstance(ReportInputDto, input({ contextFlags: ['burning', 'near_waterway', 'sharp_objects'] })))).length, 0);
+  for (const contextFlags of [['disease_risk'], ['burning', 'burning'], null, 'burning']) {
+    const dto = plainToInstance(ReportInputDto, input({ contextFlags } as never));
+    assert.ok((await validate(dto)).some(error => error.property === 'contextFlags'));
+  }
+});
+
+test('unsafe photo exception allows a submitted report with no publication consent', async () => {
+  const stub = makeService();
+  const dto = input({ mediaIds: [], photoUnavailableReason: 'unsafe' });
+  assert.equal((await validate(plainToInstance(ReportInputDto, dto))).length, 0);
+  await stub.service.createReport('u1', dto, KEY);
+  assert.deepEqual(stub.createArgs[0]?.mediaIds, []);
+  assert.equal(stub.createArgs[0]?.photoUnavailableReason, 'unsafe');
+  assert.deepEqual(stub.createArgs[0]?.publicationChannels, []);
+});
+
+test('missing photos require the unsafe exception and prohibit publication consent', async () => {
+  for (const extra of [{}, { photoUnavailableReason: 'unsafe', publicationChannels: ['web'] }, { photoUnavailableReason: 'unsafe', publicationChannels: ['instagram'] }]) {
+    const stub = makeService();
+    await assert.rejects(stub.service.createReport('u1', input({ mediaIds: [], ...extra } as never), KEY, true), error => errorCode(error) === 'EVIDENCE_INVALID');
+    assert.equal(stub.state.created, 0);
+  }
+  await assert.rejects(makeService().service.createReport('u1', input({ photoUnavailableReason: 'unsafe' }), KEY), error => errorCode(error) === 'VALIDATION_ERROR');
+});
+
+test('owner can add evidence to an unsafe report and the exception is cleared', async () => {
+  const stub = makeService({ found: record({ evidenceMediaIds: [], photoUnavailableReason: 'unsafe' }) });
+  await stub.service.updateReport('u1', REPORT, 1, { mediaIds: [MEDIA] });
+  assert.deepEqual(stub.updateArgs[0]?.changes, { mediaIds: [MEDIA], photoUnavailableReason: null });
+});
+
+test('owner removing photos must explicitly declare unsafe conditions', async () => {
+  const stub = makeService();
+  await assert.rejects(stub.service.updateReport('u1', REPORT, 1, { mediaIds: [] }), error => errorCode(error) === 'EVIDENCE_INVALID');
+  await stub.service.updateReport('u1', REPORT, 1, { mediaIds: [], photoUnavailableReason: 'unsafe' });
+  assert.deepEqual(stub.updateArgs[0]?.changes, { mediaIds: [], photoUnavailableReason: 'unsafe' });
+});
+
+test('owner can revise provenance and clear private inference without losing observed facts', async () => {
+  const stub = makeService({ found: record({ observationSource: 'secondhand', sourceReference: 'Private source', inference: 'Initial guess' }) });
+  await stub.service.updateReport('u1', REPORT, 1, { observationSource: 'firsthand', inference: null, contextFlags: [] });
+  assert.deepEqual(stub.updateArgs[0]?.changes, { observationSource: 'firsthand', sourceReference: null, inference: null, contextFlags: [] });
+});
+
+test('legacy report views never invent a firsthand attestation', () => {
+  const view = toReportView(record());
+  assert.equal(view.observationSource, null);
+  assert.equal(view.sourceReference, null);
+  assert.equal(view.inference, null);
+  assert.deepEqual(view.contextFlags, []);
+  assert.equal(view.photoUnavailableReason, null);
+});
+
+test('owner and admin private report views include provenance without adding public fields', async () => {
+  const privateRecord = record({ observationSource: 'secondhand', sourceReference: 'Private source', inference: 'Unconfirmed guess', contextFlags: ['burning'] });
+  for (const isAdmin of [false, true]) {
+    const view = await makeService({ found: privateRecord }).service.getReport('u1', isAdmin, REPORT);
+    assert.equal(view.sourceReference, 'Private source');
+    assert.equal(view.inference, 'Unconfirmed guess');
+    assert.deepEqual(view.contextFlags, ['burning']);
+  }
+});
+
+
+test('update DTO rejects null media, unknown provenance, and invalid optional assertions', async () => {
+  for (const [property, value] of [['mediaIds', null], ['observationSource', null], ['observationSource', 'ai'], ['contextFlags', ['disease_risk']], ['inference', 'x'.repeat(1001)], ['sourceReference', ''], ['photoUnavailableReason', 'inconvenient']]) {
+    const dto = plainToInstance(ReportUpdateInputDto, { [property as string]: value });
+    assert.ok((await validate(dto)).some(error => error.property === property), `${String(property)} rejects ${String(value)}`);
+  }
+});
+
+test('an unknown legacy source remains unknown during an unrelated owner edit', async () => {
+  const stub = makeService({ found: record({ observationSource: null }) });
+  await stub.service.updateReport('u1', REPORT, 1, { mediaIds: [MEDIA], inference: 'Possible cause, not established.' });
+  assert.deepEqual(stub.updateArgs[0]?.changes, { mediaIds: [MEDIA], photoUnavailableReason: null, inference: 'Possible cause, not established.' });
+  assert.equal('observationSource' in stub.updateArgs[0]!.changes, false);
 });

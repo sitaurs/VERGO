@@ -8,6 +8,9 @@ import type { CategoryId } from '../scans/scan.types.js';
 import {
   toReportView,
   type ReportRecord,
+  type ObservationSource,
+  type PhotoUnavailableReason,
+  type ReportContextFlag,
   type ReportSeverity,
   type ReportStatus,
   type ReportStatusEventRecord,
@@ -21,6 +24,11 @@ interface ReportRow {
   category_id: CategoryId | null;
   scan_id: string | null;
   description: string;
+  observation_source: ObservationSource | null;
+  inference: string | null;
+  source_reference: string | null;
+  context_flags: ReportContextFlag[];
+  photo_unavailable_reason: PhotoUnavailableReason | null;
   reported_severity: ReportSeverity;
   latitude: number;
   longitude: number;
@@ -33,6 +41,7 @@ interface ReportRow {
 
 const REPORT_COLUMNS = (sql: Database | Tx) => sql`
   id, revision, status, category_id, scan_id, description, reported_severity,
+  observation_source, inference, source_reference, context_flags, photo_unavailable_reason,
   ST_Y(location::geometry) AS latitude, ST_X(location::geometry) AS longitude,
   occurred_at, created_at, updated_at, public_summary, duplicate_of_id`;
 
@@ -40,6 +49,11 @@ export interface CreateReportInput {
   userId: string;
   mediaIds: string[];
   description: string;
+  observationSource: ObservationSource;
+  inference: string | null;
+  sourceReference: string | null;
+  contextFlags: ReportContextFlag[];
+  photoUnavailableReason: PhotoUnavailableReason | null;
   latitude: number;
   longitude: number;
   h3Cell: string;
@@ -57,6 +71,11 @@ export interface CreateReportInput {
 export interface UpdateReportChanges {
   mediaIds?: string[];
   description?: string;
+  observationSource?: ObservationSource;
+  inference?: string | null;
+  sourceReference?: string | null;
+  contextFlags?: ReportContextFlag[];
+  photoUnavailableReason?: PhotoUnavailableReason | null;
   latitude?: number;
   longitude?: number;
   h3Cell?: string;
@@ -98,9 +117,11 @@ export class ReportRepository {
       const rows = await tx<ReportRow[]>`
         INSERT INTO reports (
           reporter_id, scan_id, category_id, description, reported_severity,
+          observation_source, inference, source_reference, context_flags, photo_unavailable_reason,
           occurred_at, location, h3_cell, status
         ) VALUES (
           ${input.userId}, ${input.scanId}, ${input.categoryId}, ${input.description}, ${input.reportedSeverity},
+          ${input.observationSource}, ${input.inference}, ${input.sourceReference}, ${input.contextFlags}::text[], ${input.photoUnavailableReason},
           ${input.occurredAt}, ST_SetSRID(ST_MakePoint(${input.longitude}, ${input.latitude}), 4326), ${input.h3Cell}, 'submitted'
         )
         RETURNING ${REPORT_COLUMNS(tx)}`;
@@ -218,6 +239,11 @@ export class ReportRepository {
       await tx`
         UPDATE reports SET
           description = ${changes.description ?? tx`description`},
+          observation_source = ${changes.observationSource ?? tx`observation_source`},
+          inference = ${changes.inference !== undefined ? changes.inference : tx`inference`},
+          source_reference = ${changes.sourceReference !== undefined ? changes.sourceReference : tx`source_reference`},
+          context_flags = ${changes.contextFlags !== undefined ? tx`${changes.contextFlags}::text[]` : tx`context_flags`},
+          photo_unavailable_reason = ${changes.photoUnavailableReason !== undefined ? changes.photoUnavailableReason : tx`photo_unavailable_reason`},
           reported_severity = ${changes.reportedSeverity ?? tx`reported_severity`},
           occurred_at = ${changes.occurredAt ?? tx`occurred_at`},
           category_id = ${changes.categoryId !== undefined ? changes.categoryId : tx`category_id`},
@@ -337,6 +363,11 @@ function mapReportRow(
     categoryId: row.category_id,
     scanId: row.scan_id,
     description: row.description,
+    observationSource: row.observation_source ?? null,
+    inference: row.inference ?? null,
+    sourceReference: row.source_reference ?? null,
+    contextFlags: row.context_flags ?? [],
+    photoUnavailableReason: row.photo_unavailable_reason ?? null,
     reportedSeverity: row.reported_severity,
     latitude: Number(row.latitude),
     longitude: Number(row.longitude),

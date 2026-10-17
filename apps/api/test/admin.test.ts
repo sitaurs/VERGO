@@ -10,6 +10,7 @@ import {
   isValidDuplicateTarget,
   isValidTransition,
   requiresInitialPublicSummary,
+  requiresSafePhoto,
 } from '../src/admin/moderation.types.js';
 import type { DecideResult } from '../src/admin/moderation.repository.js';
 import type { AuditEventView } from '../src/admin/audit.repository.js';
@@ -74,6 +75,11 @@ function record(id: string): ReportRecord {
     categoryId: null,
     scanId: null,
     description: 'x'.repeat(25),
+    observationSource: null,
+    inference: null,
+    sourceReference: null,
+    contextFlags: [],
+    photoUnavailableReason: null,
     reportedSeverity: 'small',
     latitude: -6.2,
     longitude: 106.8,
@@ -131,6 +137,12 @@ test('requiresInitialPublicSummary only on a fresh entry into verified', () => {
   assert.equal(requiresInitialPublicSummary('in_progress', 'resolved'), false);
 });
 
+test('a report marked unsafe to photograph stays private until a safe photo is added', () => {
+  for (const status of ['verified','in_progress','resolved'] as const) assert.equal(requiresSafePhoto('unsafe',status),true);
+  for (const status of ['submitted','rejected','duplicate'] as const) assert.equal(requiresSafePhoto('unsafe',status),false);
+  assert.equal(requiresSafePhoto(null,'verified'),false);
+});
+
 test('isValidDuplicateTarget rejects self, chains, and non-canonical targets', () => {
   const ok = { id: TARGET, status: 'verified' as ReportStatus, duplicateOfId: null };
   assert.equal(isValidDuplicateTarget(ok, REPORT), true);
@@ -180,6 +192,7 @@ const FAILURE_CASES: Array<[DecideResult, string]> = [
   [{ ok: false, reason: 'duplicate_target_invalid' }, 'REPORT_INVALID'],
   [{ ok: false, reason: 'summary_required' }, 'REPORT_INVALID'],
   [{ ok: false, reason: 'resolution_media_required' }, 'REPORT_INVALID'],
+  [{ ok: false, reason: 'report_evidence_required' }, 'EVIDENCE_REQUIRED'],
   [{ ok: false, reason: 'publish_media_invalid' }, 'MEDIA_INVALID'],
 ];
 

@@ -42,17 +42,19 @@ function DraftPhotoPreview({ file, alt }: { file: File; alt: string }) {
 export default function ConditionForm({
   incidentId,
   previous,
+  initialKind,
   onSaved,
   onClose,
 }: {
   incidentId: string;
   previous?: R1["CommunityUpdate"];
+  initialKind?: R1["CommunityUpdateInput"]["kind"];
   onSaved: (update: R1["CommunityUpdate"]) => void;
   onClose: () => void;
 }) {
   const { t } = useI18n();
   const [kind, setKind] = useState<R1["CommunityUpdateInput"]["kind"]>(
-      previous?.kind ?? "still_present",
+      previous?.kind ?? initialKind ?? "still_present",
     ),
     [description, setDescription] = useState(previous?.description ?? ""),
     [observed, setObserved] = useState(
@@ -76,7 +78,7 @@ export default function ConditionForm({
     .filter((p) => p.id && !p.consentLoaded)
     .map((p) => p.id)
     .join(",");
-  const storageKey = `sap-condition-draft:${previous?.id ?? incidentId}`;
+  const storageKey = `sap-condition-draft:${previous?.id ?? `${incidentId}:${initialKind ?? "new"}`}`;
   const [restoredKey, setRestoredKey] = useState<string | null>(null);
   useEffect(() => {
     try {
@@ -268,8 +270,9 @@ export default function ConditionForm({
   return (
     <section className={s.card}>
       <h2>
-        {previous ? t("Lengkapi pembaruan kondisi") : t("Bagikan kondisi terbaru")}
+        {previous ? t("Lengkapi pembaruan kondisi") : kind === "information_wrong" ? t("Laporkan informasi yang perlu dikoreksi") : t("Bagikan kondisi terbaru")}
       </h2>
+      <p className={s.muted}>{t("Tuliskan apa yang diamati dan kapan. Pisahkan fakta dari dugaan; koreksi ditinjau moderator dan tidak ditentukan oleh jumlah dukungan.")}</p>
       {version?.requestedEvidence.length ? (
         <div className={s.notice}>
           <strong>{t("Bukti yang diminta moderator")}</strong>

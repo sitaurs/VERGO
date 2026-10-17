@@ -119,12 +119,16 @@ export class CommunityService {
       if (report.redirected_from) return { kind: 'redirect', canonicalId: report.id, canonicalPath: `/incidents/${report.id}` };
       const counts = await tx<Row[]>`SELECT count(*)::integer AS count FROM incident_supports s JOIN users u ON u.id=s.user_id
         WHERE s.report_id=${report.id} AND s.supported AND u.deleted_at IS NULL`;
+      const latestCorrection = await tx<Row[]>`SELECT summary,created_at FROM public_incident_events WHERE report_id=${report.id} AND kind='correction' ORDER BY created_at DESC,id DESC LIMIT 1`;
+      const handling = await tx<Row[]>`SELECT progress,updated_at FROM report_assignments WHERE report_id=${report.id} LIMIT 1`;
       const activities = await tx<Row[]>`SELECT id FROM activities WHERE report_id=${report.id} AND status<>'draft' AND public_ever ORDER BY created_at DESC`;
       return { kind: 'incident', id: report.id, sourceRevision: report.revision,
         title: report.public_summary || 'Kejadian lingkungan', summary: report.public_summary || '', status: report.status,
         categoryId: report.category_id, area: await areaRef(tx,report.h3_cell),
         occurredAt: iso(report.occurred_at ?? report.created_at), lastObservedAt: iso(report.last_observed_at), updatedAt: iso(report.updated_at),
         evidence: await this.publicEvidence(report.id,undefined,tx), supportCount: counts[0]?.count ?? 0, supportClosed: report.status === 'resolved',
+        latestCorrection: latestCorrection[0] ? {summary:latestCorrection[0].summary,createdAt:iso(latestCorrection[0].created_at)} : null,
+        handling: handling[0] ? {progress:handling[0].progress,updatedAt:iso(handling[0].updated_at)} : null,
         relatedActivityIds: activities.map(row => row.id), canonicalPath: `/incidents/${report.id}` };
     });
   }
@@ -263,10 +267,12 @@ export class CommunityService {
   }
 
   async myUpdates(actor: Actor, query: Record<string, unknown>): Promise<unknown> {
+    input.object(query,['status','limit','cursor','reportId']);
     this.enabled(); const status=query.status===undefined ? null : input.enumeration(query.status,updateStates);
-    const page=this.store.cursor(query,{type:'my_updates',user:actor.id,status});
+    const reportId=query.reportId===undefined ? null : input.uuid(query.reportId);
+    const page=this.store.cursor(query,{type:'my_updates',user:actor.id,status,reportId});
     const after=page.boundary ? this.store.db`AND (created_at,id)<(${page.boundary.at}::timestamptz,${page.boundary.id}::uuid)` : this.store.db``;
-    const rows=await this.store.db<Row[]>`SELECT id,created_at FROM community_updates WHERE author_id=${actor.id} AND (${status}::text IS NULL OR status=${status}) ${after}
+    const rows=await this.store.db<Row[]>`SELECT id,created_at FROM community_updates WHERE author_id=${actor.id} AND (${reportId}::uuid IS NULL OR report_id=${reportId}) AND (${status}::text IS NULL OR status=${status}) ${after}
       ORDER BY created_at DESC,id DESC LIMIT ${page.limit+1}`;
     const chosen=rows.slice(0,page.limit);
     return {items:await Promise.all(chosen.map(row=>this.updateDto(row.id))),nextCursor:rows.length>page.limit?page.encode(chosen[chosen.length-1] as {id:string;created_at:Date}):null};

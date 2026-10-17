@@ -29,6 +29,8 @@ export class ReportsService {
     if ((dto.publicationChannels?.length ?? 0) > 0 && !emailVerified) {
       throw new ForbiddenException({ code: 'EMAIL_VERIFICATION_REQUIRED', message: 'Verifikasi email diperlukan untuk memberi izin publikasi.' });
     }
+    this.validateObservation(dto.observationSource, dto.sourceReference ?? null);
+    this.validatePhotoException(dto.mediaIds, dto.photoUnavailableReason ?? null, dto.publicationChannels ?? []);
     await this.enforceRateLimit(userId);
 
     const occurredAt = new Date(dto.occurredAt);
@@ -47,6 +49,11 @@ export class ReportsService {
     const requestHash = canonicalHash({
       mediaIds: dto.mediaIds,
       description: dto.description,
+      observationSource: dto.observationSource,
+      inference: dto.inference ?? null,
+      sourceReference: dto.sourceReference ?? null,
+      contextFlags: dto.contextFlags ?? [],
+      photoUnavailableReason: dto.photoUnavailableReason ?? null,
       location: dto.location,
       occurredAt: dto.occurredAt,
       reportedSeverity: dto.reportedSeverity,
@@ -59,6 +66,11 @@ export class ReportsService {
       userId,
       mediaIds: dto.mediaIds,
       description: dto.description,
+      observationSource: dto.observationSource,
+      inference: dto.inference ?? null,
+      sourceReference: dto.sourceReference ?? null,
+      contextFlags: dto.contextFlags ?? [],
+      photoUnavailableReason: dto.photoUnavailableReason ?? null,
       latitude: dto.location.latitude,
       longitude: dto.location.longitude,
       h3Cell: toH3Cell(dto.location.latitude, dto.location.longitude),
@@ -112,6 +124,34 @@ export class ReportsService {
       changes.description = dto.description;
       count += 1;
     }
+    if (dto.observationSource !== undefined || dto.sourceReference !== undefined || dto.mediaIds !== undefined || dto.photoUnavailableReason !== undefined) {
+      const current = await this.reports.findForViewer(reportId, userId, false);
+      if (!current) throw new NotFoundException({ code: 'NOT_FOUND', message: 'Laporan tidak ditemukan.' });
+      const source = dto.observationSource ?? current.observationSource;
+      const sourceReference = dto.sourceReference !== undefined ? dto.sourceReference :
+        dto.observationSource === 'firsthand' ? null : current.sourceReference;
+      // Legacy source remains unknown unless the reporter explicitly supplies one.
+      if (source !== null || sourceReference !== null) this.validateObservation(source, sourceReference);
+      if (dto.observationSource !== undefined) { changes.observationSource = dto.observationSource; count += 1; }
+      if (dto.sourceReference !== undefined || dto.observationSource === 'firsthand') {
+        changes.sourceReference = sourceReference;
+        count += 1;
+      }
+      const mediaIds = dto.mediaIds ?? current.evidenceMediaIds;
+      const photoUnavailableReason = mediaIds.length > 0 ? null :
+        dto.photoUnavailableReason !== undefined ? dto.photoUnavailableReason : current.photoUnavailableReason;
+      if (dto.photoUnavailableReason === 'unsafe' && mediaIds.length > 0) {
+        this.validatePhotoException(mediaIds, dto.photoUnavailableReason);
+      }
+      this.validatePhotoException(mediaIds, photoUnavailableReason);
+      if (dto.mediaIds !== undefined || dto.photoUnavailableReason !== undefined) {
+        changes.photoUnavailableReason = photoUnavailableReason;
+        count += 1;
+      }
+    }
+    if (dto.inference !== undefined) { changes.inference = dto.inference; count += 1; }
+    if (dto.contextFlags !== undefined) { changes.contextFlags = dto.contextFlags; count += 1; }
+
     if (dto.reportedSeverity !== undefined) {
       changes.reportedSeverity = dto.reportedSeverity;
       count += 1;
@@ -154,6 +194,25 @@ export class ReportsService {
       }
     }
     return toReportView(result.record);
+  }
+
+  private validateObservation(source: unknown, sourceReference: string | null): void {
+    if (source !== 'firsthand' && source !== 'secondhand') {
+      throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Pilih sumber pengamatan: melihat langsung atau informasi pihak lain.' });
+    }
+    if (sourceReference !== null && source !== 'secondhand') {
+      throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Rujukan pihak lain hanya berlaku untuk informasi pihak lain.' });
+    }
+  }
+
+  private validatePhotoException(mediaIds: string[], reason: unknown, publicationChannels: string[] = []): void {
+    if (mediaIds.length === 0) {
+      if (reason !== 'unsafe' || publicationChannels.length > 0) {
+        throw new UnprocessableEntityException({ code: 'EVIDENCE_INVALID', message: 'Laporan tanpa foto hanya untuk kondisi tidak aman dan tidak dapat memberi izin publikasi.' });
+      }
+    } else if (reason !== null) {
+      throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Alasan foto tidak tersedia hanya berlaku untuk laporan tanpa foto.' });
+    }
   }
 
   private async assertOwnedStoredMedia(userId: string, mediaIds: string[]): Promise<void> {

@@ -49,8 +49,8 @@ export default function MapViewport(props: Props) {
     {fallback && <div className={s.fallback} role="status"><span>{t("Peta 3D belum tersedia. Peta 2D tetap dapat digunakan.")}</span><button type="button" onClick={() => { setFallback(false); setAttempt(value => value + 1); }}><RefreshCw size={15} />{t("Coba 3D lagi")}</button></div>}
     {props.selected && !fallback && ready && <div className={s.selection} aria-live="polite">
       <div><MapPin size={19} aria-hidden="true" /><strong>{props.selectedLabel}</strong><button type="button" onClick={() => props.onSelect("")} aria-label={t("Tutup detail area")}><X size={17} /></button></div>
-      <p><b>{props.selected.properties.incidentCount}</b> {t("laporan terverifikasi")}</p>
-      <small>{props.selected.properties.openIncidentCount} {t("terbuka ·")} {props.selected.properties.resolvedIncidentCount} {t("selesai")}</small>
+      <p>{t("{0} kejadian unik terverifikasi", { "0": props.selected.properties.incidentCount })}</p>
+      <small>{t("{0} terbuka · {1} selesai (historis)", { "0": props.selected.properties.openIncidentCount, "1": props.selected.properties.resolvedIncidentCount })}</small>
     </div>}
     <p className={s.gesture}>{t("Geser untuk menjelajah · gunakan dua jari di layar sentuh")}{!fallback && mode === "3d" && <span> · {t("Pilih area untuk melihat bangunan 3D")}</span>}</p>
   </div>;

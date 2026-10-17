@@ -35,6 +35,7 @@ function History({ reportId }: { reportId: string }) {
             {post.kind === "initial" ? t("Kejadian awal") : t("Hasil penanganan")} {" "}{t("· generasi")}{" "}{post.generation}
           </strong>
           <PostStatus status={post.status} />
+          {post.sourceUpdate?.followUpRequired && <p role="status">{t("Sumber berubah atau izin tidak tersedia. Unggahan lama perlu ditinjau untuk tindak lanjut.")}</p>}
           <small>#{shortId(post.id)}</small>
           <p>
             {t("Masuk draf:")}{" "}<DateStamp value={post.createdAt} />

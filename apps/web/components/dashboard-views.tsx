@@ -180,11 +180,11 @@ function ScanView({ onScanFinished, onScanActivity, onOpenReport, onNavigate, ca
 }
 
 const statusLegend = [
-  ["Menunggu pemeriksaan", "#f4b532"], ["Terverifikasi", "#3473c8"],
+  ["Menunggu pemeriksaan", "#f4b532"], ["Terverifikasi moderator", "#3473c8"],
   ["Dalam penanganan", "#63b2eb"], ["Selesai", "#4b9e54"],
   ["Ditolak", "#ef6967"], ["Duplikat", "#9aa5b2"],
 ];
-const reportStatus: Record<SapReport["status"], string> = { submitted: "Menunggu pemeriksaan", verified: "Terverifikasi", in_progress: "Dalam penanganan", resolved: "Selesai", rejected: "Ditolak", duplicate: "Duplikat" };
+const reportStatus: Record<SapReport["status"], string> = { submitted: "Menunggu pemeriksaan", verified: "Terverifikasi moderator", in_progress: "Dalam penanganan", resolved: "Selesai", rejected: "Ditolak", duplicate: "Duplikat" };
 
 function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged, onReportWizardChange, reportComposerRequested }: Pick<Props, "reports" | "categories" | "onReportSubmitted" | "onReportsChanged" | "onReportWizardChange" | "reportComposerRequested">) {
   const { t, intlLocale } = useI18n();
@@ -201,7 +201,19 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [composerOpen, onReportWizardChange]);
 
-  function closeWizard() { setComposerOpen(false); onReportWizardChange(false); }
+  useEffect(() => {
+    if (reportComposerRequested) { setComposerOpen(true); onReportWizardChange(true); }
+  }, [reportComposerRequested, onReportWizardChange]);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const reportId = url.searchParams.get("report");
+    if (reportId && /^[0-9a-f-]{36}$/i.test(reportId)) setDetailId(reportId);
+  }, []);
+  function closeWizard() {
+    setComposerOpen(false); onReportWizardChange(false);
+    const url = new URL(window.location.href); url.searchParams.delete("compose");
+    window.history.replaceState(window.history.state, "", url);
+  }
 
   if (composerOpen) return <ReportWizard categories={categories} onClose={closeWizard} onSubmitted={summary => { onReportSubmitted(summary); closeWizard(); }} />;
 
@@ -243,7 +255,11 @@ const faqs = [
   ["Bagaimana cara memindai sampah?", "Buka menu Scan, lalu ambil atau unggah foto. Foto akan diproses oleh layanan AI dan hasilnya tersimpan di riwayat scan."],
   ["Mengapa laporan saya belum muncul di peta?", "Laporan yang baru dikirim menunggu pemeriksaan admin. Hanya laporan terverifikasi yang dapat masuk ringkasan peta publik."],
   ["Bagaimana jika GPS ditolak?", "Klik peta atau geser pin untuk memilih titik temuan secara manual, lalu konfirmasikan pin tersebut."],
-  ["Apa arti status laporan?", "Menunggu pemeriksaan berarti laporan belum ditinjau; terverifikasi berarti data disetujui; dalam penanganan dan selesai menunjukkan tahap tindak lanjut."],
+  ["Apa arti Terverifikasi moderator?", "Bukti dan konteks laporan telah diperiksa. Kondisi dapat berubah; lihat waktu pembaruan. Status ini tidak menjamin semua dugaan benar atau sampah sudah dibersihkan."],
+  ["Apakah area tanpa laporan berarti bersih?", "Belum ada laporan terverifikasi pada periode ini berarti data belum tersedia, bukan bukti area bersih. Warna peta merangkum kejadian yang dilaporkan, bukan tingkat risiko penyakit."],
+  ["Bagaimana jika laporan keliru atau lokasi sudah bersih?", "Buka kejadian publik, lalu pilih Perbarui kondisi atau Laporkan informasi keliru. Masuk bila diminta dan sertakan waktu pengamatan serta bukti yang relevan. Moderator memeriksa pembaruan sebelum kondisi berubah; jumlah dukungan tidak menentukan kebenaran."],
+  ["Haruskah saya berfoto bersama sampah?", "Tidak perlu selfie. Ambil foto kondisi dari jarak aman, jangan sentuh benda tajam atau sampah berbahaya. Bukti asli digunakan untuk pemeriksaan; publikasi foto memerlukan persetujuan dan pemeriksaan terpisah."],
+  ["Siapa yang menangani laporan?", "Moderator memeriksa laporan dan penanggung jawab yang ditugaskan mencatat tindak lanjut. Pengiriman laporan tidak menjamin penanganan langsung. Jika belum ada pelaksana, laporan belum mempunyai penanggung jawab."],
 ];
 
 function HelpView({ onNavigate }: Pick<Props, "onNavigate">) {
@@ -254,6 +270,7 @@ function HelpView({ onNavigate }: Pick<Props, "onNavigate">) {
   const visibleFaqs = faqs.map((item, index) => ({ item, index })).filter(({ item }) => `${t(item[0])} ${t(item[1])}`.toLowerCase().includes(query.toLowerCase()));
   return <>
     <PageTitle title={t("Pusat bantuan")} description={t("Temukan panduan untuk memakai VERGO.")} />
+    <p className={styles.noHelp}>{t("Panduan status, peta, privasi dan koreksi ditinjau pada 17 Oktober 2026.")} <a href="/#verifikasi">{t("Baca cara pemeriksaan laporan")}</a></p>
     <label className={styles.helpSearch}><Search size={24} /><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={t("Cari bantuan...")} aria-label={t("Cari bantuan")} />{query && <button type="button" onClick={() => setQuery("")} aria-label={t("Hapus pencarian")}><X size={18} /></button>}</label>
     {visibleTopics.length > 0 && <div className={styles.helpCards}>{visibleTopics.map(topic => {
       const index = helpTopics.indexOf(topic);

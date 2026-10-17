@@ -8,7 +8,7 @@ import {ObjectStorageService} from '../media/object-storage.service.js';
 import {EvidenceService} from '../evidence/evidence.service.js';
 import {ActivitiesService} from '../activities/activities.service.js';
 import {ReviewService} from '../community/review.service.js';
-import {EMPTY_APPROVAL,INVALID_APPROVAL,POST_STATUSES,REQUIRED_SCOPES,DELETE_SCOPES,type PostStatus} from './publication.types.js';
+import {EMPTY_APPROVAL,INVALID_APPROVAL,POST_STATUSES,REQUIRED_SCOPES,DELETE_SCOPES,incidentPublicUrl,publicationCaption,sourceUpdateState,publicationContextReady,type PostStatus} from './publication.types.js';
 import {encryptCredentials,MetaClient,MetaApiError} from './meta-client.js';
 type Row=Record<string,any>;
 @Injectable()
@@ -62,7 +62,7 @@ export class PublicationsService{
     AND (${b===null} OR (r.created_at,r.id)<(${b?.at??new Date().toISOString()}::timestamptz,${b?.id??'00000000-0000-4000-8000-000000000000'}::uuid))
    ORDER BY r.created_at DESC,r.id DESC LIMIT ${page.limit+1}`;
   const selected=rows.slice(0,page.limit);
-  return {items:selected.map(r=>({reportId:r.id,scanId:r.scan_id,status:r.status,publicSummary:r.public_summary,
+  return {items:selected.map(r=>({reportId:r.id,canonicalId:r.id,publicUrl:incidentPublicUrl(this.config.APP_ORIGIN,r.id),scanId:r.scan_id,status:r.status,publicSummary:r.public_summary,
    categoryName:r.category_name??'Belum dikategorikan',occurredAt:iso(r.occurred_at??r.created_at)!,createdAt:iso(r.created_at)!,mediaIds:r.media_ids as string[]})),
    nextCursor:rows.length>page.limit?page.encode(selected[selected.length-1] as {id:string;created_at:Date}):null};
  }
@@ -70,17 +70,19 @@ export class PublicationsService{
  async preview(actor:Actor,id:string){const post=await this.get(actor,id);return {postId:post.id,revision:post.revision,contentRevision:post.contentRevision,sourceRevision:post.source.sourceRevision,caption:post.caption,altText:post.altText,rendition:post.rendition,approval:post.approval};}
  async create(actor:Actor,key:string,raw:unknown){
   this.gate(actor);if(!this.config.SAP_INSTAGRAM_RENDER_ENABLED)fail(503,'RENDER_DISABLED');if(!this.config.POSTER_OVERPASS_URL)fail(503,'MAP_PROVIDER_UNCONFIGURED');const b=input.object(raw,['reportId','mediaId','caption','altText','kind','milestoneId','replacesPostId']);
-  const reportId=input.uuid(b.reportId),mediaId=input.uuid(b.mediaId),caption=input.text(b.caption,1,2200),altText=input.text(b.altText,1,1000),kind=input.enumeration(b.kind,['initial','resolution'] as const),milestoneId=b.milestoneId===null?null:input.uuid(b.milestoneId),replacesPostId=b.replacesPostId===null?null:input.uuid(b.replacesPostId);
+  const reportId=input.uuid(b.reportId),mediaId=input.uuid(b.mediaId),captionInput=input.text(b.caption,1,2200),altText=input.text(b.altText,1,1000),kind=input.enumeration(b.kind,['initial','resolution'] as const),milestoneId=b.milestoneId===null?null:input.uuid(b.milestoneId),replacesPostId=b.replacesPostId===null?null:input.uuid(b.replacesPostId);
   if((kind==='initial')!==(milestoneId===null))fail(400,'VALIDATION_ERROR');
-  return this.store.mutate(actor,'instagram.create',key,{reportId,mediaId,caption,altText,kind,milestoneId,replacesPostId},async tx=>{
+  return this.store.mutate(actor,'instagram.create',key,{reportId,mediaId,caption:captionInput,altText,kind,milestoneId,replacesPostId},async tx=>{
    const report=await this.evidence.subject(tx,'report',reportId,true),milestone=milestoneId?await this.milestone(tx,reportId,milestoneId):null;const asset=await this.sourceAsset(tx,report,mediaId,kind,milestone);
+   const source=await this.sourceSnapshot(tx,report,mediaId,milestone),caption=publicationCaption(captionInput,source);
+   if(caption.length>2200)fail(400,'VALIDATION_ERROR','Caption terlalu panjang setelah tanggal, area dan tautan status ditambahkan. Ringkas teks utama lalu simpan lagi.');
    const [account]=await tx`SELECT * FROM instagram_accounts WHERE singleton=true FOR SHARE`;if(!account)fail(500,'RESOURCE_STATE_INVALID');if(this.health(account)!=='connected')fail(409,'INSTAGRAM_ACCOUNT_REQUIRED');
    if(milestone?.outcome==='partial'&&!/sebagian/i.test(caption))fail(400,'VALIDATION_ERROR','Caption hasil sebagian harus menyebut sebagian.');
    const milestoneKey=milestoneId??'initial';await tx`INSERT INTO instagram_publication_series(report_id,account_id,kind,milestone_key) VALUES(${reportId},${account.id},${kind},${milestoneKey}) ON CONFLICT DO NOTHING`;
    const [series]=await tx`SELECT * FROM instagram_publication_series WHERE report_id=${reportId} AND account_id=${account.id} AND kind=${kind} AND milestone_key=${milestoneKey} FOR UPDATE`;if(!series)fail(500,'RESOURCE_STATE_INVALID');
    const [previous]=await tx`SELECT * FROM instagram_posts WHERE series_id=${series.id} ORDER BY generation DESC LIMIT 1 FOR UPDATE`;
    if(previous){if(!['cancelled','retracted'].includes(previous.status)||previous.id!==replacesPostId)fail(409,'INVALID_TRANSITION','Gunakan generation terakhir yang cancelled/retracted sebagai replacement.');}else if(replacesPostId)fail(422,'EVIDENCE_INVALID');
-   const source=await this.sourceSnapshot(tx,report,mediaId,milestone),generation=series.generation+1;
+   const generation=series.generation+1;
    const [post]=await tx`INSERT INTO instagram_posts(series_id,report_id,account_id,kind,milestone_id,generation,replaces_post_id,source_revision,source_snapshot,media_id,evidence_rendition_id,caption,alt_text) VALUES(${series.id},${reportId},${account.id},${kind},${milestoneId},${generation},${replacesPostId},${report.revision},${tx.json(source)},${mediaId},${asset.rendition_id},${caption},${altText}) RETURNING *`;if(!post)fail(500,'RESOURCE_STATE_INVALID');
    await tx`UPDATE instagram_publication_series SET generation=${generation} WHERE id=${series.id}`;
    await this.store.event(tx,'instagram.render.requested',post.id,post.content_revision);
@@ -88,9 +90,11 @@ export class PublicationsService{
   },201);
  }
  async edit(actor:Actor,id:string,rev:number,raw:unknown){
-  this.gate(actor);input.uuid(id);const b=input.object(raw,['caption','altText']),caption=input.text(b.caption,1,2200),altText=input.text(b.altText,1,1000);
+  this.gate(actor);input.uuid(id);const b=input.object(raw,['caption','altText']),captionInput=input.text(b.caption,1,2200),altText=input.text(b.altText,1,1000);
   return this.store.db.begin(async tx=>{const post=await this.lockPost(tx,id);input.checkRevision(post.revision,rev);if(!['draft','failed'].includes(post.status)||post.published_at)fail(409,'INVALID_TRANSITION');
    const report=await this.evidence.subject(tx,'report',post.report_id),milestone=post.milestone_id?await this.milestone(tx,post.report_id,post.milestone_id):null,asset=await this.sourceAsset(tx,report,post.media_id,post.kind,milestone),source=await this.sourceSnapshot(tx,report,post.media_id,milestone);
+   const caption=publicationCaption(captionInput,source);
+   if(caption.length>2200)fail(400,'VALIDATION_ERROR','Caption terlalu panjang setelah tanggal, area dan tautan status ditambahkan. Ringkas teks utama lalu simpan lagi.');
    if(milestone?.outcome==='partial'&&!/sebagian/i.test(caption))fail(400,'VALIDATION_ERROR','Caption hasil sebagian harus menyebut sebagian.');
    const [prior]=await tx`SELECT stage FROM instagram_operations WHERE post_id=${id} AND kind='publish' ORDER BY created_at DESC LIMIT 1`;
    if(prior&&['publish_requested','uncertain','published'].includes(prior.stage))fail(409,'PUBLICATION_UNCERTAIN');
@@ -105,6 +109,7 @@ export class PublicationsService{
    const report=await this.evidence.subject(tx,'report',post.report_id),milestone=post.milestone_id?await this.milestone(tx,post.report_id,post.milestone_id):null;const asset=await this.sourceAsset(tx,report,post.media_id,post.kind,milestone);
    if(report.revision!==sourceRevision||post.source_revision!==sourceRevision||asset.rendition_id!==post.evidence_rendition_id)fail(409,'SOURCE_REVISION_CHANGED');
    if(post.content_revision!==contentRevision||post.rendition_id!==renditionId||post.rendition_status!=='ready')fail(409,'PUBLICATION_NOT_APPROVED');
+   if(!publicationContextReady(post,this.config.APP_ORIGIN))fail(409,'PUBLICATION_NOT_APPROVED','Simpan ulang draf untuk membuat pratinjau bertanggal dengan tautan status sebelum menyetujui.');
    const approval={status:'approved',contentRevision,sourceRevision,renditionId,approvedAt:new Date().toISOString()};
    const [updated]=await tx`UPDATE instagram_posts SET approval=${tx.json(approval)},revision=revision+1,updated_at=now() WHERE id=${id} RETURNING *`;if(!updated)fail(500,'RESOURCE_STATE_INVALID');
    await this.store.audit(tx,actor.id,'instagram.post.approved','instagram_post',id,{contentRevision,sourceRevision,renditionId});return this.dto(updated);
@@ -117,7 +122,7 @@ export class PublicationsService{
    if(!['draft','failed'].includes(post.status))fail(409,'INVALID_TRANSITION');
    const report=await this.evidence.subject(tx,'report',post.report_id),milestone=post.milestone_id?await this.milestone(tx,post.report_id,post.milestone_id):null,asset=await this.sourceAsset(tx,report,post.media_id,post.kind,milestone);
    if(report.revision!==post.source_revision||asset.rendition_id!==post.evidence_rendition_id)fail(409,'SOURCE_REVISION_CHANGED');
-   const approval=post.approval;if(approval.status!=='approved'||approval.contentRevision!==post.content_revision||approval.sourceRevision!==post.source_revision||approval.renditionId!==post.rendition_id||post.rendition_status!=='ready')fail(409,'PUBLICATION_NOT_APPROVED');
+   const approval=post.approval;if(!publicationContextReady(post,this.config.APP_ORIGIN)||approval.status!=='approved'||approval.contentRevision!==post.content_revision||approval.sourceRevision!==post.source_revision||approval.renditionId!==post.rendition_id||post.rendition_status!=='ready')fail(409,'PUBLICATION_NOT_APPROVED');
    const [account]=await tx`SELECT * FROM instagram_accounts WHERE id=${post.account_id} FOR SHARE`;if(!account)fail(500,'RESOURCE_STATE_INVALID');if(this.health(account)!=='connected'||!REQUIRED_SCOPES.every(s=>account.scopes.includes(s)))fail(409,'META_PERMISSION_REQUIRED');
    const [prior]=await tx`SELECT * FROM instagram_operations WHERE post_id=${id} AND kind='publish' ORDER BY created_at DESC LIMIT 1`;
    if(prior&&['publish_requested','uncertain'].includes(prior.stage))fail(409,'PUBLICATION_UNCERTAIN','Rekonsiliasi operasi yang ada sebelum mencoba lagi.');
@@ -151,7 +156,7 @@ export class PublicationsService{
    if(op.kind!=='disconnect'){
     const post=await this.post(tx,op.post_id);const [account]=await tx`SELECT * FROM instagram_accounts WHERE id=${op.account_id}`;if(!account)fail(500,'RESOURCE_STATE_INVALID');
     if(this.health(account)!=='connected')fail(409,'INSTAGRAM_ACCOUNT_REQUIRED');
-    if(op.kind==='publish'){if(!this.config.SAP_INSTAGRAM_PUBLISH_ENABLED)fail(503,'PUBLISH_DISABLED');const report=await this.evidence.subject(tx,'report',post.report_id),milestone=post.milestone_id?await this.milestone(tx,post.report_id,post.milestone_id):null;const asset=await this.sourceAsset(tx,report,post.media_id,post.kind,milestone);if(report.revision!==post.source_revision||asset.rendition_id!==post.evidence_rendition_id||post.approval.status!=='approved'||post.approval.contentRevision!==post.content_revision||post.approval.renditionId!==post.rendition_id||post.rendition_status!=='ready')fail(409,'SOURCE_REVISION_CHANGED');}
+    if(op.kind==='publish'){if(!this.config.SAP_INSTAGRAM_PUBLISH_ENABLED)fail(503,'PUBLISH_DISABLED');const report=await this.evidence.subject(tx,'report',post.report_id),milestone=post.milestone_id?await this.milestone(tx,post.report_id,post.milestone_id):null;const asset=await this.sourceAsset(tx,report,post.media_id,post.kind,milestone);if(!publicationContextReady(post,this.config.APP_ORIGIN)||report.revision!==post.source_revision||asset.rendition_id!==post.evidence_rendition_id||post.approval.status!=='approved'||post.approval.contentRevision!==post.content_revision||post.approval.renditionId!==post.rendition_id||post.rendition_status!=='ready')fail(409,'SOURCE_REVISION_CHANGED');}
    }
    const [updated]=await tx`UPDATE instagram_operations SET status='queued',error_code=NULL,message='Menunggu percobaan ulang.',next_retry_at=NULL,updated_at=now() WHERE id=${id} RETURNING *`;if(!updated)fail(500,'RESOURCE_STATE_INVALID');
    if(op.post_id)await tx`UPDATE instagram_posts SET status=${op.kind==='publish'?'publishing':'retracting'},revision=revision+1,updated_at=now() WHERE id=${op.post_id}`;
@@ -269,12 +274,14 @@ export class PublicationsService{
  private async dto(post:Row){
   const report=await this.evidence.subject(this.store.db,'report',post.report_id);
   const [asset]=await this.store.db`SELECT a.media_id FROM media_publication_approvals a JOIN evidence_renditions er ON er.id=a.rendition_id JOIN media_consents mc ON mc.media_id=a.media_id JOIN media m ON m.id=a.media_id WHERE a.report_id=${post.report_id} AND a.media_id=${post.media_id} AND a.rendition_id=${post.evidence_rendition_id} AND a.channel='instagram' AND a.approved AND er.status='ready' AND 'instagram'=ANY(mc.channels) AND m.state='stored' AND m.deleted_at IS NULL`;
-  const milestone=post.milestone_id?await this.milestone(this.store.db,post.report_id,post.milestone_id):null;
+  const milestone=post.milestone_id?await this.milestone(this.store.db,post.report_id,post.milestone_id,true):null;
   const exactAsset=!!asset&&await this.matchingEvidenceSource(this.store.db,post.report_id,post.media_id,post.kind,milestone);
   const sourceEligible=report.public_visibility==='public'&&report.instagram_allowed&&report.revision===post.source_revision&&['verified','in_progress','resolved'].includes(report.status)&&!report.duplicate_of_id&&!!report.public_summary&&!!asset&&exactAsset;
   const signed=sourceEligible&&post.rendition_status==='ready'&&post.rendition_object_key?await this.objects.createSignedGetUrl(post.rendition_object_key):null;
   const editable=['draft','failed'].includes(post.status)&&!post.published_at,approved=post.approval.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready';
-  return {id:post.id,revision:post.revision,contentRevision:post.content_revision,publicationSeriesId:post.series_id,generation:post.generation,replacesPostId:post.replaces_post_id,kind:post.kind,milestoneId:post.milestone_id,source:post.source_snapshot,status:post.status,caption:post.caption,altText:post.alt_text,rendition:{id:post.rendition_id,revision:post.rendition_revision,templateVersion:post.template_version,status:post.rendition_status,url:signed?.url??null,expiresAt:signed?.expiresAt.toISOString()??null},approval:post.approval,createdAt:iso(post.created_at),updatedAt:iso(post.updated_at),publishedAt:iso(post.published_at),retractedAt:iso(post.retracted_at),permalink:post.permalink,publishError:post.publish_error,lastOperationId:post.last_operation_id,actions:{edit:permission(editable,'INVALID_TRANSITION'),approve:permission(editable&&sourceEligible&&post.rendition_status==='ready','PUBLICATION_NOT_APPROVED'),publish:permission(editable&&sourceEligible&&approved&&this.config.SAP_INSTAGRAM_PUBLISH_ENABLED,'PUBLICATION_NOT_APPROVED'),cancel:permission(editable,'INVALID_TRANSITION'),retract:permission(!['cancelled','retracted'].includes(post.status),'INVALID_TRANSITION')}};
+  const canonicalId=report.duplicate_of_id??report.id,publicUrl=incidentPublicUrl(this.config.APP_ORIGIN,canonicalId);
+  const sourceUpdate=sourceUpdateState({source_revision:post.source_revision,published_at:post.published_at,status:post.status},{revision:report.revision,status:report.status},sourceEligible,publicUrl),sourceReason=sourceUpdate.reason??'PUBLICATION_NOT_APPROVED';
+  return {id:post.id,revision:post.revision,contentRevision:post.content_revision,publicationSeriesId:post.series_id,generation:post.generation,replacesPostId:post.replaces_post_id,kind:post.kind,milestoneId:post.milestone_id,source:{...post.source_snapshot,canonicalId,publicUrl},sourceUpdate,status:post.status,caption:post.caption,altText:post.alt_text,rendition:{id:post.rendition_id,revision:post.rendition_revision,templateVersion:post.template_version,status:post.rendition_status,url:signed?.url??null,expiresAt:signed?.expiresAt.toISOString()??null},approval:post.approval,createdAt:iso(post.created_at),updatedAt:iso(post.updated_at),publishedAt:iso(post.published_at),retractedAt:iso(post.retracted_at),permalink:post.permalink,publishError:post.publish_error,lastOperationId:post.last_operation_id,actions:{edit:permission(editable,'INVALID_TRANSITION'),approve:permission(editable&&sourceEligible&&publicationContextReady(post,this.config.APP_ORIGIN)&&post.rendition_status==='ready',sourceReason),publish:permission(editable&&sourceEligible&&publicationContextReady(post,this.config.APP_ORIGIN)&&approved&&this.config.SAP_INSTAGRAM_PUBLISH_ENABLED,sourceReason),cancel:permission(editable,'INVALID_TRANSITION'),retract:permission(!['cancelled','retracted'].includes(post.status),'INVALID_TRANSITION')}};
  }
  private operationDTO(r:Row){return {id:r.id,postId:r.post_id,kind:r.kind,status:r.status,channels:r.channels,errorCode:r.error_code,message:r.message,attemptCount:r.attempt_count,nextRetryAt:iso(r.next_retry_at),createdAt:iso(r.created_at),updatedAt:iso(r.updated_at)};}
  private async post(db:Executor,id:string){const [p]=await db`SELECT * FROM instagram_posts WHERE id=${id}`;if(!p)fail(404,'NOT_FOUND');return p;}
@@ -326,11 +333,11 @@ export class PublicationsService{
   }
   return false;
  }
- private async sourceSnapshot(db:Executor,report:Row,mediaId:string,milestone:Row|null=null){const [category]=await db`SELECT name_id FROM categories WHERE id=${report.category_id}`;return {reportId:report.id,sourceRevision:report.revision,scanId:report.scan_id,status:report.status,occurredAt:iso(milestone?.observed_at??report.occurred_at??report.created_at),area:await areaRef(db,report.h3_cell),title:`Laporan ${category?.name_id??'lingkungan'}`,categoryName:category?.name_id??'Belum dikategorikan',mediaId,publicSummary:milestone?.summary??report.public_summary};}
- private async milestone(db:Executor,reportId:string,id:string):Promise<Row>{
+ private async sourceSnapshot(db:Executor,report:Row,mediaId:string,milestone:Row|null=null){const [category]=await db`SELECT name_id FROM categories WHERE id=${report.category_id}`;return {reportId:report.id,canonicalId:report.id,publicUrl:incidentPublicUrl(this.config.APP_ORIGIN,report.id),sourceRevision:report.revision,scanId:report.scan_id,status:report.status,occurredAt:iso(milestone?.observed_at??report.occurred_at??report.created_at)!,area:await areaRef(db,report.h3_cell),title:`Laporan ${category?.name_id??'lingkungan'}`,categoryName:category?.name_id??'Belum dikategorikan',mediaId,publicSummary:milestone?.summary??report.public_summary};}
+ private async milestone(db:Executor,reportId:string,id:string,optional=false):Promise<Row|null>{
   const [m]=await db`SELECT id,verified_outcome AS outcome,public_summary AS summary,observed_at,data AS payload,'activity_result'::text AS source_type FROM activity_results WHERE id=${id} AND report_id=${reportId} AND status='approved'
    UNION ALL SELECT d.id,'complete' AS outcome,COALESCE(d.decision_payload->>'publicSummary',r.public_summary) AS summary,COALESCE((d.decision_payload->>'observedAt')::timestamptz,d.created_at) AS observed_at,d.decision_payload AS payload,'moderation_decision'::text AS source_type FROM moderation_decisions d JOIN reports r ON r.id=d.report_id WHERE d.id=${id} AND d.report_id=${reportId} AND d.decision_payload->>'nextStatus'='resolved' AND r.status='resolved'`;
-  if(!m)fail(422,'EVIDENCE_INVALID');
+  if(!m){if(optional)return null;fail(422,'EVIDENCE_INVALID');}
   let allowedSources:Row[]=[];
   if(m.source_type==='activity_result'){
    const ids=Array.isArray(m.payload?.afterMediaIds)?m.payload.afterMediaIds:[];allowedSources=ids.map((media_id:string)=>({media_id,subject_type:'activity_result',subject_id:m.id}));

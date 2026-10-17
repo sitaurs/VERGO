@@ -123,6 +123,8 @@ export class AdminService {
             code: 'REPORT_INVALID',
             message: 'Keputusan resolved memerlukan 1–3 resolutionMediaIds.',
           });
+        case 'report_evidence_required':
+          throw new UnprocessableEntityException({code:'EVIDENCE_REQUIRED',message:'Laporan tanpa foto tetap privat. Minta pelapor melengkapi bukti sebelum verifikasi.'});
         case 'publish_media_invalid':
           throw new UnprocessableEntityException({
             code: 'MEDIA_INVALID',

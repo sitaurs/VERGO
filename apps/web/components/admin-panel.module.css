@@ -449,3 +449,13 @@
   margin: 6px 0 0;
   padding-left: 18px;
 }
+
+.moderationInfo {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid #d8c28d;
+  border-radius: 10px;
+  background: #fff9ec;
+  color: #634d1b;
+  line-height: 1.55;
+}

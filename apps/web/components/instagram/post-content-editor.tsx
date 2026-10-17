@@ -16,7 +16,7 @@ export default function PostContentEditor({ caption, altText, editable, disabled
     <div className={ui.field}>
       <div className={ui.fieldHeading}><label htmlFor={`${id}-caption`}>{t("Caption Instagram")}</label><span>{caption.length}{t("/2.200 karakter")}</span></div>
       <textarea id={`${id}-caption`} aria-describedby={`${id}-caption-help`} rows={6} maxLength={2200} value={caption} readOnly={!editable} disabled={disabled} onChange={event => onCaption(event.target.value)} />
-      <small id={`${id}-caption-help`}>{t("Teks ini akan tampil bersama gambar di Instagram.")}</small>
+      <small id={`${id}-caption-help`}>{t("Teks ini akan tampil bersama gambar di Instagram. Tanggal pengamatan, area dan tautan status ditambahkan saat disimpan; sisakan ruang dalam batas 2.200 karakter.")}</small>
     </div>
     <div className={ui.field}>
       <div className={ui.fieldHeading}><label htmlFor={`${id}-alt`}>{t("Deskripsi gambar untuk aksesibilitas")}</label><span>{altText.length}{t("/1.000 karakter")}</span></div>

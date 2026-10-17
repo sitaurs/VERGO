@@ -41,6 +41,8 @@ export const incident: R1["PublicIncident"] = {
   supportClosed: false,
   relatedActivityIds: [ids.activity],
   canonicalPath: `/incidents/${ids.incident}`,
+  latestCorrection: null,
+  handling: null,
 };
 export const viewer: R1["IncidentViewer"] = {
   incidentId: ids.incident,
@@ -216,6 +218,8 @@ export const post: R1["InstagramPost"] = {
   milestoneId: null,
   source: {
     reportId: ids.incident,
+    canonicalId: ids.incident,
+    publicUrl: `https://vergo.venlab.tech/incidents/${ids.incident}`,
     sourceRevision: 1,
     scanId: null,
     status: "verified",
@@ -251,6 +255,7 @@ export const post: R1["InstagramPost"] = {
     cancel: permission,
     retract: { allowed: false, reasonCode: "NOT_PUBLISHED" },
   },
+  sourceUpdate: { currentSourceRevision: 1, currentStatus: "verified", changed: false, followUpRequired: false, reason: null, publicUrl: `https://vergo.venlab.tech/incidents/${ids.incident}` },
 };
 export const preview = (p: R1["InstagramPost"]): R1["PublicationPreview"] => ({
   postId: p.id,

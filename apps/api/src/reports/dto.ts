@@ -17,6 +17,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
+import { OBSERVATION_SOURCES, REPORT_CONTEXT_FLAGS, type ObservationSource, type ReportContextFlag } from './report.types.js';
 import { CATEGORY_IDS } from '../scans/scan.types.js';
 
 const SEVERITIES = ['small', 'medium', 'large'] as const;
@@ -37,7 +38,7 @@ export class LocationDto {
 /** Body for createReport (OpenAPI ReportInput). */
 export class ReportInputDto {
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(0)
   @ArrayMaxSize(3)
   @ArrayUnique()
   @IsUUID(undefined, { each: true })
@@ -46,6 +47,30 @@ export class ReportInputDto {
   @IsString()
   @Length(20, 2000)
   description!: string;
+
+  @IsIn(OBSERVATION_SOURCES)
+  observationSource!: ObservationSource;
+
+  @IsOptional()
+  @IsString()
+  @Length(1, 1000)
+  inference?: string | null;
+
+  @IsOptional()
+  @IsString()
+  @Length(1, 1000)
+  sourceReference?: string | null;
+
+  @ValidateIf((_object, value) => value !== undefined)
+  @IsArray()
+  @ArrayUnique()
+  @ArrayMaxSize(3)
+  @IsIn(REPORT_CONTEXT_FLAGS, { each: true })
+  contextFlags?: ReportContextFlag[];
+
+  @IsOptional()
+  @IsIn(['unsafe'])
+  photoUnavailableReason?: 'unsafe' | null;
 
   @ValidateNested()
   @Type(() => LocationDto)
@@ -77,9 +102,9 @@ export class ReportInputDto {
 
 /** Body for updateReport (OpenAPI ReportUpdateInput, minProperties 1). scanId is immutable. */
 export class ReportUpdateInputDto {
-  @IsOptional()
+  @ValidateIf((_object, value) => value !== undefined)
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(0)
   @ArrayMaxSize(3)
   @ArrayUnique()
   @IsUUID(undefined, { each: true })
@@ -89,6 +114,31 @@ export class ReportUpdateInputDto {
   @IsString()
   @Length(20, 2000)
   description?: string;
+
+  @ValidateIf((_object, value) => value !== undefined)
+  @IsIn(OBSERVATION_SOURCES)
+  observationSource?: ObservationSource;
+
+  @IsOptional()
+  @IsString()
+  @Length(1, 1000)
+  inference?: string | null;
+
+  @IsOptional()
+  @IsString()
+  @Length(1, 1000)
+  sourceReference?: string | null;
+
+  @ValidateIf((_object, value) => value !== undefined)
+  @IsArray()
+  @ArrayUnique()
+  @ArrayMaxSize(3)
+  @IsIn(REPORT_CONTEXT_FLAGS, { each: true })
+  contextFlags?: ReportContextFlag[];
+
+  @IsOptional()
+  @IsIn(['unsafe'])
+  photoUnavailableReason?: 'unsafe' | null;
 
   @IsOptional()
   @ValidateNested()

@@ -16,11 +16,12 @@ import { CommunityModule } from './community/community.module.js';
 import { ActivitiesModule } from './activities/activities.module.js';
 import { EvidenceModule } from './evidence/evidence.module.js';
 import { PublicationsModule } from './publications/publications.module.js';
+import { TrustModule } from './trust/trust.module.js';
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExtensionsModule, CommunityModule, ActivitiesModule,
     EvidenceModule, PublicationsModule, MediaModule, ScansModule, GamificationModule,
-    ReportsModule, AdminModule, AreasModule, AssistantModule],
+    ReportsModule, AdminModule, AreasModule, AssistantModule, TrustModule],
   controllers: [HealthController, CategoriesController],
   providers: [HealthService],
 })

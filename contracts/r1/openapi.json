@@ -9703,314 +9703,6 @@
         }
       }
     },
-    "/public/incidents": {
-      "get": {
-        "operationId": "r1IncidentsControllerList",
-        "summary": "IncidentsController.list",
-        "tags": [
-          "r1-community"
-        ],
-        "security": [],
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 50,
-              "default": 20
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "maxLength": 1024
-            },
-            "description": "Opaque signed cursor bound to filters. Preserve verbatim; null nextCursor ends pagination."
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "maxLength": 80
-            },
-            "description": "Searches the public summary, area cell, or incident id."
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "verified",
-                "in_progress",
-                "resolved"
-              ]
-            }
-          },
-          {
-            "name": "categoryId",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/CategoryId"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicIncidentPageR1Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid body, header, query or cursor",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Active session required",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Role, relationship, email verification or CSRF denied",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Missing resource or inaccessible private resource",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Revision, idempotency, transition or source precondition conflict",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "410": {
-            "description": "Previously public incident withdrawn; no historic content returned",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Evidence, consent, rendition or measurement invalid",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited; respect Retry-After",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              },
-              "Retry-After": {
-                "schema": {
-                  "type": "integer",
-                  "minimum": 1
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected server error",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Feature disabled or dependency unavailable",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          }
-        },
-        "x-contract-stage": "draft",
-        "x-runtime-readiness": "unverified",
-        "x-authorization-policy": "P",
-        "x-implementation-handler": "IncidentsController.list",
-        "x-implementation-file": "apps/api/src/community/community.controller.ts"
-      }
-    },
     "/public/incidents/{id}": {
       "get": {
         "operationId": "r1IncidentsControllerGet",
@@ -13135,212 +12827,6 @@
         "x-required-role": "admin"
       }
     },
-    "/activities/{id}/source-photo/url": {
-      "get": {
-        "operationId": "r1ActivitiesControllerSourcePhoto",
-        "summary": "ActivitiesController.sourcePhoto",
-        "tags": [
-          "r1-activities"
-        ],
-        "security": [
-          {
-            "sessionCookie": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Short-lived signed URL for source evidence, available only to accepted members of an eligible public activity",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MediaUrlR1Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid body, header, query or cursor",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Active session required",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Role, relationship, email verification or CSRF denied",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Missing resource or inaccessible private resource",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited; respect Retry-After",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              },
-              "Retry-After": {
-                "schema": {
-                  "type": "integer",
-                  "minimum": 1
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected server error",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Feature disabled or dependency unavailable",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          }
-        },
-        "x-contract-stage": "draft",
-        "x-runtime-readiness": "unverified",
-        "x-authorization-policy": "Authenticated actor has accepted membership; source activity and report remain publicly eligible",
-        "x-implementation-handler": "ActivitiesController.sourcePhoto",
-        "x-implementation-file": "apps/api/src/activities/activities.controller.ts"
-      }
-    },
     "/activities/{id}/results/{resultId}/media/{mediaId}/url": {
       "get": {
         "operationId": "r1ActivitiesControllerMedia",
@@ -14877,6 +14363,15 @@
                 "approved",
                 "rejected"
               ]
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -33204,6 +32699,12 @@
             "headers": {
               "X-Contract-Version": {
                 "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
               }
             },
             "content": {
@@ -33234,6 +32735,12 @@
             "headers": {
               "X-Contract-Version": {
                 "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
               }
             },
             "content": {
@@ -33249,6 +32756,12 @@
             "headers": {
               "X-Contract-Version": {
                 "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
               }
             },
             "content": {
@@ -33262,298 +32775,6 @@
         },
         "x-contract-stage": "draft",
         "x-runtime-readiness": "implemented-locally-unverified-in-production"
-      }
-    },
-    "/admin/instagram/reports": {
-      "get": {
-        "operationId": "r1PublicationsControllerReportSources",
-        "summary": "PublicationsController.reportSources",
-        "tags": [
-          "r1-publications"
-        ],
-        "security": [
-          {
-            "sessionCookie": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 50,
-              "default": 20
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "maxLength": 1024
-            },
-            "description": "Opaque signed cursor bound to normalized search. Preserve verbatim; null nextCursor ends pagination."
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "maxLength": 150
-            },
-            "description": "Search public summary, category, report ID, or report date."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InstagramReportSourcePageR1Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid body, header, query or cursor",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Active session required",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Role, relationship, email verification or CSRF denied",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Missing resource or inaccessible private resource",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Revision, idempotency, transition or source precondition conflict",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "410": {
-            "description": "Previously public incident withdrawn; no historic content returned",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Evidence, consent, rendition or measurement invalid",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited; respect Retry-After",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              },
-              "Retry-After": {
-                "schema": {
-                  "type": "integer",
-                  "minimum": 1
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected server error",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Feature disabled or dependency unavailable",
-            "headers": {
-              "X-Contract-Version": {
-                "$ref": "#/components/headers/ContractVersion"
-              },
-              "Cache-Control": {
-                "schema": {
-                  "type": "string",
-                  "const": "no-store"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          }
-        },
-        "x-contract-stage": "draft",
-        "x-runtime-readiness": "unverified",
-        "x-authorization-policy": "A",
-        "x-implementation-handler": "PublicationsController.reportSources",
-        "x-implementation-file": "apps/api/src/publications/publications.controller.ts",
-        "x-required-role": "admin"
       }
     },
     "/admin/users": {
@@ -33954,6 +33175,84 @@
                   "assigneeId",
                   "dueAt",
                   "note"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/reports/{id}/evidence-requests": {
+      "post": {
+        "operationId": "requestReporterEvidence",
+        "summary": "requestReporterEvidence",
+        "tags": [
+          "r1-operations"
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-runtime-readiness": "implemented-locally-unverified-in-production",
+        "x-authorization-policy": "admin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
                 ],
                 "additionalProperties": false
               }
@@ -34623,12 +33922,1281 @@
         "x-authorization-policy": "public"
       }
     },
-    "/admin/reports/{id}/evidence-requests": {
-      "post": {
-        "operationId": "requestReporterEvidence",
-        "summary": "requestReporterEvidence",
+    "/public/incidents": {
+      "get": {
+        "operationId": "r1IncidentsControllerList",
+        "summary": "IncidentsController.list",
         "tags": [
-          "r1-operations"
+          "r1-community"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "description": "Opaque signed cursor bound to filters. Preserve verbatim; null nextCursor ends pagination."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "description": "Searches the public summary, area cell, or incident id."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "verified",
+                "in_progress",
+                "resolved"
+              ]
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CategoryId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicIncidentPageR1Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid body, header, query or cursor",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Active session required",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, relationship, email verification or CSRF denied",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing resource or inaccessible private resource",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision, idempotency, transition or source precondition conflict",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Previously public incident withdrawn; no historic content returned",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Evidence, consent, rendition or measurement invalid",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; respect Retry-After",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Feature disabled or dependency unavailable",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-runtime-readiness": "unverified",
+        "x-authorization-policy": "P",
+        "x-implementation-handler": "IncidentsController.list",
+        "x-implementation-file": "apps/api/src/community/community.controller.ts"
+      }
+    },
+    "/activities/{id}/source-photo/url": {
+      "get": {
+        "operationId": "r1ActivitiesControllerSourcePhoto",
+        "summary": "ActivitiesController.sourcePhoto",
+        "tags": [
+          "r1-activities"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Short-lived signed URL for source evidence, available only to accepted members of an eligible public activity",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaUrlR1Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid body, header, query or cursor",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Active session required",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, relationship, email verification or CSRF denied",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing resource or inaccessible private resource",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; respect Retry-After",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Feature disabled or dependency unavailable",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-runtime-readiness": "unverified",
+        "x-authorization-policy": "Authenticated actor has accepted membership; source activity and report remain publicly eligible",
+        "x-implementation-handler": "ActivitiesController.sourcePhoto",
+        "x-implementation-file": "apps/api/src/activities/activities.controller.ts"
+      }
+    },
+    "/admin/instagram/reports": {
+      "get": {
+        "operationId": "r1PublicationsControllerReportSources",
+        "summary": "PublicationsController.reportSources",
+        "tags": [
+          "r1-publications"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "description": "Opaque signed cursor bound to normalized search. Preserve verbatim; null nextCursor ends pagination."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 150
+            },
+            "description": "Search public summary, category, report ID, or report date."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstagramReportSourcePageR1Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid body, header, query or cursor",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Active session required",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, relationship, email verification or CSRF denied",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing resource or inaccessible private resource",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision, idempotency, transition or source precondition conflict",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Previously public incident withdrawn; no historic content returned",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Evidence, consent, rendition or measurement invalid",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; respect Retry-After",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Feature disabled or dependency unavailable",
+            "headers": {
+              "X-Contract-Version": {
+                "$ref": "#/components/headers/ContractVersion"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-runtime-readiness": "unverified",
+        "x-authorization-policy": "A",
+        "x-implementation-handler": "PublicationsController.reportSources",
+        "x-implementation-file": "apps/api/src/publications/publications.controller.ts",
+        "x-required-role": "admin"
+      }
+    },
+    "/public/trust-policy": {
+      "get": {
+        "operationId": "getPublicTrustPolicy",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getPublicTrustPolicyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "public"
+      }
+    },
+    "/admin/trust-settings": {
+      "get": {
+        "operationId": "getTrustSettings",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getTrustSettingsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "admin"
+      },
+      "put": {
+        "operationId": "saveTrustSettings",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "if-match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrustPolicyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/saveTrustSettingsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "admin"
+      }
+    },
+    "/reports/{id}/appeals": {
+      "get": {
+        "operationId": "listMyReportAppeals",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/listMyReportAppealsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "owner"
+      },
+      "post": {
+        "operationId": "createReportAppeal",
+        "tags": [
+          "r1-trust"
         ],
         "security": [
           {
@@ -34647,9 +35215,302 @@
             }
           },
           {
+            "name": "if-match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
             "name": "idempotency-key",
             "in": "header",
-            "required": false,
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportAppealInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createReportAppealResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "verified owner"
+      }
+    },
+    "/report-appeals/{id}": {
+      "patch": {
+        "operationId": "reviseReportAppeal",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "if-match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportAppealInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/reviseReportAppealResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "verified owner"
+      }
+    },
+    "/report-appeals/{id}/media/{mediaId}/url": {
+      "get": {
+        "operationId": "getPrivateAppealEvidenceUrl",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -34662,43 +35523,382 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "additionalProperties": true
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
+                  "$ref": "#/components/schemas/getPrivateAppealEvidenceUrlResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
                 }
               }
             }
           }
         },
         "x-contract-stage": "draft",
-        "x-runtime-readiness": "implemented-locally-unverified-in-production",
-        "x-authorization-policy": "admin",
+        "x-authorization-policy": "appeal owner or admin"
+      }
+    },
+    "/admin/report-appeals": {
+      "get": {
+        "operationId": "listReportAppeals",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "needs_evidence",
+                "accepted",
+                "rejected"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/listReportAppealsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "admin"
+      }
+    },
+    "/admin/report-appeals/{id}/decisions": {
+      "post": {
+        "operationId": "decideReportAppeal",
+        "tags": [
+          "r1-trust"
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "if-match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "message"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/ReportAppealDecisionInput"
               }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/decideReportAppealResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Domain error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-contract-stage": "draft",
+        "x-authorization-policy": "admin"
       }
     }
   },
@@ -35462,6 +36662,19 @@
             "type": "integer",
             "minimum": 0
           },
+          "pointsReason": {
+            "type": "string",
+            "description": "Award status backed by the scan and ledger. Older responses may omit this field; unknown means the withheld reason cannot be established.",
+            "enum": [
+              "awarded",
+              "daily_limit",
+              "duplicate_image",
+              "not_classified",
+              "pending",
+              "failed",
+              "unknown"
+            ]
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -35682,7 +36895,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "minItems": 1,
+            "minItems": 0,
             "maxItems": 3,
             "uniqueItems": true
           },
@@ -35738,6 +36951,75 @@
                 "type": "null"
               }
             ]
+          },
+          "publicationChannels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "web",
+                "instagram"
+              ]
+            },
+            "maxItems": 2,
+            "uniqueItems": true
+          },
+          "observationSource": {
+            "type": "string",
+            "enum": [
+              "firsthand",
+              "secondhand"
+            ]
+          },
+          "inference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceReference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contextFlags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "burning",
+                "near_waterway",
+                "sharp_objects"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "photoUnavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsafe"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -35745,9 +37027,83 @@
           "description",
           "location",
           "occurredAt",
-          "reportedSeverity"
+          "reportedSeverity",
+          "observationSource"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "mediaIds": {
+                  "maxItems": 0
+                }
+              },
+              "required": [
+                "mediaIds"
+              ]
+            },
+            "then": {
+              "properties": {
+                "photoUnavailableReason": {
+                  "const": "unsafe"
+                },
+                "publicationChannels": {
+                  "maxItems": 0
+                }
+              },
+              "required": [
+                "photoUnavailableReason"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "photoUnavailableReason": {
+                  "const": "unsafe"
+                }
+              },
+              "required": [
+                "photoUnavailableReason"
+              ]
+            },
+            "then": {
+              "properties": {
+                "mediaIds": {
+                  "maxItems": 0
+                },
+                "publicationChannels": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "observationSource": {
+                  "const": "firsthand"
+                }
+              },
+              "required": [
+                "observationSource"
+              ]
+            },
+            "then": {
+              "not": {
+                "properties": {
+                  "sourceReference": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sourceReference"
+                ]
+              }
+            }
+          }
+        ]
       },
       "ReportUpdateInput": {
         "type": "object",
@@ -35758,7 +37114,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "minItems": 1,
+            "minItems": 0,
             "maxItems": 3,
             "uniqueItems": true
           },
@@ -35803,11 +37159,116 @@
                 "type": "null"
               }
             ]
+          },
+          "observationSource": {
+            "type": "string",
+            "enum": [
+              "firsthand",
+              "secondhand"
+            ]
+          },
+          "inference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceReference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contextFlags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "burning",
+                "near_waterway",
+                "sharp_objects"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "photoUnavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsafe"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [],
         "additionalProperties": false,
-        "minProperties": 1
+        "minProperties": 1,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "photoUnavailableReason": {
+                  "const": "unsafe"
+                }
+              },
+              "required": [
+                "photoUnavailableReason"
+              ]
+            },
+            "then": {
+              "properties": {
+                "mediaIds": {
+                  "maxItems": 0
+                },
+                "publicationChannels": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "observationSource": {
+                  "const": "firsthand"
+                }
+              },
+              "required": [
+                "observationSource"
+              ]
+            },
+            "then": {
+              "not": {
+                "properties": {
+                  "sourceReference": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sourceReference"
+                ]
+              }
+            }
+          }
+        ]
       },
       "ReportEvent": {
         "type": "object",
@@ -35971,6 +37432,68 @@
             "items": {
               "$ref": "#/components/schemas/ReportEvent"
             }
+          },
+          "observationSource": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "firsthand",
+                  "secondhand"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceReference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contextFlags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "burning",
+                "near_waterway",
+                "sharp_objects"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "photoUnavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsafe"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -35990,7 +37513,12 @@
           "publicSummary",
           "publishedMediaIds",
           "duplicateOfId",
-          "timeline"
+          "timeline",
+          "observationSource",
+          "inference",
+          "sourceReference",
+          "contextFlags",
+          "photoUnavailableReason"
         ],
         "additionalProperties": false
       },
@@ -38529,130 +40057,6 @@
         ],
         "additionalProperties": false
       },
-      "PublicIncidentListItem": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "verified",
-              "in_progress",
-              "resolved"
-            ]
-          },
-          "categoryId": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/CategoryId"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "area": {
-            "type": "object",
-            "properties": {
-              "cellId": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{15}$"
-              },
-              "label": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "cellId",
-              "label"
-            ],
-            "additionalProperties": false
-          },
-          "occurredAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastObservedAt": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "evidence": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PublicEvidence"
-            }
-          },
-          "supportCount": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "canonicalPath": {
-            "type": "string",
-            "pattern": "^/"
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "summary",
-          "status",
-          "categoryId",
-          "area",
-          "occurredAt",
-          "lastObservedAt",
-          "updatedAt",
-          "evidence",
-          "supportCount",
-          "canonicalPath"
-        ],
-        "additionalProperties": false
-      },
-      "PublicIncidentPage": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PublicIncidentListItem"
-            }
-          },
-          "nextCursor": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "items",
-          "nextCursor"
-        ],
-        "additionalProperties": false
-      },
       "PublicIncident": {
         "type": "object",
         "properties": {
@@ -38751,6 +40155,60 @@
           "canonicalPath": {
             "type": "string",
             "pattern": "^/"
+          },
+          "latestCorrection": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "summary",
+                  "createdAt"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "handling": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "progress": {
+                    "type": "string",
+                    "enum": [
+                      "assigned",
+                      "accepted",
+                      "working",
+                      "done"
+                    ]
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "progress",
+                  "updatedAt"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -38769,7 +40227,9 @@
           "supportCount",
           "supportClosed",
           "relatedActivityIds",
-          "canonicalPath"
+          "canonicalPath",
+          "latestCorrection",
+          "handling"
         ],
         "additionalProperties": false
       },
@@ -38803,6 +40263,29 @@
           },
           {
             "$ref": "#/components/schemas/CanonicalRedirect"
+          }
+        ]
+      },
+      "RegistrationClosedReason": {
+        "anyOf": [
+          {
+            "type": "string",
+            "const": "deadline_passed"
+          },
+          {
+            "type": "string",
+            "const": "manually_closed"
+          },
+          {
+            "type": "string",
+            "const": "activity_not_open"
+          },
+          {
+            "type": "string",
+            "const": "source_unavailable"
+          },
+          {
+            "type": "null"
           }
         ]
       },
@@ -38905,6 +40388,9 @@
           "registrationOpen": {
             "type": "boolean"
           },
+          "registrationClosedReason": {
+            "$ref": "#/components/schemas/RegistrationClosedReason"
+          },
           "equipment": {
             "type": "array",
             "items": {
@@ -38935,9 +40421,6 @@
           "canonicalPath": {
             "type": "string",
             "pattern": "^/"
-          },
-          "registrationClosedReason": {
-            "$ref": "#/components/schemas/RegistrationClosedReason"
           }
         },
         "required": [
@@ -40433,6 +41916,16 @@
               }
             ]
           },
+          "coordinatorDisplayName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "acceptedCount": {
             "type": "integer",
             "minimum": 0
@@ -40440,6 +41933,12 @@
           "availableSeats": {
             "type": "integer",
             "minimum": 0
+          },
+          "registrationOpen": {
+            "type": "boolean"
+          },
+          "registrationClosedReason": {
+            "$ref": "#/components/schemas/RegistrationClosedReason"
           },
           "holdReason": {
             "anyOf": [
@@ -40508,22 +42007,6 @@
               "requestResult"
             ],
             "additionalProperties": false
-          },
-          "registrationOpen": {
-            "type": "boolean"
-          },
-          "registrationClosedReason": {
-            "$ref": "#/components/schemas/RegistrationClosedReason"
-          },
-          "coordinatorDisplayName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
           }
         },
         "required": [
@@ -41211,8 +42694,7 @@
             }
           },
           "resolutionReviewRequired": {
-            "type": "boolean",
-            "description": "True when evidence used by the current resolved decision is revoked, missing, or no longer eligible; a moderator must review the resolution."
+            "type": "boolean"
           },
           "publicationAssets": {
             "type": "array",
@@ -41301,6 +42783,30 @@
               "additionalProperties": false
             }
           },
+          "actions": {
+            "type": "object",
+            "properties": {
+              "moderate": {
+                "$ref": "#/components/schemas/ActionPermission"
+              },
+              "withdraw": {
+                "$ref": "#/components/schemas/ActionPermission"
+              },
+              "restore": {
+                "$ref": "#/components/schemas/ActionPermission"
+              },
+              "createInstagramDraft": {
+                "$ref": "#/components/schemas/ActionPermission"
+              }
+            },
+            "required": [
+              "moderate",
+              "withdraw",
+              "restore",
+              "createInstagramDraft"
+            ],
+            "additionalProperties": false
+          },
           "instagramPublicationSeries": {
             "type": "array",
             "description": "Existing series only. If a kind/milestone pair is absent, its first generation can be created when the overall action is allowed.",
@@ -41359,30 +42865,6 @@
               ],
               "additionalProperties": false
             }
-          },
-          "actions": {
-            "type": "object",
-            "properties": {
-              "moderate": {
-                "$ref": "#/components/schemas/ActionPermission"
-              },
-              "withdraw": {
-                "$ref": "#/components/schemas/ActionPermission"
-              },
-              "restore": {
-                "$ref": "#/components/schemas/ActionPermission"
-              },
-              "createInstagramDraft": {
-                "$ref": "#/components/schemas/ActionPermission"
-              }
-            },
-            "required": [
-              "moderate",
-              "withdraw",
-              "restore",
-              "createInstagramDraft"
-            ],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -41395,8 +42877,8 @@
           "resolutionReviewRequired",
           "publicationAssets",
           "publicationMilestones",
-          "instagramPublicationSeries",
-          "actions"
+          "actions",
+          "instagramPublicationSeries"
         ],
         "additionalProperties": false
       },
@@ -42528,6 +44010,14 @@
               },
               "publicSummary": {
                 "type": "string"
+              },
+              "canonicalId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "publicUrl": {
+                "type": "string",
+                "format": "uri"
               }
             },
             "required": [
@@ -42540,7 +44030,9 @@
               "title",
               "categoryName",
               "mediaId",
-              "publicSummary"
+              "publicSummary",
+              "canonicalId",
+              "publicUrl"
             ],
             "additionalProperties": false
           },
@@ -42648,6 +44140,51 @@
               "retract"
             ],
             "additionalProperties": false
+          },
+          "sourceUpdate": {
+            "type": "object",
+            "properties": {
+              "currentSourceRevision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "currentStatus": {
+                "$ref": "#/components/schemas/ReportStatus"
+              },
+              "changed": {
+                "type": "boolean"
+              },
+              "followUpRequired": {
+                "type": "boolean"
+              },
+              "reason": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "SOURCE_REVISION_CHANGED",
+                      "SOURCE_NOT_APPROVED"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "publicUrl": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "currentSourceRevision",
+              "currentStatus",
+              "changed",
+              "followUpRequired",
+              "reason",
+              "publicUrl"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -42672,7 +44209,8 @@
           "permalink",
           "publishError",
           "lastOperationId",
-          "actions"
+          "actions",
+          "sourceUpdate"
         ],
         "additionalProperties": false
       },
@@ -43108,22 +44646,6 @@
           "publicVisibility",
           "scope",
           "operations"
-        ],
-        "additionalProperties": false
-      },
-      "PublicIncidentPageR1Response": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/PublicIncidentPage"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/Meta"
-          }
-        },
-        "required": [
-          "data",
-          "meta"
         ],
         "additionalProperties": false
       },
@@ -43919,6 +45441,146 @@
         ],
         "additionalProperties": false
       },
+      "PublicIncidentListItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "in_progress",
+              "resolved"
+            ]
+          },
+          "categoryId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CategoryId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "area": {
+            "type": "object",
+            "properties": {
+              "cellId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{15}$"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "cellId",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastObservedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicEvidence"
+            }
+          },
+          "supportCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "canonicalPath": {
+            "type": "string",
+            "pattern": "^/"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "status",
+          "categoryId",
+          "area",
+          "occurredAt",
+          "lastObservedAt",
+          "updatedAt",
+          "evidence",
+          "supportCount",
+          "canonicalPath"
+        ],
+        "additionalProperties": false
+      },
+      "PublicIncidentPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicIncidentListItem"
+            }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "additionalProperties": false
+      },
+      "PublicIncidentPageR1Response": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PublicIncidentPage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
       "InstagramReportSource": {
         "type": "object",
         "properties": {
@@ -43967,6 +45629,14 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          "canonicalId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "required": [
@@ -43977,7 +45647,9 @@
           "categoryName",
           "occurredAt",
           "createdAt",
-          "mediaIds"
+          "mediaIds",
+          "canonicalId",
+          "publicUrl"
         ],
         "additionalProperties": false
       },
@@ -44023,28 +45695,455 @@
         ],
         "additionalProperties": false
       },
-      "RegistrationClosedReason": {
-        "anyOf": [
-          {
-            "type": "string",
-            "const": "deadline_passed"
+      "TrustPolicyInput": {
+        "type": "object",
+        "properties": {
+          "operatorLabel": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
-          {
-            "type": "string",
-            "const": "manually_closed"
+          "contactUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
-          {
-            "type": "string",
-            "const": "activity_not_open"
+          "reviewNotice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
-          {
-            "type": "string",
-            "const": "source_unavailable"
-          },
-          {
-            "type": "null"
+          "retentionNotice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
-        ]
+        },
+        "required": [
+          "operatorLabel",
+          "contactUrl",
+          "reviewNotice",
+          "retentionNotice"
+        ],
+        "additionalProperties": false
+      },
+      "TrustPolicy": {
+        "type": "object",
+        "properties": {
+          "operatorLabel": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contactUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewNotice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "retentionNotice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "operatorLabel",
+          "contactUrl",
+          "reviewNotice",
+          "retentionNotice",
+          "revision",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "ReportAppealInput": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2000
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "ReportAppealDecisionInput": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "accept_review",
+              "reject",
+              "request_evidence"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 1000
+          },
+          "reportRevision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "action",
+          "reason",
+          "reportRevision"
+        ],
+        "additionalProperties": false
+      },
+      "ReportAppeal": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceRevision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reportRevision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reportStatus": {
+            "$ref": "#/components/schemas/ReportStatus"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2000
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 3
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "needs_evidence",
+              "accepted",
+              "rejected"
+            ]
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "decisionReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "reportId",
+          "sourceRevision",
+          "reportRevision",
+          "reportStatus",
+          "reason",
+          "mediaIds",
+          "status",
+          "revision",
+          "decisionReason",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "ReportAppealPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportAppeal"
+            }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "additionalProperties": false
+      },
+      "getPublicTrustPolicyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/TrustPolicy"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "getTrustSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/TrustPolicy"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "saveTrustSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/TrustPolicy"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "listMyReportAppealsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReportAppealPage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "createReportAppealResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReportAppeal"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "reviseReportAppealResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReportAppeal"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "PrivateEvidenceUrl": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "url",
+          "expiresAt"
+        ],
+        "additionalProperties": false
+      },
+      "getPrivateAppealEvidenceUrlResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PrivateEvidenceUrl"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "listReportAppealsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReportAppealPage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "decideReportAppealResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReportAppeal"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
       }
     },
     "securitySchemes": {

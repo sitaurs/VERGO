@@ -18,6 +18,7 @@ import {
   isValidDuplicateTarget,
   isValidTransition,
   requiresInitialPublicSummary,
+  requiresSafePhoto,
   MAX_REPORT_AWARDS_PER_DAY,
   REPORT_AWARD_DELTA,
   type AdminStatsView,
@@ -50,7 +51,8 @@ export type DecideFailure =
   | 'duplicate_target_invalid'
   | 'summary_required'
   | 'resolution_media_required'
-  | 'publish_media_invalid';
+  | 'publish_media_invalid'
+  | 'report_evidence_required';
 
 export type DecideResult =
   | { ok: true; view: ReportView; replayed: boolean }
@@ -105,14 +107,17 @@ export class ModerationRepository {
       }
 
       const cur = await tx<
-        { reporter_id: string | null; status: ReportStatus; revision: number; public_summary:string|null; public_visibility:string }[]
-      >`SELECT reporter_id, status, revision, public_summary, public_visibility FROM reports WHERE id = ${input.reportId} FOR UPDATE`;
+        { reporter_id: string | null; status: ReportStatus; revision: number; public_summary:string|null; public_visibility:string; photo_unavailable_reason:string|null }[]
+      >`SELECT reporter_id, status, revision, public_summary, public_visibility, photo_unavailable_reason FROM reports WHERE id = ${input.reportId} FOR UPDATE`;
       const row = cur[0];
       if (!row) throw new DecisionAbort('not_found');
       if (row.revision !== input.ifMatchRevision) throw new DecisionAbort('conflict');
 
       const from = row.status;
       const to = input.nextStatus;
+      if (requiresSafePhoto(row.photo_unavailable_reason, to)) {
+        throw new DecisionAbort('report_evidence_required');
+      }
       const summaryProvided = input.publicSummary !== undefined;
       const effectivePublicSummary = summaryProvided ? input.publicSummary ?? null : row.public_summary;
       const claimIds = input.resolutionEvidenceIds ?? [];

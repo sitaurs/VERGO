@@ -45,6 +45,15 @@
 .panelHeading > button { display: grid; place-items: center; flex: none; width: 38px; height: 38px; border: 1px solid #dae7ed; border-radius: 10px; background: white; color: #486879; cursor: pointer; }
 .panelHeading > button:disabled { opacity: .45; cursor: default; }
 .updated { display: block; min-height: 17px; margin-top: 11px; font-size: 11px; line-height: 1.5; color: #7b899d; }
+.summary { display:grid; gap:5px; padding:13px; margin:0 0 16px; border:1px solid #dcebe1; border-radius:9px; background:#f4faf6; color:#345e47; }
+.summary p { margin:0; font-size:14px; font-weight:700; line-height:1.5; }
+.summary span,.summary small { font-size:12px; line-height:1.6; }
+.stale { padding:10px 12px; border-radius:8px; background:#fff4dd; color:#775318; font-size:12px; line-height:1.6; }
+.legendTitle { margin:0 0 10px; color:#526e60; font-size:12px; line-height:1.5; }
+.method { margin-top:15px; border-top:1px solid #e0ebe3; padding-top:6px; color:#516b5e; }
+.method summary { display:list-item; min-height:44px; padding:12px 0; font-size:13px; font-weight:650; line-height:1.6; cursor:pointer; }
+.method p,.method small { display:block; margin:0 0 10px; font-size:12px; line-height:1.75; }
+.method summary:focus-visible { outline:3px solid #007f65; outline-offset:3px; }
 .period { display: flex; align-items: center; gap: 12px; margin: 22px 0; font-size: 13px; color: #607186; }
 .period > span:last-child { display: flex; align-items: center; flex: 1; min-width: 0; height: 44px; padding: 0 11px; gap: 10px; border: 1px solid #d5e3ef; border-radius: 10px; }
 .period svg { flex: none; color: #516f83; }

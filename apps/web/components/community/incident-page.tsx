@@ -9,12 +9,14 @@ import {
   getIncident,
   incidentTimeline,
   incidentViewer,
+  myUpdates,
   publicIncidents,
   supportIncident,
 } from "../../lib/api/community";
 import { permissionReason, type R1 } from "../../lib/api/r1";
 import { loginDestination, safeReturnTo } from "../../lib/auth-return";
 import ConditionForm from "./condition-form";
+import PublicTrustNotice from "../trust/public-trust-notice";
 import {
   date,
   Empty,
@@ -34,7 +36,7 @@ type IncidentStatus = IncidentCard["status"];
 type IncidentCategory = NonNullable<IncidentCard["categoryId"]>;
 
 const statusLabels: Record<IncidentStatus, string> = {
-  verified: "Terverifikasi",
+  verified: "Terverifikasi moderator",
   in_progress: "Dalam penanganan",
   resolved: "Selesai",
 };
@@ -175,6 +177,10 @@ export default function IncidentPage({ id }: { id: string }) {
     [timelineError, setTimelineError] = useState<unknown>(null),
     [epoch, setEpoch] = useState(0),
     [form, setForm] = useState(false),
+    [formKind, setFormKind] = useState<R1["CommunityUpdateInput"]["kind"]>("still_present"),
+    [editingUpdate, setEditingUpdate] = useState<R1["CommunityUpdate"] | null>(null),
+    [myContributions, setMyContributions] = useState<R1["CommunityUpdate"][]>([]),
+    [myContributionsError, setMyContributionsError] = useState(""),
     [contributionMessage, setContributionMessage] = useState("");
   const actionBlocked =
     busy ||
@@ -191,7 +197,13 @@ export default function IncidentPage({ id }: { id: string }) {
     setViewer(null);
     setGuest(false);
     setForm(false);
+    setFormKind("still_present");
+    setEditingUpdate(null);
+    setMyContributions([]);
+    setMyContributionsError("");
     setContributionMessage("");
+    const contributionIntent = new URLSearchParams(window.location.search).get("contribute");
+    const requestedKind = contributionIntent === "correction" ? "information_wrong" : contributionIntent === "condition" ? "still_present" : null;
     void getIncident(id, c.signal)
       .then(async (value) => {
         if (c.signal.aborted) return;
@@ -225,7 +237,18 @@ export default function IncidentPage({ id }: { id: string }) {
           return;
         } else setTimelineError(timeline.reason);
         const access = results[1];
-        if (access.status === "fulfilled") setViewer(access.value);
+        if (access.status === "fulfilled") {
+          setViewer(access.value);
+          void myUpdates(undefined,c.signal,id).then(page=>{
+            if(!c.signal.aborted)setMyContributions(page.items);
+          }).catch(cause=>{
+            if(!c.signal.aborted)setMyContributionsError(cause instanceof Error?cause.message:"Riwayat pembaruan Anda belum dapat dimuat.");
+          });
+          if(requestedKind&&access.value.actions.update.allowed){
+            setFormKind(requestedKind);setEditingUpdate(null);setForm(true);
+            window.history.replaceState(null,"",`${window.location.pathname}#kontribusi-warga`);
+          }
+        }
         else if (
           access.reason instanceof ApiError &&
           access.reason.status === 410
@@ -296,6 +319,9 @@ export default function IncidentPage({ id }: { id: string }) {
       setBusy(false);
     }
   }
+  function openContribution(kind:R1["CommunityUpdateInput"]["kind"],previous:R1["CommunityUpdate"]|null=null){
+    setFormKind(kind);setEditingUpdate(previous);setForm(true);
+  }
   return (
     <PublicShell>
       {loading ? (
@@ -313,6 +339,12 @@ export default function IncidentPage({ id }: { id: string }) {
                   <span>{date(incident.occurredAt, intlLocale)}</span>
                 </div>
                 <p className={s.pre}>{incident.summary}</p>
+                {incident.latestCorrection && <aside className={s.notice}>
+                  <strong>{t("Koreksi terbaru yang ditinjau moderator")}</strong>
+                  <p className={s.pre}>{incident.latestCorrection.summary}</p>
+                  <small>{t("Diperbarui")}: {date(incident.latestCorrection.createdAt,intlLocale)}</small>
+                </aside>}
+                <p className={s.muted}>{t("Waktu pengamatan terakhir")}: {date(incident.lastObservedAt,intlLocale)} · {t("Data halaman diperbarui")}: {date(incident.updatedAt,intlLocale)}</p>
                 <Evidence items={incident.evidence} />
                 <button
                   className={s.secondary}
@@ -322,13 +354,13 @@ export default function IncidentPage({ id }: { id: string }) {
               </section>
               <section className={`${s.card} ${s.contributionCard}`} id="kontribusi-warga">
                 <span className={s.eyebrow}>{t("Kontribusi Warga")}</span>
-                <h2>{t("Kirim kondisi terbaru atau foto bukti")}</h2>
+                <h2>{t("Kirim kondisi terbaru atau laporkan informasi keliru")}</h2>
                 <p className={s.muted}>
-                  {t("Pembaruan warga masuk ke antrean moderator/admin. Foto yang Anda unggah menjadi bukti privat dulu, lalu hanya tampil publik jika disetujui.")}</p>
+                  {t("Pilih pembaruan kondisi atau laporkan informasi yang keliru. Tuliskan pengamatan dan waktunya; foto menjadi bukti privat sampai moderator menyetujuinya.")}</p>
                 {guest ? (
                   <div className={s.actions}>
-                    <Link className={s.button} href={loginDestination(`/incidents/${id}#kontribusi-warga`)}>
-                      {t("Masuk untuk kirim pembaruan")}</Link>
+                    <Link className={s.button} href={loginDestination(`/incidents/${id}?contribute=condition#kontribusi-warga`)}>{t("Masuk untuk memperbarui kondisi")}</Link>
+                    <Link className={s.secondary} href={loginDestination(`/incidents/${id}?contribute=correction#kontribusi-warga`)}>{t("Masuk untuk melaporkan informasi keliru")}</Link>
                     <Link className={s.secondary} href="/incidents">
                       {t("Lihat kejadian publik lain")}</Link>
                   </div>
@@ -338,9 +370,11 @@ export default function IncidentPage({ id }: { id: string }) {
                       <button
                         className={s.button}
                         disabled={busy || !viewer.actions.update.allowed}
-                        onClick={() => setForm(true)}
+                        onClick={() => openContribution("still_present")}
                       >
-                        {t("Kirim pembaruan warga")}</button>
+                        {t("Perbarui kondisi")}</button>
+                      <button className={s.secondary} disabled={busy || !viewer.actions.update.allowed} onClick={()=>openContribution("information_wrong")}>
+                        {t("Laporkan informasi keliru")}</button>
                       <Link className={s.secondary} href="/incidents">
                         {t("Lihat kejadian publik lain")}</Link>
                     </div>
@@ -356,8 +390,12 @@ export default function IncidentPage({ id }: { id: string }) {
               {form && (
                 <ConditionForm
                   incidentId={id}
-                  onSaved={() => {
+                  initialKind={formKind}
+                  previous={editingUpdate ?? undefined}
+                  onSaved={(saved) => {
                     setForm(false);
+                    setEditingUpdate(null);
+                    setMyContributions(current=>[saved,...current.filter(item=>item.id!==saved.id)]);
                     setContributionMessage(
                       "Pembaruan terkirim untuk ditinjau. Moderator akan memutuskan sebelum foto atau ringkasan tampil publik.",
                     );
@@ -369,6 +407,18 @@ export default function IncidentPage({ id }: { id: string }) {
                 <p role="status" className={s.notice}>
                   {t(contributionMessage)}</p>
               )}
+              {viewer&&<section className={s.card}>
+                <h2>{t("Pembaruan Anda untuk kejadian ini")}</h2>
+                {myContributionsError&&<p className={s.muted} role="status">{t(myContributionsError)}</p>}
+                {!myContributionsError&&!myContributions.length&&<Empty>{t("Belum ada pembaruan dari akun Anda untuk kejadian ini.")}</Empty>}
+                {!!myContributions.length&&<ol className={s.timeline}>{myContributions.map(item=><li key={item.id}>
+                  <strong>{t(item.kind==="information_wrong"?"Koreksi informasi":"Pembaruan kondisi")} · {t(({submitted:"Menunggu pemeriksaan",needs_evidence:"Perlu bukti tambahan",approved:"Disetujui moderator",rejected:"Tidak disetujui"} as const)[item.status])}</strong>
+                  <p>{date(item.observedAt,intlLocale)} · {item.description}</p>
+                  {item.requestedEvidence.length>0&&<div className={s.notice}><strong>{t("Bukti yang diminta moderator")}</strong><ul>{item.requestedEvidence.map((text,index)=><li key={index}>{text}</li>)}</ul></div>}
+                  {item.decisionReason&&<p className={s.muted}>{item.decisionReason}</p>}
+                  {item.status==="needs_evidence"&&<button type="button" className={s.secondary} disabled={!viewer.actions.update.allowed} onClick={()=>openContribution(item.kind,item)}>{t("Lengkapi bukti yang diminta")}</button>}
+                </li>)}</ol>}
+              </section>}
               <section className={s.card}>
                 <h2>{t("Perjalanan kejadian")}</h2>
                 {events.length ? (
@@ -396,6 +446,11 @@ export default function IncidentPage({ id }: { id: string }) {
             </div>
             <aside className={s.card}>
               <h2>{t("Ikut peduli")}</h2>
+              <section className={s.notice}>
+                <strong>{t("Status penanganan")}</strong>
+                {incident.handling?<p>{t(({assigned:"Penugasan dibuat",accepted:"Tugas diterima",working:"Penanganan sedang berjalan",done:"Progres tugas ditandai selesai"} as const)[incident.handling.progress])} · {date(incident.handling.updatedAt,intlLocale)}</p>:<p>{t("Belum ada penanggung jawab yang ditugaskan; progres penanganan belum tercatat.")}</p>}
+                <small>{t("Progres tugas adalah catatan tindak lanjut; status Selesai tetap memerlukan keputusan moderator berdasarkan bukti.")}</small>
+              </section>
               <p>{t("{0} dukungan warga", { "0": incident.supportCount })}</p>
               <p className={s.muted}>
                 {t("Dukung kejadian untuk menunjukkan kepedulian. Ikuti kabar untuk menerima pembaruan.")}</p>
@@ -424,7 +479,7 @@ export default function IncidentPage({ id }: { id: string }) {
                   <button
                     className={s.secondary}
                     disabled={busy || !viewer.actions.update.allowed}
-                    onClick={() => setForm(true)}
+                    onClick={() => openContribution("still_present")}
                   >
                     {t("Bagikan kondisi terbaru")}</button>
                   {Object.values(viewer.actions)
@@ -460,6 +515,7 @@ export default function IncidentPage({ id }: { id: string }) {
               retry={() => setEpoch((v) => v + 1)}
             />
           )}
+          <PublicTrustNotice />
         </>
       ) : (
         <Empty>{t("Informasi kejadian belum tersedia.")}</Empty>

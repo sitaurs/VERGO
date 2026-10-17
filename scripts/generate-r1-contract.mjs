@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import ts from 'typescript';
 import { addOperationalRoutes } from './r1-operational-addendum.mjs';
+import { addTrustRoutes } from './r1-trust-addendum.mjs';
 
 // Generates handoff artifacts only. It does not start services, execute routes or promote the published contract.
 const root = path.resolve(import.meta.dirname, '..');
@@ -410,6 +411,18 @@ spec['x-domain-reference'] = 'docs/CONTRACT_ZAKA_ZAMANI.md';
 const output = path.join(root, 'contracts/r1');
 fs.mkdirSync(output, { recursive: true });
 addOperationalRoutes(spec);
+// Preserve explicitly maintained R1 additions that predate the generator.
+const compatibility = JSON.parse(read('scripts/r1-compatibility.json'));
+for (const [name, schema] of Object.entries(compatibility.schemas)) schemas[name] = structuredClone(schema);
+for (const [name, fields] of Object.entries(compatibility.fields)) {
+  Object.assign(schemas[name].properties, structuredClone(fields.properties));
+  schemas[name].required = [...new Set([...(schemas[name].required ?? []), ...fields.required])];
+}
+for (const [route, methods] of Object.entries(compatibility.paths)) {
+  spec.paths[route] ??= {};
+  Object.assign(spec.paths[route], structuredClone(methods));
+}
+addTrustRoutes(spec);
 fs.writeFileSync(path.join(output, 'openapi.json'), JSON.stringify(spec, null, 2) + '\n');
 const fileHash = file => crypto.createHash('sha256').update(read(file)).digest('hex');
 const manifest = {
@@ -419,7 +432,7 @@ const manifest = {
   flagDefaults: { SAP_EXTENSION_ENABLED: false, SAP_COMMUNITY_ENABLED: false, SAP_ACTIVITIES_ENABLED: false, SAP_HERMES_ENABLED: false, SAP_INSTAGRAM_ENABLED: false, SAP_INSTAGRAM_PUBLISH_ENABLED: false, META_DELETE_ENABLED: false },
   runtimeFlagState: 'not_inspected', flagsDisabledByDefault: true,
   hashes: { publishedOpenApi: fileHash('contracts/openapi.json'), sharedContract: fileHash('docs/CONTRACT_ZAKA_ZAMANI.md') },
-  newOperationCount: operationInventory.length, newOperations: operationInventory,
+  newOperationCount: Object.entries(spec.paths).reduce((n, [route, methods]) => n + Object.keys(methods).filter(method => ['get','post','put','patch','delete','head','options'].includes(method) && !published.paths[route]?.[method]).length, 0), newOperations: Object.entries(spec.paths).flatMap(([route, methods]) => Object.entries(methods).filter(([method]) => ['get','post','put','patch','delete','head','options'].includes(method) && !published.paths[route]?.[method]).map(([method, operation]) => ({method:method.toUpperCase(),path:route,handler:operation['x-implementation-handler'] ?? operation.operationId,schemaState:'draft',handlerState:'implemented',runtimeState:'not_verified'}))),
   promotionRequired: spec['x-promotion-required'],
   limitations: ['Presence of a source handler is not proof of correct runtime behaviour.', 'No tests, live provider calls, database migrations or server route checks were run by this generator.', 'Keep existing published contract and generated web client on 1.1.0 until a coordinated promotion.'],
 };
@@ -454,7 +467,8 @@ function example(schema, field = '', trail = '') {
   }
   throw new Error('Unsupported fixture schema');
 }
-const samples = Object.fromEntries([...aliases.keys()].filter(name => schemas[name]).map(name => [name, example(schemas[name], '', name)]));
+const exampleNames = [...new Set([...aliases.keys(), ...Object.keys(compatibility.schemas), 'TrustPolicy','ReportAppeal','ReportAppealInput','ReportAppealDecisionInput'])].filter(name => schemas[name]);
+const samples = Object.fromEntries(exampleNames.map(name => [name, example(schemas[name], '', name)]));
 const reportId = syntheticId('scenario.report'), activityId = syntheticId('scenario.activity'), mediaId = syntheticId('scenario.media');
 Object.assign(samples.PublicIncident, { id: reportId, title: 'DATA CONTOH: sampah perlu ditangani', summary: 'Contoh laporan sintetis untuk pengembangan antarmuka.', categoryId: 'plastic', supportCount: 7, relatedActivityIds: [activityId], canonicalPath: `/incidents/${reportId}` });
 Object.assign(samples.PublicIncident.area, { label: 'Area contoh sintetis' });

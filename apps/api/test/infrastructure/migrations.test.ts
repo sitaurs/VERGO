@@ -87,6 +87,9 @@ const EXPECTED_TABLES = [
   'report_assignments',
   'area_localities',
   'report_notification_emails',
+  // 0023 reporting trust and private appeals
+  'report_appeals',
+  'trust_settings',
 ].sort();
 
 test('there are at least five migration files', async () => {
@@ -183,4 +186,26 @@ test('membership requests have a dedicated notification type without removing ex
   assert.match(migration.sql, /'community_update_decided'/i);
   assert.doesNotMatch(migration.sql, /\b(?:DELETE|TRUNCATE)\b/i,
     'the additive notification migration must preserve existing notifications');
+});
+
+test('report observation migration keeps legacy provenance unknown and separates private assertions', async () => {
+  const files=await loadMigrations();
+  const migration=files.find(file=>file.filename==='0022_report_observations.sql');
+  assert.ok(migration,'expected the report observation migration');
+  assert.match(migration.sql,/ADD COLUMN observation_source text/i);
+  assert.match(migration.sql,/ADD COLUMN inference text/i);
+  assert.match(migration.sql,/ADD COLUMN source_reference text/i);
+  assert.match(migration.sql,/ADD COLUMN context_flags text\[\]/i);
+  assert.match(migration.sql,/ADD COLUMN photo_unavailable_reason text/i);
+  assert.doesNotMatch(migration.sql,/UPDATE\s+reports/i,'legacy reports must not be retroactively marked as firsthand or otherwise reclassified');
+});
+
+test('appeals are private, bounded, and leave operator/retention promises unset by default', async () => {
+  const files=await loadMigrations();
+  const migration=files.find(file=>file.filename==='0023_report_appeals_and_trust.sql');
+  assert.ok(migration,'expected the trust and appeal migration');
+  assert.match(migration.sql,/media_ids uuid\[\] NOT NULL DEFAULT '\{\}' CHECK\(cardinality\(media_ids\) <= 3\)/i);
+  assert.match(migration.sql,/CREATE UNIQUE INDEX report_appeals_one_open[\s\S]*status IN \('pending','needs_evidence'\)/i);
+  assert.match(migration.sql,/INSERT INTO trust_settings\(id\) VALUES\('singleton'\)/i);
+  assert.doesNotMatch(migration.sql,/UPDATE\s+reports|operator_label\s+text\s+NOT NULL|retention_notice\s+text\s+NOT NULL/i);
 });

@@ -6,13 +6,13 @@ import type { AppConfig } from '@sap/config';
 import { MapSnapshotService, xml, type MapMetadata, type MapData } from './map-snapshot.js';
 
 export type PosterSource = {
-  reportId: string; sourceRevision: number; scanId: string|null;
+  reportId: string; canonicalId?:string; publicUrl?:string; sourceRevision: number; scanId: string|null;
   status: 'verified'|'in_progress'|'resolved'; occurredAt: string;
   area: {cellId:string;label:string}; title:string;categoryName:string;
   mediaId:string;publicSummary:string;
 };
 export type PosterInput = {source:PosterSource;photo:Buffer;outcome:'initial'|'partial'|'complete';reportCode:string};
-export type RenderedPoster = {bytes:Buffer;source:PosterSource;map:MapMetadata;mapData:MapData;templateVersion:'sap-feed-reference-v3'};
+export type RenderedPoster = {bytes:Buffer;source:PosterSource;map:MapMetadata;mapData:MapData;templateVersion:'vergo-feed-status-v4'};
 const WIDTH=1080, HEIGHT=1350, CREAM='#f8f4e7', GREEN='#115239';
 const BLACK_FONT=fileURLToPath(new URL('./assets/fonts/Roboto-Black.ttf',import.meta.resolve('@sap/worker/package.json')));
 const BODY_FONT=fileURLToPath(new URL('./assets/fonts/RobotoCondensed-Bold.ttf',import.meta.resolve('@sap/worker/package.json')));
@@ -38,7 +38,9 @@ export class PosterRenderer {
   async render(input:PosterInput):Promise<RenderedPoster> {
     if(!this.config.SAP_INSTAGRAM_RENDER_ENABLED)throw new Error('RENDER_DISABLED');
     await (this.fontsReady ??= assertPosterFonts().catch(error => {this.fontsReady=undefined;throw error;}));
-    const original=input.source;
+    const canonicalId=input.source.canonicalId??input.source.reportId;
+    const publicUrl=new URL(`/incidents/${encodeURIComponent(canonicalId)}`,this.config.APP_ORIGIN).toString();
+    const original={...input.source,canonicalId,publicUrl};
     if(!['verified','in_progress','resolved'].includes(original.status)||!Number.isFinite(Date.parse(original.occurredAt))||
       !/^SAP-\d{3,15}$/.test(input.reportCode)||!original.publicSummary.trim()||input.photo.length===0)throw new Error('POSTER_SOURCE_INVALID');
     const map=await this.maps.get(original.area.cellId);
@@ -48,17 +50,19 @@ export class PosterRenderer {
       title:`${headline.replace(/\n/g,' ')} ${locality}`};
     const date=new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Jakarta'}).format(new Date(source.occurredAt));
     const time=new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Jakarta'}).format(new Date(source.occurredAt)).replace(':','.');
-    const stamp=input.outcome==='partial'?'Hasil sebagian SAP':input.outcome==='complete'?'Hasil ditinjau SAP':'Terverifikasi SAP';
+    const stamp=input.outcome==='partial'?'Hasil sebagian ditinjau':'Ditinjau moderator';
     const layers:Layer[]=[];
-    layers.push(await this.text('SAP',114,GREEN,55,30,207,82,true));
-    layers.push(await this.text('Sustainable AI Platform',21,GREEN,58,108,312,25,false));
+    layers.push(await this.text('VERGO',76,GREEN,55,30,207,82,true));
+    layers.push(await this.text('Laporan warga · bukti ditinjau moderator',19,GREEN,58,108,760,25,false));
     layers.push(await this.text(headline,108,'#091c15',54,148,976,188,true));
     layers.push(await this.text(locality,101,GREEN,55,343,975,83,true));
     layers.push(await this.text(map.metadata.areaLabel,35,'#102c23',133,437,870,51,false));
     layers.push(await this.text(`${date} • ${time} WIB`,35,'#ffffff',173,910,375,62,false));
     layers.push(await this.text(source.categoryName,35,'#ffffff',169,1000,379,61,false));
     layers.push(await this.text(`Laporan ${input.reportCode}`,35,'#ffffff',169,1082,375,57,false));
-    layers.push(await this.text('Pantau perkembangan di SAP',43,'#103c29',231,1222,635,65,true));
+    layers.push(await this.text('Status terbaru & koreksi di VERGO',34,'#103c29',231,1211,635,45,true));
+    layers.push(await this.text(publicUrl,22,GREEN,220,1302,810,35,false));
+    layers.push(await this.text('Kondisi dapat berubah setelah tanggal pengamatan.',21,GREEN,230,1258,630,31,false));
     const photo=await sharp(input.photo,{limitInputPixels:25000000,failOn:'warning'}).rotate().resize(WIDTH,490,{fit:'cover',position:'attention'}).flatten({background:CREAM}).jpeg({quality:94}).toBuffer();
     const mapPng=await sharp(map.svg,{limitInputPixels:25000000}).png().toBuffer();
     const flecks=Array.from({length:550},(_,i)=>`<circle cx="${(i*719)%WIDTH}" cy="${(i*487)%HEIGHT}" r="${i%3===0?1.1:.55}" fill="#cabf98" opacity=".12"/>`).join('');
@@ -80,7 +84,7 @@ export class PosterRenderer {
       <g transform="rotate(-9 813 1113)"><rect x="641" y="1064" width="365" height="99" rx="29" fill="${CREAM}" stroke="${GREEN}" stroke-width="5"/>
         <rect x="648" y="1071" width="351" height="85" rx="23" fill="none" stroke="${GREEN}" stroke-width="2" stroke-dasharray="3 4"/>
         <circle cx="689" cy="1112" r="29" fill="${GREEN}"/><path d="M674 1112l10 11 23-27" fill="none" stroke="white" stroke-width="7" stroke-linecap="round"/>
-        <text x="730" y="1124" font-family="Roboto Condensed" font-weight="bold" font-size="29" fill="${GREEN}">${xml(stamp)}</text></g>
+        <text x="730" y="1124" font-family="Roboto Condensed" font-weight="bold" font-size="24" fill="${GREEN}">${xml(stamp)}</text></g>
       <rect x="174" y="1194" width="816" height="103" rx="51" fill="#ffda53"/>
       <path d="M877 1245h46m-20-20 22 20-22 20" fill="none" stroke="${GREEN}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M0 1283C13 1223 31 1195 70 1211C100 1170 122 1184 123 1213C113 1254 86 1270 60 1277L49 1331C70 1289 112 1290 152 1308L207 1350H0Z" fill="#22764b"/>
@@ -88,7 +92,7 @@ export class PosterRenderer {
     </svg>`;
     const bytes=await sharp(Buffer.from(base),{limitInputPixels:25000000}).composite(layers).flatten({background:CREAM}).toColourspace('srgb').jpeg({quality:93,mozjpeg:true}).toBuffer();
     if(bytes.length>7*1024*1024)throw new Error('POSTER_SIZE_EXCEEDED');
-    return {bytes,source,map:map.metadata,mapData:map.data,templateVersion:'sap-feed-reference-v3'};
+    return {bytes,source,map:map.metadata,mapData:map.data,templateVersion:'vergo-feed-status-v4'};
   }
   private async text(value:string,size:number,color:string,left:number,top:number,width:number,height:number,black:boolean):Promise<Layer> {
     if([...value].length>250)throw new Error('POSTER_TEXT_INVALID');

@@ -6,6 +6,7 @@ const source: SapReport = {
   id: ids.incident, revision: 1, status: "submitted", categoryId: "plastic",
   scanId: null, description: "Hubungi pelapor di private@example.invalid untuk lokasi ini.",
   reportedSeverity: "small", location: { latitude: -6.2, longitude: 106.8 },
+  observationSource: "firsthand", inference: null, sourceReference: null, contextFlags: [], photoUnavailableReason: null,
   occurredAt: time, createdAt: time, updatedAt: time, mediaIds: [ids.media],
   resolutionMediaIds: [], publicSummary: null, publishedMediaIds: [], duplicateOfId: null, timeline: [],
 };

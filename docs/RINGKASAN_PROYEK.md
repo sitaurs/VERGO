@@ -1,8 +1,8 @@
 # Ringkasan VERGO dan keputusan implementasi
 
-Diperbarui **17 Oktober 2026**. Baseline source: `413100b949f0a8f42679b4a8fd42c1b7e95976e1`.
+Diperbarui **17 Oktober 2026**. Baseline sebelum fitur kompetisi: `4d3553b`. Implementasi trust UX dalam sesi ini sudah divalidasi secara lokal; catatan commit/deployment ditambahkan setelah rilis.
 
-Dokumen ini menggantikan rencana selesai, handoff lama, riset rancangan dan laporan status bertanggal yang telah dikonsolidasikan. Keberadaan kode dibedakan dari bukti integrasi serta keadaan deployment. Pekerjaan dokumentasi ini tidak menjalankan aplikasi, pengujian fitur, migrasi atau deployment baru.
+Dokumen ini menggantikan rencana selesai, handoff lama, riset rancangan dan laporan status bertanggal yang telah dikonsolidasikan. Keberadaan kode dibedakan dari bukti integrasi serta keadaan deployment. `npm run check`, build web produksi, dan tes API relevan sudah berjalan di lokal; ini belum membuktikan alur visual browser atau penerimaan pascadeploy.
 
 ## 1. Produk dan identitas
 
@@ -20,15 +20,15 @@ Dokumen ini menggantikan rencana selesai, handoff lama, riset rancangan dan lapo
 | --- | --- |
 | Akun | Registrasi/verifikasi email, sesi/CSRF, reset/ganti password, MFA, avatar, preferensi dan penghapusan akun. Delivery email dan acceptance lintas alur memerlukan bukti per lingkungan. |
 | Scan | Kamera/unggah, job asinkron, Gradio, hybrid vision opsional, riwayat dan pengaturan admin. Klasifikasi material tidak memverifikasi kejadian. |
-| Laporan | Foto privat, lokasi/waktu, perkiraan tingkat tumpukan, revisi, moderasi, canonical/duplicate, timeline dan resolusi berbukti. Laporan dapat dibuat tanpa scan. |
+| Laporan | Foto privat, lokasi/waktu, perkiraan tingkat tumpukan, sumber pengamatan langsung/pihak lain, pemisahan pengamatan dan dugaan, konteks, revisi, moderasi, canonical/duplicate, timeline dan resolusi berbukti. Laporan dapat dibuat tanpa scan. Jika foto tidak aman diambil, laporan dapat dikirim privat dengan alasan keselamatan; verifikasi menunggu bukti aman. Tidak ada selfie wajib. |
 | Peta | Agregasi H3 dari laporan eligible. Landing memakai Mapbox 2D/3D dengan fallback Leaflet; dashboard memakai Leaflet. Ringkasan historis bukan prediksi atau peta penyakit. |
-| Kejadian publik | `/incidents` dan `/incidents/[id]`, ringkasan teredaksi, rendition berizin, timeline, dukungan/follow dan pembaruan kondisi. |
-| Koreksi warga | Form mendukung `still_present`, `reduced`, `looks_clean`, `information_wrong`, waktu, deskripsi, 0–3 foto, consent dan revisi. Kiriman menunggu moderator. |
+| Kejadian publik | `/incidents` dan `/incidents/[id]`, ringkasan teredaksi, rendition berizin, timeline, dukungan/follow, konteks jumlah/waktu pembaruan, koreksi terbaru yang disetujui, dan progres penugasan aman. “Terverifikasi moderator” tidak membuktikan semua dugaan benar atau lokasi sudah bersih; tanpa data bukan berarti aman. |
+| Koreksi dan banding | Form mendukung kondisi berubah dan `information_wrong`, waktu, deskripsi, 0–3 foto, consent dan revisi. Pemilik dapat meminta banding, melengkapi bukti, dan melihat progres. Kiriman/keputusan menunggu moderator, bukan jumlah suara. |
 | Kegiatan | Jelajah/detail, pendaftaran, penerimaan koordinator, peserta/kehadiran, jadwal, hasil partial/complete dan bukti sebelum/sesudah. Approval hasil tidak otomatis menyelesaikan laporan. |
 | Operasi | Penugasan laporan, tenggat/progres, notifikasi, pengguna/peran dan peta laporan menunggu. Progres tugas berbeda dari status laporan. |
 | Dampak | Hasil disetujui, kehadiran, pengukuran berat per tahap/batch, cakupan bukti dan respons. Tidak diketahui berbeda dari nol; satu batch tidak dihitung berulang. |
 | Hermes | Rekomendasi terstruktur dari service privat; keputusan verifikasi, koreksi dan resolusi tetap manusia. |
-| Instagram | Consent per kanal, rendition, draft, final preview, approval, publish/retract dan rekonsiliasi persisten. Verified bukan perintah langsung publish; HTTP 202 bukan konfirmasi terbit/terhapus. |
+| Instagram | Consent per kanal, rendition, draft, final preview, approval, publish/retract dan rekonsiliasi persisten. Poster/caption membawa tautan kanonik/QR; perubahan sumber memberi peringatan admin. Verified bukan perintah langsung publish; HTTP 202 bukan konfirmasi terbit/terhapus dan konten Instagram lama tidak berubah otomatis. |
 | VERA | Bantuan opsional, FAQ/retrieval dan query tools dengan scope server. Tidak mempunyai write/moderation/publication tools. |
 | UI/bahasa | Indonesia/English, navigasi mobile, dialog/notifikasi, ilustrasi dan landing VERGO 2.5D. Preferensi bahasa tersimpan pada browser, bukan akun lintas perangkat. |
 
@@ -57,7 +57,7 @@ Backend: browser → proxy satu origin `/api/v1` → validasi/guard sesi dan izi
 7. Hasil partial tidak menyelesaikan laporan. Claim resolusi terikat laporan/revisi dan dapat dicabut atau diganti ketika sumber/izin/bukti berubah.
 8. Retry idempoten dan konflik revisi mempertahankan input. Fixture, health probe dan mock tidak dianggap data nyata atau bukti integrasi penuh.
 9. Poin, status, kapasitas, agregat dan otorisasi dihitung server. Angka dampak harus dapat ditelusuri ke catatan/metode.
-10. Selfie tidak diwajibkan. Kebijakan baru tentang konteks kesehatan, koreksi, bukti dan keselamatan masih merupakan pekerjaan dalam rencana aktif.
+10. Selfie tidak diwajibkan. Alur tanpa foto hanya untuk alasan keselamatan, tetap privat, dan menunggu bukti aman sebelum verifikasi. Pengaturan operator/kontak/catatan layanan bersifat opsional dan kosong secara default; belum ada PIC, SLA, atau retensi yang dijanjikan.
 
 ## 5. Detail penting dari rencana selesai
 
@@ -79,7 +79,7 @@ Backend: browser → proxy satu origin `/api/v1` → validasi/guard sesi dan izi
 | 5 Oktober | Tes browser dengan jaringan sintetis dan QA poster lokal. | Tidak memublikasikan/menghapus Meta nyata; mendahului perubahan UI berikutnya. |
 | 16–17 Oktober | Source/commit memuat VERGO/VERA, origin kanonik, landing 2.5D dan perapian tampilannya. | Draft rebrand yang masih menyebut nama/domain sebagai kandidat telah digantikan source/config. Penerimaan live terpisah. |
 
-Persentase kesiapan **21%**, jumlah tes/route, kondisi provider down, status migration “baru lokal” dan path mesin lama tidak dijadikan status terkini. Source memuat migration sampai `0021_report_operations.sql`; ledger tiap lingkungan menentukan yang benar-benar terpasang.
+Persentase kesiapan **21%**, jumlah tes/route, kondisi provider down, dan path mesin lama tidak dijadikan status terkini. Source memuat migration sampai `0023_report_appeals_and_trust.sql`; ledger tiap lingkungan menentukan migration yang benar-benar terpasang.
 
 ## 7. Pekerjaan terbuka yang diteruskan
 
@@ -87,7 +87,7 @@ Ini kebutuhan rekonsiliasi bukti, bukan kesimpulan bahwa kode belum dibuat. ID h
 
 | Kelompok / ID lama | Bukti atau keputusan yang perlu dituntaskan |
 | --- | --- |
-| Kontrak/environment G-09–11 | Schema/handler/fixture/types, published vs draft, migration checksum, flags dan commit deployment selaras. Generator R1 belum mereproduksi seluruh schema/fixture tracked: regenerasi saat perapian ini menghilangkan tambahan kontrak existing, sehingga output schema/fixture dikembalikan dan hanya hash metadata disinkronkan. Perbaiki reproduksibilitas sebelum regenerasi untuk perubahan fitur. |
+| Kontrak/environment G-09–11 | Schema/handler/fixture/types, published vs draft, migration checksum, flags dan commit deployment selaras. Compatibility input dan addendum kini menjaga operasi/field R1 existing saat regenerasi; tinjau lagi pada perubahan kontrak berikutnya. |
 | ML/scan G-12–14 | Identitas model, kategori/unknown/no-waste, scan sampai ledger, retry/restart/outbox/lease, latensi/biaya. Outbox/lease sudah ada di source; klaim lama “belum tersedia” perlu diperiksa ulang. |
 | Akun/media G-15–19/G-26 | Delivery email, OTP/reset/MFA/session/avatar, ownership, expiry dan lifecycle storage. |
 | Operasi G-20–21 | Restore terisolasi dengan replay penghapusan setelah snapshot, heartbeat/queue health, kapasitas, retensi, PIC/escalation. |

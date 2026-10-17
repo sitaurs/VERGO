@@ -39,9 +39,9 @@ export const followedIncidents = (cursor?: string, signal?: AbortSignal) =>
     `/users/me/followed-incidents?${query({ limit: 20, cursor })}`,
     signal,
   );
-export const myUpdates = (cursor?: string, signal?: AbortSignal) =>
+export const myUpdates = (cursor?: string, signal?: AbortSignal, reportId?: string) =>
   r1Get<R1["CommunityUpdatePage"]>(
-    `/users/me/community-updates?${query({ limit: 20, cursor })}`,
+    `/users/me/community-updates?${query({ limit: 20, cursor, reportId })}`,
     signal,
   );
 export const getUpdate = (id: string, signal?: AbortSignal) =>

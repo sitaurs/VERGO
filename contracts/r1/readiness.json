@@ -25,17 +25,15 @@
   "runtimeFlagState": "not_inspected",
   "flagsDisabledByDefault": true,
   "hashes": {
-    "publishedOpenApi": "17385acfc55b3d53867184881afb419059cc13fcf9f5fb5b32f051da34a0b65e",
+    "publishedOpenApi": "96cef2df803b93ba170fa059c4ddaa344b8c18f408b383f7a02045f7115a6cd5",
     "sharedContract": "687bb965411ee3a272ac0262aead7784daa66a7796a4f57a22e67f7a79046bea"
   },
-  "newOperationCount": 81,
+  "newOperationCount": 108,
   "newOperations": [
     {
       "method": "GET",
       "path": "/public/incidents/{id}",
       "handler": "IncidentsController.get",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -44,8 +42,6 @@
       "method": "GET",
       "path": "/public/incidents/{id}/timeline",
       "handler": "IncidentsController.timeline",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -54,8 +50,6 @@
       "method": "GET",
       "path": "/public/incidents/{id}/viewer",
       "handler": "IncidentsController.viewer",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -64,8 +58,6 @@
       "method": "PUT",
       "path": "/public/incidents/{id}/support",
       "handler": "IncidentsController.support",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -74,8 +66,6 @@
       "method": "PUT",
       "path": "/public/incidents/{id}/follow",
       "handler": "IncidentsController.follow",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -84,8 +74,6 @@
       "method": "GET",
       "path": "/users/me/followed-incidents",
       "handler": "MyCommunityController.followed",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -94,8 +82,6 @@
       "method": "GET",
       "path": "/media/{mediaId}/consents",
       "handler": "EvidenceController.consents",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -104,8 +90,6 @@
       "method": "PUT",
       "path": "/media/{mediaId}/consents",
       "handler": "EvidenceController.consent",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -114,8 +98,6 @@
       "method": "PUT",
       "path": "/admin/reports/{reportId}/media/{mediaId}/approvals",
       "handler": "EvidenceController.approve",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -124,8 +106,6 @@
       "method": "GET",
       "path": "/admin/reports/{reportId}/media/{mediaId}/url",
       "handler": "EvidenceController.reportUrl",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -134,8 +114,6 @@
       "method": "GET",
       "path": "/admin/community-updates/{id}/media/{mediaId}/url",
       "handler": "EvidenceController.updateUrl",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -144,8 +122,6 @@
       "method": "GET",
       "path": "/activities/{id}/results/{resultId}/media/{mediaId}/url",
       "handler": "ActivitiesController.media",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -154,8 +130,6 @@
       "method": "GET",
       "path": "/activities/{id}/measurements/{measurementId}/media/{mediaId}/url",
       "handler": "ActivitiesController.measurementMedia",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -164,8 +138,6 @@
       "method": "POST",
       "path": "/admin/media/{mediaId}/renditions",
       "handler": "EvidenceController.rendition",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 202,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -174,8 +146,6 @@
       "method": "GET",
       "path": "/admin/media/{mediaId}/renditions",
       "handler": "EvidenceController.renditions",
-      "source": "apps/api/src/evidence/evidence.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -184,8 +154,6 @@
       "method": "POST",
       "path": "/public/incidents/{id}/updates",
       "handler": "IncidentsController.update",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 201,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -194,8 +162,6 @@
       "method": "GET",
       "path": "/users/me/community-updates",
       "handler": "MyCommunityController.updates",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -204,18 +170,6 @@
       "method": "GET",
       "path": "/community-updates/{id}",
       "handler": "CommunityUpdatesController.get",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/community-updates/{id}",
-      "handler": "CommunityAdminController.get",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -224,8 +178,14 @@
       "method": "PATCH",
       "path": "/community-updates/{id}",
       "handler": "CommunityUpdatesController.patch",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/community-updates/{id}",
+      "handler": "CommunityAdminController.get",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -234,8 +194,6 @@
       "method": "POST",
       "path": "/admin/community-updates/{id}/decisions",
       "handler": "CommunityAdminController.decide",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -244,8 +202,6 @@
       "method": "GET",
       "path": "/admin/review-queue",
       "handler": "CommunityAdminController.queue",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -254,8 +210,6 @@
       "method": "GET",
       "path": "/admin/reports/{id}/reviews",
       "handler": "CommunityAdminController.reportReviews",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -264,18 +218,6 @@
       "method": "GET",
       "path": "/admin/reviews",
       "handler": "CommunityAdminController.list",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/reports/{id}/lifecycle",
-      "handler": "CommunityAdminController.lifecycle",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -284,8 +226,14 @@
       "method": "POST",
       "path": "/admin/reviews",
       "handler": "CommunityAdminController.request",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 202,
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/reports/{id}/lifecycle",
+      "handler": "CommunityAdminController.lifecycle",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -294,8 +242,6 @@
       "method": "GET",
       "path": "/admin/reviews/{id}",
       "handler": "CommunityAdminController.review",
-      "source": "apps/api/src/community/community.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -304,8 +250,6 @@
       "method": "GET",
       "path": "/activities",
       "handler": "ActivitiesController.list",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -314,78 +258,6 @@
       "method": "GET",
       "path": "/activities/{id}",
       "handler": "ActivitiesController.detail",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/activities/{id}/viewer",
-      "handler": "ActivitiesController.viewer",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/users/me/activities",
-      "handler": "MyActivitiesController.mine",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/users/me/coordinator-assignments",
-      "handler": "MyActivitiesController.assignments",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/activities",
-      "handler": "ActivitiesAdminController.list",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/activity-coordinator-candidates",
-      "handler": "ActivitiesAdminController.candidates",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "POST",
-      "path": "/admin/activities",
-      "handler": "ActivitiesAdminController.create",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 201,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/activities/{id}/manage",
-      "handler": "ActivitiesController.manage",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -394,8 +266,62 @@
       "method": "PATCH",
       "path": "/activities/{id}",
       "handler": "ActivitiesController.edit",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/viewer",
+      "handler": "ActivitiesController.viewer",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/activities",
+      "handler": "MyActivitiesController.mine",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/coordinator-assignments",
+      "handler": "MyActivitiesController.assignments",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/activities",
+      "handler": "ActivitiesAdminController.list",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/activities",
+      "handler": "ActivitiesAdminController.create",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/activity-coordinator-candidates",
+      "handler": "ActivitiesAdminController.candidates",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/manage",
+      "handler": "ActivitiesController.manage",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -404,8 +330,6 @@
       "method": "POST",
       "path": "/activities/{id}/commands",
       "handler": "ActivitiesController.command",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -414,8 +338,6 @@
       "method": "PUT",
       "path": "/activities/{id}/membership",
       "handler": "ActivitiesController.membership",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -424,8 +346,6 @@
       "method": "GET",
       "path": "/activities/{id}/memberships",
       "handler": "ActivitiesController.members",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -434,8 +354,6 @@
       "method": "PATCH",
       "path": "/activities/{id}/memberships/{membershipId}",
       "handler": "ActivitiesController.decideMember",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -444,8 +362,6 @@
       "method": "PUT",
       "path": "/activities/{id}/memberships/{membershipId}/attendance",
       "handler": "ActivitiesController.attendance",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -454,8 +370,6 @@
       "method": "POST",
       "path": "/activities/{id}/results",
       "handler": "ActivitiesController.createResult",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 201,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -464,18 +378,6 @@
       "method": "GET",
       "path": "/activities/{id}/results/{resultId}",
       "handler": "ActivitiesController.result",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/activity-results/{id}",
-      "handler": "ActivitiesAdminController.result",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -484,8 +386,14 @@
       "method": "PATCH",
       "path": "/activities/{id}/results/{resultId}",
       "handler": "ActivitiesController.editResult",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/activity-results/{id}",
+      "handler": "ActivitiesAdminController.result",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -494,8 +402,6 @@
       "method": "GET",
       "path": "/activities/{id}/public-results",
       "handler": "ActivitiesController.publicResults",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -504,8 +410,6 @@
       "method": "POST",
       "path": "/admin/activity-results/{id}/decisions",
       "handler": "ActivitiesAdminController.decision",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -514,8 +418,6 @@
       "method": "POST",
       "path": "/admin/measurements/{id}/decisions",
       "handler": "ActivitiesAdminController.measurementDecision",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -524,8 +426,6 @@
       "method": "PATCH",
       "path": "/admin/measurements/{id}",
       "handler": "ActivitiesAdminController.correctMeasurement",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -534,8 +434,6 @@
       "method": "POST",
       "path": "/activities/{id}/measurements",
       "handler": "ActivitiesController.createMeasurement",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 201,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -544,8 +442,6 @@
       "method": "GET",
       "path": "/activities/{id}/measurements",
       "handler": "ActivitiesController.measurements",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -554,8 +450,6 @@
       "method": "GET",
       "path": "/users/me/notifications",
       "handler": "MyActivitiesController.notifications",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -564,8 +458,6 @@
       "method": "PUT",
       "path": "/users/me/notifications/{id}/read",
       "handler": "MyActivitiesController.read",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -574,8 +466,6 @@
       "method": "GET",
       "path": "/impact/summary",
       "handler": "ImpactController.summary",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -584,8 +474,6 @@
       "method": "GET",
       "path": "/admin/instagram",
       "handler": "PublicationsController.overview",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -594,18 +482,6 @@
       "method": "GET",
       "path": "/admin/instagram/posts",
       "handler": "PublicationsController.list",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
-      "schemaState": "draft",
-      "handlerState": "implemented",
-      "runtimeState": "not_verified"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/instagram/posts/{id}",
-      "handler": "PublicationsController.get",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -614,8 +490,14 @@
       "method": "POST",
       "path": "/admin/instagram/posts",
       "handler": "PublicationsController.create",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 201,
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/instagram/posts/{id}",
+      "handler": "PublicationsController.get",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -624,8 +506,6 @@
       "method": "PATCH",
       "path": "/admin/instagram/posts/{id}",
       "handler": "PublicationsController.edit",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -634,8 +514,6 @@
       "method": "GET",
       "path": "/admin/instagram/posts/{id}/preview",
       "handler": "PublicationsController.preview",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -644,8 +522,6 @@
       "method": "POST",
       "path": "/admin/instagram/posts/{id}/approve",
       "handler": "PublicationsController.approve",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -654,8 +530,6 @@
       "method": "POST",
       "path": "/admin/instagram/posts/{id}/publish",
       "handler": "PublicationsController.publish",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 202,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -664,8 +538,6 @@
       "method": "POST",
       "path": "/admin/instagram/posts/{id}/cancel",
       "handler": "PublicationsController.cancel",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -674,8 +546,6 @@
       "method": "POST",
       "path": "/admin/instagram/posts/{id}/retract",
       "handler": "PublicationsController.retract",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 202,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -684,8 +554,6 @@
       "method": "GET",
       "path": "/admin/instagram/operations/{id}",
       "handler": "PublicationsController.operation",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -694,8 +562,6 @@
       "method": "POST",
       "path": "/admin/instagram/operations/{id}/retry",
       "handler": "PublicationsController.retry",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 202,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -704,8 +570,6 @@
       "method": "POST",
       "path": "/admin/instagram/operations/{id}/manual-confirmation",
       "handler": "PublicationsController.manual",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -714,8 +578,6 @@
       "method": "PUT",
       "path": "/admin/instagram/settings",
       "handler": "PublicationsController.settings",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -724,8 +586,6 @@
       "method": "GET",
       "path": "/admin/instagram/reports/{reportId}/media/{mediaId}/url",
       "handler": "PublicationsController.media",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -734,8 +594,6 @@
       "method": "GET",
       "path": "/admin/instagram/account/authorization",
       "handler": "PublicationsController.authorization",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -744,8 +602,6 @@
       "method": "GET",
       "path": "/admin/instagram/account/callback",
       "handler": "PublicationsController.callback",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 302,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -754,8 +610,6 @@
       "method": "POST",
       "path": "/admin/instagram/account/disconnect",
       "handler": "PublicationsController.disconnect",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 202,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -764,8 +618,6 @@
       "method": "POST",
       "path": "/admin/reports/{id}/withdraw",
       "handler": "PublicationLifecycleController.withdraw",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 202,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -774,8 +626,6 @@
       "method": "POST",
       "path": "/admin/reports/{id}/restore-publication",
       "handler": "PublicationLifecycleController.restore",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -784,8 +634,6 @@
       "method": "GET",
       "path": "/admin/reports/{id}/publications",
       "handler": "PublicationLifecycleController.publications",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -794,8 +642,6 @@
       "method": "PUT",
       "path": "/activities/{id}/coordinator-acceptance",
       "handler": "ActivitiesController.accept",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -804,8 +650,6 @@
       "method": "PUT",
       "path": "/activities/{id}/schedule-acknowledgement",
       "handler": "ActivitiesController.acknowledge",
-      "source": "apps/api/src/activities/activities.controller.ts",
-      "successStatus": 200,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -814,8 +658,6 @@
       "method": "GET",
       "path": "/publication-assets/{id}",
       "handler": "PublicationAssetsController.asset",
-      "source": "apps/api/src/publications/publications.controller.ts",
-      "successStatus": 302,
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -823,9 +665,7 @@
     {
       "method": "GET",
       "path": "/health/live",
-      "handler": "HealthController.getLiveness",
-      "source": "apps/api/src/health/health.controller.ts",
-      "successStatus": 200,
+      "handler": "r1GetHealthLiveness",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"
@@ -833,9 +673,223 @@
     {
       "method": "GET",
       "path": "/health/ready",
-      "handler": "HealthController.getReadiness",
-      "source": "apps/api/src/health/health.controller.ts",
-      "successStatus": 200,
+      "handler": "r1GetHealthReadiness",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/users",
+      "handler": "listOperationalUsers",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/users/{id}/role",
+      "handler": "changeOperationalUserRole",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/report-operations",
+      "handler": "listOperationalReports",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/reports/{id}/assignment",
+      "handler": "setReportAssignment",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/reports/{id}/evidence-requests",
+      "handler": "requestReporterEvidence",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/reports/pending-map",
+      "handler": "listPendingReportsMap",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/reports/export.csv",
+      "handler": "exportOperationalReports",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/area-localities",
+      "handler": "listAdminLocalities",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/areas/{cellId}/locality",
+      "handler": "setAdminLocality",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/report-notification-preferences",
+      "handler": "getReportNotificationPreferences",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PUT",
+      "path": "/users/me/report-notification-preferences",
+      "handler": "setReportNotificationPreferences",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/report-assignments",
+      "handler": "listMyReportAssignments",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PUT",
+      "path": "/users/me/report-assignments/{id}/progress",
+      "handler": "updateMyReportAssignment",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/areas/{cellId}/locality",
+      "handler": "getAreaLocality",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/area-localities",
+      "handler": "listPublicLocalities",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/public/incidents",
+      "handler": "IncidentsController.list",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/source-photo/url",
+      "handler": "ActivitiesController.sourcePhoto",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/instagram/reports",
+      "handler": "PublicationsController.reportSources",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/public/trust-policy",
+      "handler": "getPublicTrustPolicy",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/trust-settings",
+      "handler": "getTrustSettings",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/trust-settings",
+      "handler": "saveTrustSettings",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{id}/appeals",
+      "handler": "listMyReportAppeals",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "POST",
+      "path": "/reports/{id}/appeals",
+      "handler": "createReportAppeal",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "PATCH",
+      "path": "/report-appeals/{id}",
+      "handler": "reviseReportAppeal",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/report-appeals/{id}/media/{mediaId}/url",
+      "handler": "getPrivateAppealEvidenceUrl",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/report-appeals",
+      "handler": "listReportAppeals",
+      "schemaState": "draft",
+      "handlerState": "implemented",
+      "runtimeState": "not_verified"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/report-appeals/{id}/decisions",
+      "handler": "decideReportAppeal",
       "schemaState": "draft",
       "handlerState": "implemented",
       "runtimeState": "not_verified"

@@ -133,6 +133,7 @@ export default function PublicationDetail({
       caption.length <= 2200 &&
       altText.trim().length > 0 &&
       altText.length <= 1000;
+  const needsFormatRefresh = !!record && (record.rendition.templateVersion !== "vergo-feed-status-v4" || !record.caption.includes(source.publicUrl)) && record.rendition.status !== "queued";
   const ready =
     !!final &&
     !expired &&
@@ -283,6 +284,7 @@ export default function PublicationDetail({
     : record.status === "published" ? "Postingan sudah diterbitkan di Instagram."
     : record.status === "retracted" ? "Ditarik"
     : record.status === "cancelled" ? "Draf dibatalkan."
+    : needsFormatRefresh ? "Simpan ulang draf untuk menambahkan tanggal, area dan tautan status pada gambar final."
     : !ready ? "Tinjau gambar final yang siap sebelum menyetujui."
     : !approved ? "Setujui konten sebelum memposting."
     : "Konten disetujui; belum diposting.";
@@ -309,7 +311,7 @@ export default function PublicationDetail({
           <p className={ui.footerHint}><Info size={20} aria-hidden="true" />{t(footerHint)}</p>
           <div className={ui.actions}>
             {editable && <button type="button" className={ui.outline}
-              disabled={busy || loading || !available || !valid || !!latest || !!confirm || (!!record && (!dirty || uncertain))}
+              disabled={busy || loading || !available || !valid || !!latest || !!confirm || (!!record && ((!dirty && !needsFormatRefresh) || uncertain))}
               onClick={() => void execute("save")}><Save size={18} />{t(uncertain && !record ? "Periksa penyimpanan draf" : "Simpan draf")}</button>}
             {record && <>
               <button type="button" className={approved ? ui.outline : ui.primary} disabled={blocked || !ready || !!confirm || !record.actions.approve.allowed} onClick={() => setConfirm("approve")}><ShieldCheck size={18} />{t("Setujui konten")}</button>

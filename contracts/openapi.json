@@ -10463,7 +10463,15 @@
           "pointsReason": {
             "type": "string",
             "description": "Award status backed by the scan and ledger. Older responses may omit this field; unknown means the withheld reason cannot be established.",
-            "enum": ["awarded", "daily_limit", "duplicate_image", "not_classified", "pending", "failed", "unknown"]
+            "enum": [
+              "awarded",
+              "daily_limit",
+              "duplicate_image",
+              "not_classified",
+              "pending",
+              "failed",
+              "unknown"
+            ]
           },
           "createdAt": {
             "type": "string",
@@ -10685,7 +10693,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "minItems": 1,
+            "minItems": 0,
             "maxItems": 3,
             "uniqueItems": true
           },
@@ -10746,10 +10754,70 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["web", "instagram"]
+              "enum": [
+                "web",
+                "instagram"
+              ]
             },
             "maxItems": 2,
             "uniqueItems": true
+          },
+          "observationSource": {
+            "type": "string",
+            "enum": [
+              "firsthand",
+              "secondhand"
+            ]
+          },
+          "inference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceReference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contextFlags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "burning",
+                "near_waterway",
+                "sharp_objects"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "photoUnavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsafe"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -10757,9 +10825,83 @@
           "description",
           "location",
           "occurredAt",
-          "reportedSeverity"
+          "reportedSeverity",
+          "observationSource"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "mediaIds": {
+                  "maxItems": 0
+                }
+              },
+              "required": [
+                "mediaIds"
+              ]
+            },
+            "then": {
+              "properties": {
+                "photoUnavailableReason": {
+                  "const": "unsafe"
+                },
+                "publicationChannels": {
+                  "maxItems": 0
+                }
+              },
+              "required": [
+                "photoUnavailableReason"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "photoUnavailableReason": {
+                  "const": "unsafe"
+                }
+              },
+              "required": [
+                "photoUnavailableReason"
+              ]
+            },
+            "then": {
+              "properties": {
+                "mediaIds": {
+                  "maxItems": 0
+                },
+                "publicationChannels": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "observationSource": {
+                  "const": "firsthand"
+                }
+              },
+              "required": [
+                "observationSource"
+              ]
+            },
+            "then": {
+              "not": {
+                "properties": {
+                  "sourceReference": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sourceReference"
+                ]
+              }
+            }
+          }
+        ]
       },
       "ReportUpdateInput": {
         "type": "object",
@@ -10770,7 +10912,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "minItems": 1,
+            "minItems": 0,
             "maxItems": 3,
             "uniqueItems": true
           },
@@ -10815,11 +10957,116 @@
                 "type": "null"
               }
             ]
+          },
+          "observationSource": {
+            "type": "string",
+            "enum": [
+              "firsthand",
+              "secondhand"
+            ]
+          },
+          "inference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceReference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contextFlags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "burning",
+                "near_waterway",
+                "sharp_objects"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "photoUnavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsafe"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [],
         "additionalProperties": false,
-        "minProperties": 1
+        "minProperties": 1,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "photoUnavailableReason": {
+                  "const": "unsafe"
+                }
+              },
+              "required": [
+                "photoUnavailableReason"
+              ]
+            },
+            "then": {
+              "properties": {
+                "mediaIds": {
+                  "maxItems": 0
+                },
+                "publicationChannels": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "observationSource": {
+                  "const": "firsthand"
+                }
+              },
+              "required": [
+                "observationSource"
+              ]
+            },
+            "then": {
+              "not": {
+                "properties": {
+                  "sourceReference": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sourceReference"
+                ]
+              }
+            }
+          }
+        ]
       },
       "ReportEvent": {
         "type": "object",
@@ -10983,6 +11230,68 @@
             "items": {
               "$ref": "#/components/schemas/ReportEvent"
             }
+          },
+          "observationSource": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "firsthand",
+                  "secondhand"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceReference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contextFlags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "burning",
+                "near_waterway",
+                "sharp_objects"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "photoUnavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsafe"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -11002,7 +11311,12 @@
           "publicSummary",
           "publishedMediaIds",
           "duplicateOfId",
-          "timeline"
+          "timeline",
+          "observationSource",
+          "inference",
+          "sourceReference",
+          "contextFlags",
+          "photoUnavailableReason"
         ],
         "additionalProperties": false
       },

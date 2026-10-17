@@ -1003,7 +1003,13 @@ export interface components {
             categoryId?: ("battery" | "biological" | "cardboard" | "clothes" | "glass" | "metal" | "paper" | "plastic" | "shoes" | "trash") | null;
             scanId?: string | null;
             publicationChannels?: ("web" | "instagram")[];
-        };
+            /** @enum {string} */
+            observationSource: "firsthand" | "secondhand";
+            inference?: string | null;
+            sourceReference?: string | null;
+            contextFlags?: ("burning" | "near_waterway" | "sharp_objects")[];
+            photoUnavailableReason?: "unsafe" | null;
+        } & (unknown & unknown & unknown);
         ReportUpdateInput: {
             mediaIds?: string[];
             description?: string;
@@ -1013,7 +1019,13 @@ export interface components {
             /** @enum {string} */
             reportedSeverity?: "small" | "medium" | "large";
             categoryId?: ("battery" | "biological" | "cardboard" | "clothes" | "glass" | "metal" | "paper" | "plastic" | "shoes" | "trash") | null;
-        };
+            /** @enum {string} */
+            observationSource?: "firsthand" | "secondhand";
+            inference?: string | null;
+            sourceReference?: string | null;
+            contextFlags?: ("burning" | "near_waterway" | "sharp_objects")[];
+            photoUnavailableReason?: "unsafe" | null;
+        } & (unknown & unknown);
         ReportEvent: {
             /** Format: uuid */
             id: string;
@@ -1047,6 +1059,11 @@ export interface components {
             publishedMediaIds: string[];
             duplicateOfId: string | null;
             timeline: components["schemas"]["ReportEvent"][];
+            observationSource: ("firsthand" | "secondhand") | null;
+            inference: string | null;
+            sourceReference: string | null;
+            contextFlags: ("burning" | "near_waterway" | "sharp_objects")[];
+            photoUnavailableReason: "unsafe" | null;
         };
         PublicReport: {
             /** Format: uuid */

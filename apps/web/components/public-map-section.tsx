@@ -79,40 +79,60 @@ export default function PublicMapSection() {
   const features = areas?.features ?? [];
   const visible = features.filter(feature => `${label(feature.properties.cellId)} ${feature.properties.cellId}`.toLocaleLowerCase(intlLocale).includes(query.trim().toLocaleLowerCase(intlLocale)));
   const selectedFeature = selected ? features.find(feature => feature.properties.cellId === selected) ?? detail?.feature ?? null : null;
-  const risks = { low: t("Risiko rendah"), medium: t("Risiko sedang"), high: t("Risiko tinggi") };
+  const levels = { low: t("Kejadian rendah"), medium: t("Kejadian sedang"), high: t("Kejadian tinggi") };
+  const totals = features.reduce((sum, { properties }) => ({
+    incidents: sum.incidents + properties.incidentCount,
+    open: sum.open + properties.openIncidentCount,
+    resolved: sum.resolved + properties.resolvedIncidentCount,
+  }), { incidents: 0, open: 0, resolved: 0 });
 
   return <section id="peta" className={s.section} aria-labelledby="public-report-map-title">
     <div data-landing-enter="heading" className={s.heading}>
       <p className={s.eyebrow}><span />{t("Pantau lingkungan")}</p>
       <h2 id="public-report-map-title">{t("Peta laporan sampah")}</h2>
-      <p>{t("Jelajahi area berdasarkan laporan sampah yang sudah terverifikasi.")}</p>
+      <p>{t("Jelajahi kejadian sampah yang telah ditinjau moderator. Periksa periode dan waktu pembaruan untuk memahami kondisi yang dilaporkan.")}</p>
     </div>
     <div className={s.frame}>
       <MapViewport areas={areas} selected={selectedFeature} selectedLabel={label(selected)} selectionRevision={selectionRevision} onBoundsChange={onBoundsChange} onSelect={onSelect} />
       <aside className={s.panel} aria-label={t("Ringkasan area")}>
-        <div className={s.panelHeading}><div><h3>{t("Ringkasan area")}</h3><p><ShieldCheck size={15} aria-hidden="true" />{t("Laporan terverifikasi")}</p></div><button type="button" onClick={() => setReload(value => value + 1)} aria-label={t("Muat ulang ringkasan area")} title={t("Muat ulang ringkasan area")} disabled={loading}><RefreshCw size={18} aria-hidden="true" /></button></div>
+        <div className={s.panelHeading}><div><h3>{t("Ringkasan area")}</h3><p><ShieldCheck size={15} aria-hidden="true" />{t("Terverifikasi moderator")}</p></div><button type="button" onClick={() => setReload(value => value + 1)} aria-label={t("Muat ulang ringkasan area")} title={t("Muat ulang ringkasan area")} disabled={loading}><RefreshCw size={18} aria-hidden="true" /></button></div>
         <small className={s.updated}>{loading ? t("Memuat data area") : areas ? t("Diperbarui: {0}", { "0": new Date(areas.asOf).toLocaleString(intlLocale, { dateStyle: "short", timeStyle: "short" }) }) : t("Data belum tersedia")}{areas?.isStale && !loading ? ` · ${t("Data terakhir tersimpan")}` : ""}</small>
         <label className={s.period}><span>{t("Periode")}</span><span><CalendarDays size={18} aria-hidden="true" /><select value={period} onChange={event => { setPeriod(Number(event.target.value)); onSelect(""); }} aria-label={t("Periode laporan")}><option value={7}>{t("7 hari terakhir")}</option><option value={30}>{t("30 hari terakhir")}</option><option value={90}>{t("90 hari terakhir")}</option></select><ChevronDown size={16} aria-hidden="true" /></span></label>
-        <div className={s.legend} aria-label={t("Legenda risiko area")}>{(["low", "medium", "high"] as const).map(risk => <span key={risk}><i data-risk={risk} />{t({ low: "Rendah", medium: "Sedang", high: "Tinggi" }[risk])}</span>)}<span><i />{t("Belum ada data")}</span></div>
-        <div className={s.listTitle}><h4>{t("Area terverifikasi")}</h4><span>{loading || !areas ? "—" : t("{0} area", { "0": features.length })}</span></div>
+        {!loading && areas && <div className={s.summary} aria-label={t("Kejadian unik pada area peta")}>
+          <p>{t("{0} kejadian unik pada area peta", { "0": totals.incidents })}</p>
+          <span>{t("{0} terbuka · {1} selesai (historis)", { "0": totals.open, "1": totals.resolved })}</span>
+          <small>{new Date(areas.from).toLocaleDateString(intlLocale)} – {new Date(areas.to).toLocaleDateString(intlLocale)}</small>
+        </div>}
+        {areas?.isStale && !loading && <p className={s.stale} role="status">{t("Ringkasan tersimpan ditampilkan. Kondisi terbaru belum dapat dipastikan; coba muat ulang.")}</p>}
+        <p className={s.legendTitle}>{t("Tingkat kejadian berdasarkan laporan")}</p>
+        <div className={s.legend} aria-label={t("Legenda tingkat kejadian berdasarkan laporan")}>{(["low", "medium", "high"] as const).map(risk => <span key={risk}><i data-risk={risk} />{t({ low: "Rendah", medium: "Sedang", high: "Tinggi" }[risk])}</span>)}<span><i />{t("Belum ada data")}</span></div>
+        <div className={s.listTitle}><h4>{t("Area dengan laporan")}</h4><span>{loading || !areas ? "—" : t("{0} area", { "0": features.length })}</span></div>
         <label className={s.search}><Search size={17} aria-hidden="true" /><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={t("Cari nama atau ID area")} aria-label={t("Cari nama atau ID area")} /></label>
         <div className={s.reports} aria-busy={loading} aria-live="polite">
           {loading ? <p className={s.state}>{t("Memuat ringkasan laporan terverifikasi…")}</p> : error ? <div className={s.error}><p role="alert">{t(error)}</p><button type="button" onClick={() => setReload(value => value + 1)}><RefreshCw size={16} />{t("Coba lagi")}</button></div> : visible.length ? visible.map(feature => {
             const p = feature.properties;
             return <button className={s.report} data-selected={selected === p.cellId} aria-pressed={selected === p.cellId} type="button" key={p.cellId} onClick={() => onSelect(p.cellId)}>
-              <span className={s.pin}><MapPin size={20} aria-hidden="true" /></span><span className={s.reportMain}><strong>{label(p.cellId)}</strong><small className={s.cellId}>{p.cellId}</small><span>{t("{0} laporan terverifikasi", { "0": p.incidentCount })}</span><small>{p.openIncidentCount} {t("terbuka ·")} {p.resolvedIncidentCount} {t("selesai")}</small></span>
-              <span className={s.risk} data-risk={p.riskLevel}>{risks[p.riskLevel]}</span><ChevronRight size={16} aria-hidden="true" />
+              <span className={s.pin}><MapPin size={20} aria-hidden="true" /></span><span className={s.reportMain}><strong>{label(p.cellId)}</strong><small className={s.cellId}>{p.cellId}</small><span>{t("{0} kejadian unik terverifikasi", { "0": p.incidentCount })}</span><small>{t("{0} terbuka · {1} selesai (historis)", { "0": p.openIncidentCount, "1": p.resolvedIncidentCount })}</small></span>
+              <span className={s.risk} data-risk={p.riskLevel}>{levels[p.riskLevel]}</span><ChevronRight size={16} aria-hidden="true" />
             </button>;
-          }) : <p className={s.state}>{t(query.trim() ? "Tidak ada area yang cocok. Coba nama atau ID lain." : "Belum ada laporan terverifikasi untuk area yang terlihat pada peta.")}</p>}
+          }) : <p className={s.state}>{t(query.trim() ? "Tidak ada area yang cocok. Coba nama atau ID lain." : "Belum ada laporan terverifikasi pada periode ini. Ini bukan bukti area bersih.")}</p>}
         </div>
         {selected && <div className={s.detail}>
           <p><MapPin size={16} aria-hidden="true" /><strong>{label(selected)}</strong></p>
-          {detailError ? <p role="status">{t("Detail area belum dapat dimuat. Pilih area lagi untuk mencoba.")}</p> : detail ? <small>{t("{0} laporan pada {1} hari berbeda.", { "0": detail.feature.properties.incidentCount, "1": detail.feature.properties.distinctDays })}</small> : <small>{t("Memuat detail area…")}</small>}
+          {detailError ? <p role="status">{t("Detail area belum dapat dimuat. Pilih area lagi untuk mencoba.")}</p> : detail ? <small>{t("{0} kejadian unik pada {1} hari berbeda.", { "0": detail.feature.properties.incidentCount, "1": detail.feature.properties.distinctDays })}</small> : <small>{t("Memuat detail area…")}</small>}
           <AreaIncidentLinks key={`${selected}-${range.from}`} cellId={selected} from={range.from} to={range.to} />
         </div>}
         <p className={s.disclaimer}><Info size={16} aria-hidden="true" />{t("Ringkasan area, bukan lokasi persis pelapor.")}</p>
+        <details className={s.method}><summary>{t("Cara membaca dan metode peta")}</summary>
+          <p>{t("Bukti dan konteks laporan telah diperiksa. Kondisi dapat berubah; lihat waktu pembaruan.")}</p>
+          <p>{t("Hitungan memakai kejadian unik yang ditinjau moderator, bukan jumlah dukungan atau scan. Laporan duplikat tidak dihitung lagi. Kejadian selesai tetap masuk riwayat pada periode pengamatan; hanya kejadian terverifikasi dan dalam penanganan dihitung terbuka.")}</p>
+          <p>{t("Warna merangkum jumlah kejadian dan hari pengamatan, bukan risiko penyakit atau kepastian bahaya. Lebih banyak warga yang melapor juga dapat meningkatkan hitungan.")}</p>
+          <p>{t("Rendah: 1–2 kejadian atau semua kejadian pada satu hari. Sedang: 3–4 kejadian pada sedikitnya 2 hari. Tinggi: sedikitnya 5 kejadian pada sedikitnya 2 hari.")}</p>
+          <p>{t("Periode mengikuti waktu kejadian. Hari pengamatan dihitung dalam zona waktu Asia/Jakarta; ringkasan dihitung per sel area, termasuk bagian sel di luar batas layar.")}</p>
+          {areas && <small>{t("Versi metode: {0}", { "0": areas.methodVersion })}</small>}
+        </details>
       </aside>
     </div>
-    <p className={s.footnote}><Info size={17} aria-hidden="true" />{t("Area tanpa data belum tentu bebas sampah.")}</p>
+    <p className={s.footnote}><Info size={17} aria-hidden="true" />{t("Area tanpa laporan terverifikasi bukan bukti area bersih. Warna peta merangkum laporan, bukan risiko penyakit.")}</p>
   </section>;
 }

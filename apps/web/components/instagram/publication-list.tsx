@@ -300,6 +300,7 @@ export default function PublicationList({
                   <span className={styles.rowCopy}>
                     <strong>{post.source.title}</strong>
                     <span>{post.source.categoryName}</span>
+                    {post.sourceUpdate?.followUpRequired && <small className={styles.followUp}>{t("Sumber berubah / izin tidak tersedia · tinjau tindak lanjut")}</small>}
                     <small>
                       {t("Laporan #")}{shortId(post.source.reportId)}
                       {post.source.scanId &&

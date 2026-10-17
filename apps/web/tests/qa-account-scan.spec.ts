@@ -134,6 +134,7 @@ const report: SapReport = {
   id: ids.incident, revision: 1, status: "submitted", categoryId: "plastic", scanId: null,
   description: "Synthetic report with enough detail to verify translated pile labels.",
   reportedSeverity: "large", location: { latitude: -7.98, longitude: 112.63 },
+  observationSource: "firsthand", inference: null, sourceReference: null, contextFlags: [], photoUnavailableReason: null,
   occurredAt: time, createdAt: time, updatedAt: time, mediaIds: [], resolutionMediaIds: [],
   publicSummary: null, publishedMediaIds: [], duplicateOfId: null, timeline: [],
 };

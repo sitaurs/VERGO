@@ -1,7 +1,7 @@
 import type { SapReportStatus } from "../../lib/api/client";
 
 export const STATUS_LABEL: Record<SapReportStatus, string> = {
-  submitted: "Menunggu pemeriksaan", verified: "Terverifikasi", in_progress: "Dalam penanganan",
+  submitted: "Menunggu pemeriksaan", verified: "Terverifikasi moderator", in_progress: "Dalam penanganan",
   resolved: "Selesai", rejected: "Ditolak", duplicate: "Duplikat",
 };
 export const STATUS_COLOR: Record<SapReportStatus, string> = {

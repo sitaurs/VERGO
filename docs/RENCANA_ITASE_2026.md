@@ -1,6 +1,24 @@
 # Rencana VERGO untuk ITASE 7.0 dan kepercayaan laporan
 
-Tanggal **17 Oktober 2026**. **Status: rencana aktif, belum dieksekusi oleh perubahan dokumentasi ini.** Baseline source `413100b`. Kemampuan existing dan batas bukti: [RINGKASAN_PROYEK.md](RINGKASAN_PROYEK.md).
+Tanggal **17 Oktober 2026**. **Status: implementasi utama selesai di lokal; validasi lulus; menunggu commit, push, dan deploy VPS.** Baseline implementasi `4d3553b`. Kemampuan existing, keputusan terbaru, dan batas bukti: [RINGKASAN_PROYEK.md](RINGKASAN_PROYEK.md).
+
+## Catatan pelaksanaan 17 Oktober 2026
+
+Checklist berikut adalah kriteria produk. Status pekerjaan sesi ini:
+
+| Prioritas | Hasil yang sudah dibuat |
+| --- | --- |
+| P0-01 | Landing menjelaskan fokus SDG 3.9, manfaat dan jalur laporan tanpa klaim dampak yang belum terukur. |
+| P0-02 | Form membedakan pengamatan langsung/kabar pihak lain, fakta/dugaan, waktu, konteks, dan bukti privat. Foto wajah/selfie tidak diminta. Tanpa foto hanya diperbolehkan bila pengambilan tidak aman; laporan tetap privat dan tidak dapat diverifikasi sampai bukti aman ditambahkan. |
+| P0-03 | Peta/halaman kejadian menunjukkan konteks, kebaruan, arti “Terverifikasi moderator”, dan menjelaskan bahwa belum ada data bukan berarti aman. |
+| P0-04 | Halaman kejadian menyediakan koreksi kondisi dan pelaporan informasi keliru; pemilik dapat mengajukan banding, melengkapi bukti, dan melihat statusnya. Semua keputusan tetap lewat moderator. |
+| P0-05 | Pemilik dapat melihat bukti privat dan meninjau foto sebelum menambahkannya. Panel admin menyediakan keterangan operasional opsional, kosong secara default; tidak mengarang PIC, SLA, atau masa simpan. |
+| P0-06 | Halaman publik membedakan progres penugasan dari status kejadian dan menyebut “Belum ada penanggung jawab” bila belum ditetapkan. |
+| P1-01 | Poster/caption Instagram menyediakan tautan kanonik dan QR; perubahan sumber memberi peringatan pada admin. Sistem tidak mengklaim posting lama otomatis berubah atau terhapus. Draft format lama harus dibuat ulang dan disetujui ulang. |
+| P1-02 | Pesan/form dan terjemahan terkait diperbarui; pemeriksaan visual lintas browser/perangkat diserahkan kepada QA agent pengguna. |
+| P1-03 | Tidak membuat data pilot, nama PIC, kemitraan, atau hasil lapangan rekaan. Demo kompetisi harus menyebut simulasi bila memakai data contoh. |
+
+**Validasi lokal:** `npm run check` lulus; `npm run build -w @sap/web` lulus; 61 tes API relevan lulus. Browser test sengaja tidak dijalankan karena akan dilakukan QA agent khusus. Versi kontrak publik tetap 1.1.0; draft R1 1.2.0 mencatat perluasan rute dan schema. Hasil tes bukan bukti deployment sampai pemeriksaan pascadeploy.
 
 ## 1. Tujuan dan keputusan produk
 
@@ -55,7 +73,7 @@ Selesai bila pengunjung menemukan cara melapor, arti pemeriksaan dan jalur tinda
 - [ ] Tambahkan konteks pilihan yang terlihat, misalnya pembakaran, dekat saluran air, benda tajam. Ini keterangan pelapor untuk ditinjau, bukan diagnosis atau hasil AI.
 - [ ] Jelaskan kegunaan foto/lokasi; tidak meminta selfie atau foto bersama tumpukan.
 - [ ] Informasi pihak lain mempunyai rujukan/izin; foto internet bukan dokumentasi baru pelapor.
-- [ ] Jika foto tidak aman diambil, arahkan ke kanal bantuan yang dikelola atau permintaan informasi privat. Laporan baseline membutuhkan foto; jalur tanpa foto memerlukan keputusan kontrak sebelum implementasi, dan tidak boleh langsung menjadi kejadian terverifikasi.
+- [ ] Jika foto tidak aman diambil, izinkan laporan privat dengan alasan keselamatan tanpa consent publikasi. Moderator meminta bukti tambahan yang aman sebelum verifikasi; pemilik dapat menambahkannya kemudian. Jangan menjanjikan PIC atau kanal bantuan yang belum tersedia.
 
 Selesai bila moderator mengetahui sumber pengamatan, waktu, fakta dan dugaan tanpa menebak. Modul: `report-wizard.tsx`, reports/DTO. Jika field bertambah, sinkronkan schema, fixture, migration dan generated types.
 
@@ -197,11 +215,11 @@ Ini mewarisi pekerjaan terbuka lama tanpa menganggapnya masih gagal ataupun suda
 | A-10 | Instagram eligibility/render/revisi/approval/publish/retract/timeout/reload/retry/needs_action, token/scope/callback; tidak ada post ganda atau klaim hapus sebelum konfirmasi. |
 | A-11 | Hermes snapshot/stale/retry/isolasi/fallback; VERA grounding/sitasi/abstention, evaluasi Indonesia, scope tools, biaya/retensi dan provider gagal. |
 | A-12 | Delivery OTP/reset/MFA/session/avatar/hapus akun, storage lifecycle, dependency/queue health, kapasitas, restore terisolasi dengan replay penghapusan, retensi/PIC/runbook. |
-| A-13 | Published/draft, validator/serializer/handler, fixture/types, migration ledger, flags dan commit runtime sesuai. Perbaiki drift generator R1 terhadap tambahan schema tracked sebelum regenerasi; jangan menghapus operasi/field existing. Source bukan bukti deploy. |
+| A-13 | Published/draft, validator/serializer/handler, fixture/types, migration ledger, flags dan commit runtime sesuai. Compatibility input dan addendum kini menjaga operasi/field R1 existing saat regenerasi; tinjau lagi pada perubahan kontrak berikutnya. Source bukan bukti deploy. |
 | A-14 | Mobile/keyboard/reduced motion, izin ditolak/koneksi gagal, alur dan istilah dipahami pengguna; hambatan utama ditutup. |
 | A-15 | Proposal/video/deck cocok dengan demo; data nyata berizin/sintetis berlabel, provenance/lisensi dan klaim dapat dipertanggungjawabkan. |
 
-Catat tanggal, commit web/API/kontrak, lingkungan, skenario, hasil dan batas fixture/provider pada backlog terkait. Rencana ini tidak mengotorisasi posting Instagram, menghubungi orang lain atau perubahan layanan produksi.
+Catat tanggal, commit web/API/kontrak, lingkungan, skenario, hasil dan batas fixture/provider pada backlog terkait. Push dan deployment VPS untuk commit implementasi ini telah diminta pemilik proyek; tidak ada publikasi konten Instagram atau klaim pilot nyata.
 
 ## 9. Referensi
 

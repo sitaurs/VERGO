@@ -59,7 +59,8 @@ export default function AreaMap({ areas, onBoundsChange, onSelect }: Props) {
           color: colors[feature.properties.riskLevel], fillColor: colors[feature.properties.riskLevel],
           fillOpacity: .42, weight: 2,
         }).addTo(group);
-        shape.bindTooltip(t("{0} laporan · {1}", { "0": feature.properties.incidentCount, "1": feature.properties.riskLevel }));
+        const level = { low: "Kejadian rendah", medium: "Kejadian sedang", high: "Kejadian tinggi" }[feature.properties.riskLevel];
+        shape.bindTooltip(t("{0} kejadian unik · {1}", { "0": feature.properties.incidentCount, "1": t(level) }));
         shape.on("click", () => selectCallback.current(feature.properties.cellId));
       }
     });

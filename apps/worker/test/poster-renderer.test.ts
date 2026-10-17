@@ -36,6 +36,7 @@ function dependencies() {
     json: (value: unknown) => value,
   });
   const config = {
+    APP_ORIGIN: 'https://vergo.example',
     SAP_INSTAGRAM_RENDER_ENABLED: true,
     POSTER_OVERPASS_URL: 'https://maps.example.invalid/api/interpreter',
     POSTER_MAP_CACHE_HOURS: 24,
@@ -91,11 +92,13 @@ test('renders a design-sized sRGB poster and uses local plus city names from OSM
   assert.equal(metadata.height, 1350);
   assert.equal(metadata.space, 'srgb');
   assert.ok(rendered.bytes.length <= 7 * 1024 * 1024);
-  assert.equal(rendered.templateVersion, 'sap-feed-reference-v3');
+  assert.equal(rendered.templateVersion, 'vergo-feed-status-v4');
   assert.equal(rendered.map.areaLabel, 'Kauman, Kota Malang');
   assert.equal(rendered.map.locality, 'Kauman');
   assert.equal(rendered.map.locationMode, 'public_area');
   assert.match(rendered.map.attribution, /OpenStreetMap contributors/);
+  assert.equal(rendered.source.publicUrl, 'https://vergo.example/incidents/11111111-1111-4111-8111-111111111111');
+  assert.equal(rendered.source.canonicalId, rendered.source.reportId);
   assert.equal(rendered.source.area.label, 'Kauman, Kota Malang');
   assert.equal(rendered.source.title, 'Penumpukan sampah di kawasan Kauman');
 });

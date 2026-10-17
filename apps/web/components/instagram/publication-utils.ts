@@ -25,7 +25,10 @@ export function eligibleReport(report: SapReport) {
 export function buildCaption(source: PublicationSource, settings: PublicationSettings) {
   const text = settings.captionTemplate.replaceAll("{jenis_sampah}", source.categoryName)
     .replaceAll("{ringkasan_laporan}", source.publicSummary);
-  return [text.trim(), settings.hashtags.trim()].filter(Boolean).join("\n\n").slice(0, 2200);
+  const body = [text.trim(), settings.hashtags.trim()].filter(Boolean).join("\n\n");
+  if (!source.publicUrl) return body;
+  const date = new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeZone: "Asia/Jakarta" }).format(new Date(source.occurredAt));
+  return `${body}\n\n--- Status VERGO ---\nLaporan warga · bukti ditinjau moderator\nPengamatan: ${date} · ${source.area.label}\nKondisi dapat berubah. Status terbaru / koreksi:\n${source.publicUrl}`;
 }
 export function instagramPermalink(value: string | null): string | undefined {
   if (!value) return;

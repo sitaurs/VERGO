@@ -16,7 +16,10 @@ import {
   type SapReport, type SapReportStatus, type SapScanSettings,
 } from "../lib/api/client";
 import { useI18n } from "../lib/i18n/provider";
+import { r1Error } from "../lib/api/r1";
 import AnimatedNumber from "./motion/animated-number";
+import TrustSettingsPanel from "./trust/trust-settings-panel";
+import ReportAppealsAdmin from "./trust/report-appeals-admin";
 
 
 const MODE_INFO: Record<SapScanSettings["mode"], { label: string; hint: string }> = {
@@ -93,7 +96,7 @@ function StatusBadge({ status }: { status: SapReportStatus }) {
 }
 
 export default function AdminPanel({ section, categories }: { section: "moderation" | "settings"; categories: SapCategory[] }) {
-  if (section === "settings") return <ScanSettingsPanel />;
+  if (section === "settings") return <><ScanSettingsPanel /><TrustSettingsPanel /></>;
   return <ModerationPanel categories={categories} />;
 }
 
@@ -250,10 +253,11 @@ function ModerationPanel({ categories }: { categories: SapCategory[] }) {
   }
 
   function onDecided() { setActive(null); void load(); }
-  const selectedReports = reports.filter(report => selected.includes(report.id) && report.status === "submitted");
-  const selectable = reports.filter(report => report.status === "submitted").slice(0, 20);
+  const selectedReports = reports.filter(report => selected.includes(report.id) && report.status === "submitted" && !(report.photoUnavailableReason === "unsafe" && !report.mediaIds.length));
+  const selectable = reports.filter(report => report.status === "submitted" && !(report.photoUnavailableReason === "unsafe" && !report.mediaIds.length)).slice(0, 20);
 
   return <div className={admin.wrap}>
+    <ReportAppealsAdmin onReview={id=>{getReport(id).then(setActive).catch(cause=>setError(r1Error(cause)));}}/>
     <div className={admin.statRow}>
       <div data-motion="card" className={admin.statBox}><span>{t("Menunggu")}</span><strong><AnimatedNumber value={stats?.submittedReports ?? "—"} /></strong><small>{t("Perlu diperiksa")}</small></div>
       <div data-motion="card" className={admin.statBox}><span>{t("Terverifikasi")}</span><strong><AnimatedNumber value={stats?.verifiedReports ?? "—"} /></strong></div>
@@ -264,6 +268,7 @@ function ModerationPanel({ categories }: { categories: SapCategory[] }) {
 
     <section className={admin.panel}>
       <div className={admin.panelHead}><ClipboardList size={22} /><h2>{t("Antrean laporan")}</h2></div>
+      {reports.some(report=>report.photoUnavailableReason==="unsafe"&&!report.mediaIds.length)&&<p className={admin.moderationInfo}>{t("Laporan yang belum memiliki foto karena pengambilan dinilai tidak aman perlu dilengkapi bukti aman sebelum dapat diverifikasi.")}</p>}
       <div className={admin.toolbar}>
         <span className={styles.selectWrap}>
           <select aria-label={t("Filter status")} value={status} onChange={event => setStatus(event.target.value as SapReportStatus)}>
@@ -285,7 +290,7 @@ function ModerationPanel({ categories }: { categories: SapCategory[] }) {
             {reports.map(report => (
               <div key={report.id} className={admin.selectionRow}>
               {status === "submitted" && report.status === "submitted" && <input type="checkbox" aria-label={t("Pilih laporan #{0}", { "0": report.id.slice(0, 8) })}
-                checked={selected.includes(report.id)} disabled={!selected.includes(report.id) && selected.length >= 20}
+                checked={selected.includes(report.id)} disabled={(report.photoUnavailableReason === "unsafe" && !report.mediaIds.length)||(!selected.includes(report.id) && selected.length >= 20)}
                 onChange={event => setSelected(current => event.target.checked ? [...current, report.id] : current.filter(id => id !== report.id))} />}
               <button type="button" className={admin.reportRow} onClick={() => setActive(report)}>
                 <span>

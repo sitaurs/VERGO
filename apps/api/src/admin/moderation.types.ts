@@ -56,6 +56,11 @@ export function requiresInitialPublicSummary(from: ReportStatus, to: ReportStatu
   return to === 'verified' && !VERIFIED_FAMILY.includes(from);
 }
 
+/** A report submitted without a safe photo stays private until evidence is added. */
+export function requiresSafePhoto(photoUnavailableReason: string | null, nextStatus: ReportStatus): boolean {
+  return photoUnavailableReason === 'unsafe' && VERIFIED_FAMILY.includes(nextStatus);
+}
+
 /** A canonical report a duplicate may point at: itself not a duplicate, and publicly eligible. */
 export function isValidDuplicateTarget(target: {
   id: string;

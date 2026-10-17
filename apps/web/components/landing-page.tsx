@@ -17,14 +17,14 @@ function Artwork({ name, className = "", alt = "", eager = false, sizes = "(max-
   return <div className={`${s.artwork} ${className}`}><Image src={`/images/landing-25d/${name}.webp`} alt={alt} fill sizes={sizes} preload={eager} /></div>;
 }
 const steps = [
-  { art: "scan", title: "Foto dan kenali", copy: "Kenali material sampah dari foto." },
-  { art: "report", title: "Laporkan kondisi", copy: "Lengkapi lokasi, waktu, dan catatan kondisi." },
-  { art: "review", title: "Ditinjau manusia", copy: "Moderator memeriksa sebelum laporan tampil publik." },
+  { art: "report", title: "Warga melaporkan", copy: "Kirim foto dari jarak aman, lokasi, waktu, dan kondisi yang terlihat." },
+  { art: "review", title: "Moderator meninjau", copy: "Moderator memeriksa bukti sebelum laporan tampil publik." },
+  { art: "community", title: "Pelaksana menindaklanjuti", copy: "Jika ada penugasan, pelaksana mencatat progres dan bukti hasil. Moderator memeriksa penyelesaian." },
 ] as const;
 const features = [
   { art: "scan", title: "Kenali material sampah", copy: "AI membantu mengenali jenis material dari foto.", href: "/dashboard?view=scan" },
-  { art: "report", title: "Pelaporan yang terarah", copy: "Lengkapi foto, lokasi, waktu, dan catatan kondisi.", href: "/dashboard?view=reports" },
-  { art: "map", title: "Peta area terverifikasi", copy: "Lihat ringkasan laporan yang sudah ditinjau.", href: "#peta" },
+  { art: "report", title: "Pelaporan yang terarah", copy: "Lengkapi foto, lokasi, waktu, dan catatan kondisi.", href: "/dashboard?view=reports&compose=report" },
+  { art: "map", title: "Peta laporan terverifikasi", copy: "Lihat ringkasan laporan yang sudah ditinjau.", href: "#peta" },
   { art: null, title: "Pantau pembaruan", copy: "Ikuti perkembangan laporan Anda.", href: "/dashboard?view=notifications" },
 ] as const;
 const verification = [
@@ -36,6 +36,10 @@ const questions = [
   { title: "Apakah hasil AI langsung terverifikasi?", answer: "Tidak. AI membantu mengenali material, sedangkan laporan diperiksa moderator sebelum masuk ke ringkasan publik." },
   { title: "Apakah foto dan lokasi saya langsung tampil?", answer: "Tidak. Foto dan koordinat presisi tidak otomatis ditampilkan. Peta publik menampilkan ringkasan per area; publikasi bukti mengikuti persetujuan dan pemeriksaan yang berlaku." },
   { title: "Bagaimana laporan muncul di peta?", answer: "Setelah diperiksa dan disetujui moderator, laporan masuk ke ringkasan area sesuai lokasi dan periode yang dipilih." },
+  { title: "Apa arti Terverifikasi moderator?", answer: "Bukti dan konteks laporan telah diperiksa. Kondisi dapat berubah; lihat waktu pembaruan. Status ini tidak menjamin semua dugaan benar atau sampah sudah dibersihkan." },
+  { title: "Apakah area tanpa laporan berarti bersih?", answer: "Belum ada laporan terverifikasi pada periode ini berarti data belum tersedia, bukan bukti area bersih. Warna peta merangkum kejadian yang dilaporkan, bukan tingkat risiko penyakit." },
+  { title: "Bagaimana jika laporan keliru atau lokasi sudah bersih?", answer: "Buka kejadian publik, lalu pilih Perbarui kondisi atau Laporkan informasi keliru. Masuk bila diminta dan sertakan waktu pengamatan serta bukti yang relevan. Moderator memeriksa pembaruan sebelum kondisi berubah; jumlah dukungan tidak menentukan kebenaran." },
+  { title: "Siapa yang menangani laporan?", answer: "Moderator memeriksa laporan dan penanggung jawab yang ditugaskan mencatat tindak lanjut. Pengiriman laporan tidak menjamin penanganan langsung. Jika belum ada pelaksana, laporan belum mempunyai penanggung jawab." },
 ] as const;
 function StatusTimeline({ compact = false }: { compact?: boolean }) {
   const { t } = useI18n();
@@ -52,7 +56,7 @@ function ReportPreview() {
   return <div className={s.preview} data-landing-enter="card" aria-label={t("Contoh alur laporan")}>
     <div className={s.previewSidebar}><BrandLogo width={110} /><a href="/dashboard?view=scan"><Camera size={17} />{t("Scan")}</a><a href="/dashboard?view=reports"><FileText size={17} />{t("Laporan saya")}</a><a href="#peta"><MapPin size={17} />{t("Peta area")}</a><a href="/incidents"><ShieldCheck size={17} />{t("Kejadian publik")}</a></div>
     <div className={s.previewScan}><Artwork name="scan" sizes="(max-width: 760px) 180px, 320px" /><span className={s.material}><Recycle size={14} />{t("Botol plastik")}</span></div>
-    <div className={s.previewReport}><span className={s.example}>{t("Contoh alur laporan")}</span><h3>{t("Buat laporan")}</h3><dl><div><dt><MapPin size={14} />{t("Lokasi")}</dt><dd>Malang</dd></div><div><dt><FileText size={14} />{t("Catatan")}</dt><dd>{t("Contoh: botol plastik di pinggir jalan.")}</dd></div></dl><a className={s.textLink} href="/dashboard?view=reports">{t("Mulai laporan")}<ArrowRight size={16} /></a></div>
+    <div className={s.previewReport}><span className={s.example}>{t("Contoh alur laporan")}</span><h3>{t("Buat laporan")}</h3><dl><div><dt><MapPin size={14} />{t("Lokasi")}</dt><dd>Malang</dd></div><div><dt><FileText size={14} />{t("Catatan")}</dt><dd>{t("Contoh: botol plastik di pinggir jalan.")}</dd></div></dl><a className={s.textLink} href="/dashboard?view=reports&compose=report">{t("Mulai laporan")}<ArrowRight size={16} /></a></div>
     <div className={s.previewStatus}><h3>{t("Status laporan")}</h3><StatusTimeline /></div>
   </div>;
 }
@@ -67,12 +71,19 @@ export default function LandingPage() {
       <section id="beranda" className={s.hero} aria-labelledby="impact-hero-title"><div className={`${s.container} ${s.heroInner}`}>
         <div className={s.heroCopy}><p data-landing-enter="eyebrow" className={s.eyebrow}>{t("Foto. Verifikasi. Aksi.")}</p>
           <h1 id="impact-hero-title" data-landing-enter="title" data-landing-order="1"><span>{t("Satu foto.")}</span><span>{t("Bukti yang jelas.")}</span><em>{t("Aksi yang tepat.")}</em></h1>
-          <p data-landing-enter="copy" data-landing-order="2" className={s.heroDescription}>{t("Kenali sampah dengan AI, petakan lokasinya, dan ikuti laporan yang ditinjau manusia.")}</p>
-          <div className={s.heroActions} data-landing-enter="actions" data-landing-order="3"><a className={s.primary} data-landing-action href="/dashboard?view=scan"><Camera size={21} />{t("Mulai scan")}<ArrowRight size={19} /></a><a className={s.secondary} data-landing-action href="#peta">{t("Jelajahi peta")}<ArrowRight size={19} /></a></div>
+          <p data-landing-enter="copy" data-landing-order="2" className={s.heroDescription}>{t("Laporkan penumpukan sampah yang dapat mengganggu lingkungan dan kesehatan. Pantau pemeriksaan bukti, tindak lanjut, dan pembaruan kondisinya.")}</p>
+          <div className={s.heroActions} data-landing-enter="actions" data-landing-order="3"><a className={s.primary} data-landing-action href="/dashboard?view=reports&compose=report"><FileText size={21} />{t("Laporkan tumpukan sampah")}<ArrowRight size={19} /></a><a className={s.secondary} data-landing-action href="#peta">{t("Jelajahi peta")}<ArrowRight size={19} /></a></div>
+          <a className={s.optionalScan} href="/dashboard?view=scan"><Camera size={17} aria-hidden="true" />{t("Belum tahu jenis sampahnya? Coba scan AI.")}<ArrowRight size={15} aria-hidden="true" /></a>
           <ul className={s.assurances} data-landing-enter="assurances" data-landing-order="4"><li><Camera />{t("Bukti foto")}</li><li><MapPin />{t("Konteks lokasi")}</li><li><UsersRound />{t("Tinjauan manusia")}</li></ul><a className={s.incidentLink} href="/incidents">{t("Kejadian publik")}<ArrowRight size={15} /></a>
         </div>
         <div className={s.heroVisual} data-landing-enter="hero-card"><div data-landing-float="shape"><Artwork name="hero" alt={t("Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO")} eager className={s.heroArtwork} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 55vw, 780px" /></div></div>
       </div></section>
+      <section className={`${s.healthContext} ${s.container}`} aria-labelledby="health-context-title">
+        <span className={s.pill}>SDG 3 · {t("Target 3.9")}</span><h2 id="health-context-title">{t("Lingkungan terawat, kesehatan lebih terlindungi.")}</h2>
+        <p>{t("Sampah yang tidak dikelola dapat mencemari air, tanah, dan udara serta menjadi tempat berkembangnya pembawa penyakit. VERGO membantu warga mendokumentasikan kondisi dan memantau tindak lanjut, sejalan dengan tujuan SDG 3.9 untuk mengurangi dampak pencemaran terhadap kesehatan.")}</p>
+        <p className={s.healthLimit}>{t("Peta VERGO merangkum laporan warga; peta ini tidak mengukur risiko penyakit atau membuktikan penurunan penyakit.")}</p>
+        <div className={s.sourceLinks}><span>{t("Rujukan:")}</span><a href="https://sdgs.un.org/goals/goal3">{t("PBB — SDG 3.9")}</a><a href="https://www.who.int/news/item/16-12-2025-who-highlights-health-risks-and-opportunities-in-the-global-waste-crisis">{t("WHO — sampah dan kesehatan")}</a></div>
+      </section>
       <section id="cara-kerja" className={`${s.section} ${s.container}`} aria-labelledby="workflow-title">
         <div className={`${s.heading} ${s.centered}`} data-landing-enter="heading"><span className={s.pill}>{t("Cara kerja")}</span><h2 id="workflow-title">{t("Lihat masalahnya.")} <em>{t("Tentukan langkahnya.")}</em></h2></div>
         <ol className={s.steps}>{steps.map((step, index) => <li key={step.title} data-landing-enter="card" data-landing-order={index}><Artwork name={step.art} /><div><span className={s.stepNumber}>0{index + 1}</span><h3>{t(step.title)}</h3><p>{t(step.copy)}</p></div>{index < steps.length - 1 && <ArrowRight className={s.stepArrow} aria-hidden="true" />}</li>)}</ol><ReportPreview />
@@ -83,7 +94,7 @@ export default function LandingPage() {
       </div></section>
       <PublicMapSection />
       <section id="verifikasi" className={`${s.section} ${s.container}`} aria-labelledby="verification-title"><span id="tinjauan" className={s.anchor} />
-        <div className={s.heading} data-landing-enter="heading"><span className={s.pill}>{t("Verifikasi")}</span><h2 id="verification-title">{t("AI membantu.")} <em>{t("Manusia memastikan.")}</em></h2><p>{t("Laporan diperiksa moderator sebelum tampil di peta publik.")}</p></div>
+        <div className={s.heading} data-landing-enter="heading"><span className={s.pill}>{t("Terverifikasi moderator")}</span><h2 id="verification-title">{t("AI membantu.")} <em>{t("Moderator meninjau.")}</em></h2><p>{t("Bukti dan konteks laporan telah diperiksa. Kondisi dapat berubah; lihat waktu pembaruan.")}</p><p>{t("Pemeriksaan tidak menjamin semua dugaan benar atau lokasi sudah bersih. Pembaruan warga tetap perlu ditinjau.")}</p></div>
         <ol className={s.verificationSteps}>{verification.map((step, index) => <li key={step.title} data-landing-enter="card" data-landing-order={index}><span className={s.featureNumber}>0{index + 1}</span><Artwork name={step.art} sizes="(max-width: 760px) 120px, 150px" /><div><h3>{t(step.title)}</h3><p>{t(step.copy)}</p></div></li>)}</ol><p className={s.privacy}><LockKeyhole size={17} aria-hidden="true" />{t("Foto dan koordinat tidak langsung ditampilkan ke publik.")}</p>
       </section>
       <section id="aksi-warga" className={`${s.section} ${s.communitySection}`} aria-labelledby="community-title"><div className={s.container}>
@@ -91,7 +102,7 @@ export default function LandingPage() {
         <div className={s.communityGrid}><Artwork name="community" className={s.communityArtwork} alt={t("Ilustrasi warga membersihkan lingkungan bersama")} sizes="(max-width: 760px) 100vw, 460px" /><div className={s.communityLinks}><a href="/activities" className={s.communityCard} data-landing-enter="card"><span className={s.communityIcon}><CalendarDays /></span><div><h3>{t("Kegiatan warga")}</h3><p>{t("Temukan kegiatan bersih lingkungan.")}</p><span className={s.textLink}>{t("Lihat kegiatan warga")}<ArrowRight size={17} /></span></div></a><a href="/incidents" className={s.communityCard} data-landing-enter="card" data-landing-order="1"><span className={s.communityIcon}><Leaf /></span><div><h3>{t("Pembaruan kondisi")}</h3><p>{t("Ikuti pembaruan pada kejadian publik yang telah ditinjau.")}</p><span className={s.textLink}>{t("Lihat kejadian publik")}<ArrowRight size={17} /></span></div></a></div></div>
       </div></section>
       <section id="edukasi" className={`${s.section} ${s.container} ${s.faq}`} aria-labelledby="faq-title"><div className={s.heading} data-landing-enter="heading"><span className={s.pill}>FAQ</span><h2 id="faq-title">{t("Yang sering ditanyakan.")}</h2><p>{t("Kenali cara kerja dan privasi laporan Anda.")}</p></div><div className={s.questions}>{questions.map((question, index) => <details key={question.title} name="vergo-landing-faq" open={index === 0}><summary>{t(question.title)}<ChevronDown size={19} aria-hidden="true" /></summary><p>{t(question.answer)}</p></details>)}</div></section>
-      <section className={`${s.container} ${s.closing}`} aria-labelledby="closing-title"><div><h2 id="closing-title">{t("Mulai dari satu foto.")}</h2><p>{t("Ambil langkah kecil untuk lingkungan yang lebih baik.")}</p></div><a className={s.primary} data-landing-action href="/dashboard?view=scan"><Camera size={21} />{t("Mulai scan sekarang")}<ArrowRight size={20} /></a><Artwork name="scan" className={s.closingArtwork} /></section>
+      <section className={`${s.container} ${s.closing}`} aria-labelledby="closing-title"><div><h2 id="closing-title">{t("Mulai dari satu foto.")}</h2><p>{t("Ambil langkah kecil untuk lingkungan yang lebih baik.")}</p></div><a className={s.primary} data-landing-action href="/dashboard?view=reports&compose=report"><FileText size={21} />{t("Laporkan tumpukan sampah")}<ArrowRight size={20} /></a><Artwork name="scan" className={s.closingArtwork} /></section>
     </main>
     <footer className={s.footer}><div className={`${s.container} ${s.footerGrid}`}><div className={s.footerBrand}><a href="#beranda" aria-label={t("VERGO, kembali ke beranda")}><BrandLogo width={148} /></a><p>{t("Kenali sampah, laporkan kondisi, dan pantau lingkungan bersama.")}</p></div><nav aria-label={t("Navigasi footer")}><div><h3>{t("Produk")}</h3><a href="/dashboard?view=scan">{t("Scan")}</a><a href="#peta">{t("Peta Laporan")}</a><a href="/incidents">{t("Kejadian publik")}</a><a href="/activities">{t("Kegiatan warga")}</a></div><div><h3>{t("Tentang")}</h3><a href="#cara-kerja">{t("Cara kerja")}</a><a href="#verifikasi">{t("Verifikasi")}</a><a href="#edukasi">{t("Edukasi")}</a></div><div><h3>{t("Bantuan")}</h3>{["Kebijakan Privasi", "Ketentuan Layanan", "Pengaturan Cookie"].map(label => <button type="button" key={label} onClick={() => setBottomDetail({ kind: "footer", label })}>{t(label)}</button>)}</div></nav><div className={s.footerBottom}><span>© {new Date().getFullYear()} VERGO</span><a href="/dashboard">{t("Buka dashboard")}<ArrowRight size={16} /></a><span>Verify and Go</span></div></div></footer>
     <DetailDialog detail={bottomDetail} onClose={() => setBottomDetail(null)} />

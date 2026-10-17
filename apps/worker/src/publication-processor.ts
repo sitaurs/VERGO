@@ -9,6 +9,11 @@ type Executor=Sql|TransactionSql;
 export function selectPublicationAsset(assets:Row[],sources:Row[]):Row|undefined{
  return assets.find(asset=>sources.some(source=>(source.media_id===undefined||source.media_id===asset.media_id)&&source.subject_type===asset.subject_type&&source.subject_id===asset.subject_id));
 }
+export function publicationStatusCaption(caption:string,source:{occurredAt:string;area:{label:string};publicUrl?:string}):string {
+ const body=caption.split('--- Status VERGO ---')[0]!.trim();
+ const date=new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeZone:'Asia/Jakarta'}).format(new Date(source.occurredAt));
+ return `${body}\n\n--- Status VERGO ---\nLaporan warga · bukti ditinjau moderator\nPengamatan: ${date} · ${source.area.label}\nKondisi dapat berubah. Status terbaru / koreksi:\n${source.publicUrl}`;
+}
 class LeaseLost extends Error {}
 const INVALID={status:'invalidated',contentRevision:null,sourceRevision:null,renditionId:null,approvedAt:null};
 class ProviderError extends Error{constructor(readonly code:string,readonly uncertain=false){super(code);}}
@@ -110,7 +115,7 @@ export class PublicationProcessor{
    if(media.id===published.id&&typeof media.permalink==='string'&&/^https:\/\//.test(media.permalink))await this.sql`UPDATE instagram_posts SET permalink=${media.permalink} WHERE id=${post.id} AND provider_media_id=${published.id}`;
   }catch{}
  }
- private approved(post:Row){return post.approval?.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready'&&!!post.rendition_object_key;}
+ private approved(post:Row){return post.template_version==='vergo-feed-status-v4'&&post.source_snapshot?.publicUrl===new URL(`/incidents/${post.report_id}`,this.config.APP_ORIGIN).toString()&&post.caption===publicationStatusCaption(post.caption,post.source_snapshot)&&post.approval?.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready'&&!!post.rendition_object_key;}
  private async inspectUncertain(op:Row,post:Row,token:string){
   if(post.provider_media_id){await this.successPublish(op,post,post.provider_media_id,post.permalink);return;}
   if(post.provider_container_id){try{await this.stage(op,'uncertain');await this.graph(post.provider_container_id,token,{fields:'id,status_code'});}catch(error){if(error instanceof LeaseLost)throw error;}}
@@ -251,7 +256,9 @@ export class PublicationProcessor{
    if(post.kind==='resolution'&&!milestone)throw new Error('SOURCE_REVISION_CHANGED');
    const outcome=post.kind==='initial'?'initial':milestone?.outcome==='partial'?'partial':'complete';
    const rendered=await this.poster.render({source:post.source_snapshot as PosterSource,photo:await this.objects.getObject(post.evidence_key),outcome,reportCode:post.public_code});
-   const enriched=JSON.stringify(rendered.source)!==JSON.stringify(post.source_snapshot),revision=post.content_revision+(enriched?1:0),renditionId=enriched?randomUUID():post.rendition_id;
+   const caption=publicationStatusCaption(post.caption,rendered.source);
+   if(caption.length>2200)throw new Error('CAPTION_METADATA_TOO_LONG');
+   const enriched=JSON.stringify(rendered.source)!==JSON.stringify(post.source_snapshot)||caption!==post.caption,revision=post.content_revision+(enriched?1:0),renditionId=enriched?randomUUID():post.rendition_id;
    objectKey=`instagram/${post.id}/${revision}/${randomUUID()}.jpg`;
    const reserved=await this.sql.begin(async tx=>{
     await tx`SELECT id FROM reports WHERE id=${post.report_id} FOR UPDATE`;
@@ -268,7 +275,7 @@ export class PublicationProcessor{
     if(!current||current.rendition_status==='ready'||!['draft','failed'].includes(current.status)||current.content_revision!==post.content_revision||current.source_revision!==post.source_revision||current.rendition_id!==post.rendition_id||current.evidence_rendition_id!==post.evidence_rendition_id||!await this.eligible(current,tx))return false;
     if(current.kind==='resolution'&&!await this.milestone(tx,current.report_id,current.milestone_id))return false;
     await tx`UPDATE instagram_rendition_objects SET reservation_expires_at=now() WHERE object_key=${objectKey!}`;
-    await tx`UPDATE instagram_posts SET source_snapshot=${tx.json(rendered.source as never)},content_revision=${revision},rendition_id=${renditionId},rendition_revision=rendition_revision+${enriched?1:0},rendition_status='ready',rendition_object_key=${objectKey!},rendition_metadata=${tx.json(rendered.map as never)},template_version=${rendered.templateVersion},provider_container_id=CASE WHEN ${enriched} THEN NULL ELSE provider_container_id END,approval=CASE WHEN ${enriched} OR approval->>'status'='approved' THEN ${tx.json(INVALID)} ELSE approval END,publish_error=NULL,revision=revision+1,updated_at=now() WHERE id=${post.id}`;
+    await tx`UPDATE instagram_posts SET source_snapshot=${tx.json(rendered.source as never)},caption=${caption},content_revision=${revision},rendition_id=${renditionId},rendition_revision=rendition_revision+${enriched?1:0},rendition_status='ready',rendition_object_key=${objectKey!},rendition_metadata=${tx.json(rendered.map as never)},template_version=${rendered.templateVersion},provider_container_id=CASE WHEN ${enriched} THEN NULL ELSE provider_container_id END,approval=CASE WHEN ${enriched} OR approval->>'status'='approved' THEN ${tx.json(INVALID)} ELSE approval END,publish_error=NULL,revision=revision+1,updated_at=now() WHERE id=${post.id}`;
     return true;
    });
    if(!accepted)await this.discardRendered(objectKey,post.media_id);
@@ -327,7 +334,7 @@ export class PublicationProcessor{
     if(['draft','failed'].includes(post.status)){
      const [prior]=await tx`SELECT stage FROM instagram_operations WHERE post_id=${post.id} AND kind='publish' ORDER BY created_at DESC LIMIT 1`;
      if(prior&&['publish_requested','uncertain','published'].includes(prior.stage)){await this.requestRetraction(tx,post,'unaffected');continue;}
-     const source={...post.source_snapshot,sourceRevision:report.revision,status:report.status,categoryName:report.category_name??'Belum dikategorikan',publicSummary:milestone?.summary??report.public_summary,occurredAt:new Date(milestone?.observed_at??report.occurred_at??report.created_at).toISOString()};
+     const source={...post.source_snapshot,canonicalId:reportId,publicUrl:new URL(`/incidents/${reportId}`,this.config.APP_ORIGIN).toString(),sourceRevision:report.revision,status:report.status,categoryName:report.category_name??'Belum dikategorikan',publicSummary:milestone?.summary??report.public_summary,occurredAt:new Date(milestone?.observed_at??report.occurred_at??report.created_at).toISOString()};
      const [changed]=await tx`UPDATE instagram_posts SET source_revision=${report.revision},source_snapshot=${tx.json(source)},evidence_rendition_id=${asset.rendition_id},content_revision=content_revision+1,rendition_id=gen_random_uuid(),rendition_revision=rendition_revision+1,rendition_status='queued',rendition_object_key=NULL,provider_container_id=NULL,approval=${tx.json(INVALID)},revision=revision+1,updated_at=now() WHERE id=${post.id} AND status IN ('draft','failed') RETURNING content_revision`;
      if(changed)await tx`INSERT INTO outbox_events(topic,aggregate_id,payload_minimal,dedup_key) VALUES('instagram.render.requested',${post.id},${tx.json({aggregateRevision:changed.content_revision})},${`instagram.render.requested:${post.id}:${changed.content_revision}`}) ON CONFLICT DO NOTHING`;
     }else await tx`UPDATE instagram_posts SET approval=${tx.json(INVALID)},revision=revision+1,updated_at=now() WHERE id=${post.id}`;
@@ -340,11 +347,11 @@ export class PublicationProcessor{
    for(const milestone of candidates){
     const sources=milestone.kind==='initial'?[{subject_type:'report',subject_id:reportId}]:milestone.allowedSources;
     const asset=selectPublicationAsset(assets,sources);if(!asset)continue;
-    const summary=String(milestone.summary),url=new URL(`/incidents/${reportId}`,this.config.APP_ORIGIN).toString(),template=String(settings.payload.captionTemplate||'{summary}\nPantau perkembangan di SAP: {url}');
-    let caption=template.replace(/\{summary\}/g,summary).replace(/\{url\}/g,url).replace(/\{reportId\}/g,reportId);
+    const summary=String(milestone.summary),url=new URL(`/incidents/${reportId}`,this.config.APP_ORIGIN).toString(),template=String(settings.payload.captionTemplate||'{summary}');
+    let caption=template.replace(/\{summary\}/g,summary).replace(/\{url\}/g,url).replace(/\{reportId\}/g,reportId).replace(/\{jenis_sampah\}/g,report.category_name??'Belum dikategorikan').replace(/\{ringkasan_laporan\}/g,summary);
     if(milestone.outcome==='partial')caption='Penanganan sebagian. '+caption;
     caption+=(settings.payload.hashtags?'\n'+settings.payload.hashtags:'');if([...caption].length>2200||![...summary].length)continue;
-    const source={reportId,sourceRevision:report.revision,scanId:report.scan_id,status:report.status,occurredAt:new Date(milestone.observed_at).toISOString(),area:{cellId:report.h3_cell,label:`Area ${report.h3_cell}`},title:`Laporan ${report.category_name??'lingkungan'}`,categoryName:report.category_name??'Belum dikategorikan',mediaId:asset.media_id,publicSummary:summary};
+    const source={reportId,canonicalId:reportId,publicUrl:url,sourceRevision:report.revision,scanId:report.scan_id,status:report.status,occurredAt:new Date(milestone.observed_at).toISOString(),area:{cellId:report.h3_cell,label:`Area ${report.h3_cell}`},title:`Laporan ${report.category_name??'lingkungan'}`,categoryName:report.category_name??'Belum dikategorikan',mediaId:asset.media_id,publicSummary:summary};
     await tx`INSERT INTO instagram_publication_series(report_id,account_id,kind,milestone_key) VALUES(${reportId},${account.id},${milestone.kind},${milestone.id??'initial'}) ON CONFLICT DO NOTHING`;
     const [series]=await tx`SELECT * FROM instagram_publication_series WHERE report_id=${reportId} AND account_id=${account.id} AND kind=${milestone.kind} AND milestone_key=${milestone.id??'initial'} FOR UPDATE`;
     if(!series||series.generation>0)continue; // Automatic creation never resurrects a terminal series.

@@ -4,3 +4,26 @@ export const EMPTY_APPROVAL={status:'unapproved',contentRevision:null,sourceRevi
 export const INVALID_APPROVAL={...EMPTY_APPROVAL,status:'invalidated'};
 export const REQUIRED_SCOPES=['instagram_basic','instagram_content_publish','pages_show_list','pages_read_engagement'];
 export const DELETE_SCOPES=['instagram_basic','instagram_manage_contents'];
+
+
+export function incidentPublicUrl(origin:string,canonicalId:string):string {
+ return new URL(`/incidents/${encodeURIComponent(canonicalId)}`,origin).toString();
+}
+export function publicationCaption(caption:string,source:{occurredAt:string;area:{label:string};publicUrl:string}):string {
+ const marker='--- Status VERGO ---';
+ const body=caption.split(marker)[0]!.trim();
+ const date=new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeZone:'Asia/Jakarta'}).format(new Date(source.occurredAt));
+ return `${body}\n\n${marker}\nLaporan warga · bukti ditinjau moderator\nPengamatan: ${date} · ${source.area.label}\nKondisi dapat berubah. Status terbaru / koreksi:\n${source.publicUrl}`;
+}
+export function sourceUpdateState(post:{source_revision:number;published_at:unknown;status:string},report:{revision:number;status:string},sourceEligible:boolean,publicUrl:string){
+ const changed=report.revision!==post.source_revision;
+ return {currentSourceRevision:report.revision,currentStatus:report.status,changed,
+  followUpRequired:!!post.published_at&&!['cancelled','retracted'].includes(post.status)&&(changed||!sourceEligible),
+  reason:changed?'SOURCE_REVISION_CHANGED':!sourceEligible?'SOURCE_NOT_APPROVED':null,publicUrl};
+}
+
+export function publicationContextReady(post:Record<string,any>,origin:string):boolean {
+ const source=post.source_snapshot;
+ if(post.template_version!=='vergo-feed-status-v4'||!source?.reportId||!Number.isFinite(Date.parse(source.occurredAt))||!source.area?.label)return false;
+ return source.publicUrl===incidentPublicUrl(origin,source.reportId)&&post.caption===publicationCaption(post.caption,source);
+}

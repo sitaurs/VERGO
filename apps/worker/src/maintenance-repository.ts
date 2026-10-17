@@ -2,7 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import type { Sql, TransactionSql } from 'postgres';
 
 type Executor = Sql | TransactionSql;
-type SchemaReadiness = { extensions: boolean; leases: boolean; posterLedger: boolean; posterReservations: boolean; mfa: boolean };
+type SchemaReadiness = { extensions: boolean; leases: boolean; posterLedger: boolean; posterReservations: boolean; mfa: boolean; appeals:boolean };
 export interface DeletionJob { deletionId: string; userId: string | null; subjectHash: string; status: string }
 export interface DeletionClaim { outboxId: string; leaseOwner?: string }
 export interface DeletionOutboxEvent extends DeletionClaim { deletionId: string; subjectHash: string }
@@ -21,8 +21,9 @@ export class MaintenanceRepository {
       EXISTS(SELECT 1 FROM information_schema.columns WHERE table_name='outbox_events' AND column_name='lease_owner' AND table_schema=current_schema()) AS leases,
       to_regclass('instagram_rendition_objects') IS NOT NULL AS "posterLedger",
       EXISTS(SELECT 1 FROM information_schema.columns WHERE table_name='instagram_rendition_objects' AND column_name='reservation_expires_at' AND table_schema=current_schema()) AS "posterReservations",
-      to_regclass('mfa_factors') IS NOT NULL AS mfa`;
-    return row ?? { extensions: false, leases: false, posterLedger: false, posterReservations:false, mfa: false };
+      to_regclass('mfa_factors') IS NOT NULL AS mfa,
+      to_regclass('report_appeals') IS NOT NULL AS appeals`;
+    return row ?? { extensions: false, leases: false, posterLedger: false, posterReservations:false, mfa: false, appeals:false };
   }
 
   async claimDeletionEvent(): Promise<DeletionOutboxEvent | null> {
@@ -131,6 +132,8 @@ export class MaintenanceRepository {
       await tx`DELETE FROM incident_supports WHERE user_id=${userId}`;
       await tx`DELETE FROM incident_follows WHERE user_id=${userId}`;
       await tx`DELETE FROM notifications WHERE user_id=${userId}`;
+      if(schema.appeals) await tx`UPDATE report_appeals SET appellant_id=NULL,reason='Konten akun telah dihapus.',media_ids='{}',decision_reason=NULL,updated_at=now() WHERE appellant_id=${userId}`;
+      await tx`DELETE FROM idempotency_keys WHERE actor_scope=${`user:${userId}`}`;
       await tx`DELETE FROM report_notification_emails WHERE user_id=${userId}`;
       await tx`DELETE FROM report_assignments WHERE assignee_id=${userId}`;
       await tx`DELETE FROM instagram_oauth_states WHERE user_id=${userId}`;
@@ -205,6 +208,8 @@ export class MaintenanceRepository {
         if (pending) throw new Error('DELETION_OBJECTS_PENDING');
       }
       if (userId) {
+        if(schema.appeals) await tx`UPDATE report_appeals SET appellant_id=NULL,reason='Konten akun telah dihapus.',media_ids='{}',decision_reason=NULL,updated_at=now() WHERE appellant_id=${userId}`;
+        await tx`DELETE FROM idempotency_keys WHERE actor_scope=${`user:${userId}`}`;
         await tx`DELETE FROM report_notification_emails WHERE user_id=${userId}`;
         await tx`DELETE FROM report_assignments WHERE assignee_id=${userId}`;
         await tx`UPDATE media SET state='deleted',deleted_at=coalesce(deleted_at,now()),public_derivative_key=NULL,updated_at=now() WHERE owner_id=${userId} AND state<>'deleted'`;
@@ -217,8 +222,9 @@ export class MaintenanceRepository {
     });
   }
 
-  private unreferenced(db:Executor,extensions:boolean) {
+  private unreferenced(db:Executor,extensions:boolean,appeals=false) {
     const extended=extensions?db`AND NOT EXISTS(SELECT 1 FROM evidence_links el WHERE el.media_id=m.id)
+      ${appeals?db`AND NOT EXISTS(SELECT 1 FROM report_appeals ra WHERE m.id=ANY(ra.media_ids))`:db``}
       AND NOT EXISTS(SELECT 1 FROM measurement_media mm WHERE mm.media_id=m.id)
       AND NOT EXISTS(SELECT 1 FROM evidence_renditions er WHERE er.media_id=m.id)
       AND NOT EXISTS(SELECT 1 FROM instagram_posts p WHERE p.media_id=m.id AND p.status NOT IN ('cancelled','retracted'))`:db``;
@@ -237,9 +243,9 @@ export class MaintenanceRepository {
         SELECT ro.object_key,p.media_id FROM instagram_rendition_objects ro JOIN instagram_posts p ON p.id=ro.post_id
         WHERE ro.reservation_expires_at<now() AND ro.object_key IS DISTINCT FROM p.rendition_object_key
         ON CONFLICT(object_key) DO NOTHING`;
-      await tx`UPDATE media m SET expires_at=now()+interval '1 day',updated_at=now() WHERE m.state IN ('stored','pending') AND m.expires_at IS NULL AND m.created_at<now()-interval '1 day' AND ${this.unreferenced(tx,true)}`;
+      await tx`UPDATE media m SET expires_at=now()+interval '1 day',updated_at=now() WHERE m.state IN ('stored','pending') AND m.expires_at IS NULL AND m.created_at<now()-interval '1 day' AND ${this.unreferenced(tx,true,schema.appeals)}`;
       const rows=await tx<{id:string;object_key:string;public_derivative_key:string|null}[]>`SELECT m.id,m.object_key,m.public_derivative_key FROM media m
-        WHERE m.state IN ('stored','pending') AND m.expires_at IS NOT NULL AND m.expires_at<now() AND ${this.unreferenced(tx,true)} ORDER BY m.id FOR UPDATE SKIP LOCKED LIMIT 100`;
+        WHERE m.state IN ('stored','pending') AND m.expires_at IS NOT NULL AND m.expires_at<now() AND ${this.unreferenced(tx,true,schema.appeals)} ORDER BY m.id FOR UPDATE SKIP LOCKED LIMIT 100`;
       for (const m of rows) {
         await tx`INSERT INTO media_cleanup_tasks(object_key,media_id) VALUES(${m.object_key},${m.id}) ON CONFLICT(object_key) DO UPDATE SET status='pending',completed_at=NULL,revision=media_cleanup_tasks.revision+1`;
         if (m.public_derivative_key) await tx`INSERT INTO media_cleanup_tasks(object_key,media_id) VALUES(${m.public_derivative_key},${m.id}) ON CONFLICT(object_key) DO UPDATE SET status='pending',completed_at=NULL,revision=media_cleanup_tasks.revision+1`;

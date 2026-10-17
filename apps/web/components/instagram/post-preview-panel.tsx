@@ -5,6 +5,7 @@ import { Clock3, ExternalLink, FileText, ImageOff, RefreshCw, Search, X } from "
 import { useI18n } from "../../lib/i18n/provider";
 import { Notice } from "./publication-ui";
 import { shortId } from "./publication-utils";
+import PublicStatusLink from "./public-status-link";
 import PublicationHistory from "./publication-history";
 import type { InstagramPost, PublicationSource } from "./types";
 import ui from "./post-detail.module.css";
@@ -30,6 +31,7 @@ export default function PostPreviewPanel({ source, record, kind, url, altText, f
       <span>{t(kind === "resolution" ? "Hasil penanganan" : "Kejadian awal")} {t("· generasi")} {record?.generation ?? t("baru")}</span>
     </div>
     <button type="button" className={ui.sourceLink} disabled={!canOpenReport} onClick={onReport}>{t("Buka moderasi laporan")}<ExternalLink size={14} /></button>
+    <PublicStatusLink source={source} record={record} />
     <div className={ui.metadata}>
       <div><Clock3 size={21} aria-hidden="true" /><div><span>{t("Masuk draf")}</span><DetailDate value={record?.createdAt ?? null} empty="Belum tersimpan" /></div></div>
       <div><FileText size={21} aria-hidden="true" /><div><span>{t("Pernah terposting")}</span><DetailDate value={record?.publishedAt ?? null} /></div></div>

@@ -226,3 +226,5 @@
 .operation { display: grid; gap: 14px; padding: 20px; border: 1px solid #d8e8e4; border-radius: 14px; background: #f5faf8; color: #315348; font-size: 14px; line-height: 1.6; min-width: 0; overflow-wrap: anywhere; }
 .operation h3 { font-size: 18px; margin: 0; }
 .finalPhoto { display: block; width: 100%; height: auto; max-height: 580px; object-fit: contain; border-radius: 14px; background: #f4f8fa; }
+
+.followUp{color:#9b4d09!important;font-weight:700}

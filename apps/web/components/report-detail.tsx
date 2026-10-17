@@ -7,11 +7,14 @@ import { ApiError, getReport, mediaUrl, updateReport, type SapCategory, type Sap
 import { getConsents, setConsents } from "../lib/api/community";
 import type { R1 } from "../lib/api/r1";
 import styles from "./report-detail.module.css";
+import ReportAppealPanel from "./trust/report-appeal-panel";
+import ReportObservationSummary from "./trust/report-observation-summary";
+import ReportEvidenceEditor from "./trust/report-evidence-editor";
 import { useI18n } from "../lib/i18n/provider";
 
 
 const statusLabels: Record<SapReport["status"], string> = {
-  submitted: "Menunggu pemeriksaan", verified: "Terverifikasi", in_progress: "Dalam penanganan",
+  submitted: "Menunggu pemeriksaan", verified: "Terverifikasi moderator", in_progress: "Dalam penanganan",
   resolved: "Selesai", rejected: "Ditolak", duplicate: "Duplikat",
 };
 const severityLabels: Record<SapReport["reportedSeverity"], string> = { small: "Kecil", medium: "Sedang", large: "Besar" };
@@ -168,6 +171,8 @@ export default function ReportDetail({ id, categories, onClose, onUpdated }: { i
         <div className={styles.status}>{t(statusLabels[report.status])} <small>{t("Revisi")}{" "}{report.revision}</small></div>
         {report.publicSummary && ["verified", "in_progress", "resolved"].includes(report.status) && <a className={styles.publicLink} href={`/incidents/${encodeURIComponent(report.id)}`}>{t("Buka kronologi publik dan kirim pembaruan warga")} ↗</a>}
         <div className={styles.facts}><span><CalendarDays size={18} />{new Date(report.occurredAt).toLocaleString(intlLocale)}</span><span><MapPin size={18} />{report.location.latitude.toFixed(5)}, {report.location.longitude.toFixed(5)}</span><span><FileText size={18} />{`${t(categories.find(item => item.id === report.categoryId)?.name || "Tanpa kategori")} ${t("· Tumpukan")} ${t(severityLabels[report.reportedSeverity])}`}</span></div>
+        <ReportObservationSummary report={report}/>
+        {report.status === "submitted" && <ReportEvidenceEditor report={report} onSaved={value=>{setReport(value);onUpdated();}}/>}
         {photos.length > 0 && <div className={styles.photos}>{photos.map((photo, index) => <figure key={photo.mediaId} className={styles.photoConsent}>
           <img src={photo.url} alt={t("Bukti laporan {0}", { "0": index + 1 })} onLoad={() => photoLoaded(photo.mediaId)} onError={() => void refreshPhotoUrl(photo.mediaId)} />
           {photo.refreshingUrl && <small role="status">{t("Memuat ulang foto…")}</small>}
@@ -188,6 +193,7 @@ export default function ReportDetail({ id, categories, onClose, onUpdated }: { i
           </figcaption>
         </figure>)}</div>}
         <div className={styles.description}><div><h3>{t("Keterangan")}</h3>{report.status === "submitted" && !editing && <button type="button" onClick={() => setEditing(true)}>{t("Ubah")}</button>}</div>{editing ? <><textarea value={description} maxLength={2000} onChange={event => setDescription(event.target.value)} aria-label={t("Ubah keterangan laporan")} /><div className={styles.actions}><button type="button" onClick={() => { setEditing(false); setDescription(report.description); }}>{t("Batal")}</button><button type="button" onClick={save} disabled={busy}>{busy ? t("Menyimpan…") : t("Simpan perubahan")}</button></div></> : <p>{report.description}</p>}</div>
+        <ReportAppealPanel report={report}/>
         <div className={styles.timeline}><h3>{t("Riwayat status")}</h3>{report.timeline.map(event => <div key={event.id}><strong>{t(statusLabels[event.status])}</strong><time>{new Date(event.createdAt).toLocaleString(intlLocale)}</time>{event.note && <p>{event.note}</p>}</div>)}</div>
       </>}
     </section>

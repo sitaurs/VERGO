@@ -755,23 +755,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/incidents": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** IncidentsController.list */
-        get: operations["r1IncidentsControllerList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/public/incidents/{id}": {
         parameters: {
             query?: never;
@@ -935,23 +918,6 @@ export interface paths {
         };
         /** EvidenceController.updateUrl */
         get: operations["r1EvidenceControllerUpdateUrl"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/activities/{id}/source-photo/url": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** ActivitiesController.sourcePhoto */
-        get: operations["r1ActivitiesControllerSourcePhoto"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2006,23 +1972,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/admin/instagram/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** PublicationsController.reportSources */
-        get: operations["r1PublicationsControllerReportSources"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/admin/users": {
         parameters: {
             query?: never;
@@ -2085,6 +2034,23 @@ export interface paths {
         /** setReportAssignment */
         put: operations["setReportAssignment"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reports/{id}/evidence-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** requestReporterEvidence */
+        post: operations["requestReporterEvidence"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2245,7 +2211,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/admin/reports/{id}/evidence-requests": {
+    "/public/incidents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** IncidentsController.list */
+        get: operations["r1IncidentsControllerList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/activities/{id}/source-photo/url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ActivitiesController.sourcePhoto */
+        get: operations["r1ActivitiesControllerSourcePhoto"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/instagram/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** PublicationsController.reportSources */
+        get: operations["r1PublicationsControllerReportSources"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/trust-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getPublicTrustPolicy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/trust-settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getTrustSettings"];
+        put: operations["saveTrustSettings"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reports/{id}/appeals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listMyReportAppeals"];
+        put?: never;
+        post: operations["createReportAppeal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/report-appeals/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2254,8 +2319,55 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** requestReporterEvidence */
-        post: operations["requestReporterEvidence"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["reviseReportAppeal"];
+        trace?: never;
+    };
+    "/report-appeals/{id}/media/{mediaId}/url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getPrivateAppealEvidenceUrl"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/report-appeals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listReportAppeals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/report-appeals/{id}/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["decideReportAppeal"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2453,6 +2565,11 @@ export interface components {
             predictions: components["schemas"]["Prediction"][];
             errorCode: ("ML_UNAVAILABLE" | "ML_TIMEOUT" | "ML_INVALID_RESPONSE" | "MEDIA_INVALID") | null;
             pointsAwarded: number;
+            /**
+             * @description Award status backed by the scan and ledger. Older responses may omit this field; unknown means the withheld reason cannot be established.
+             * @enum {string}
+             */
+            pointsReason?: "awarded" | "daily_limit" | "duplicate_image" | "not_classified" | "pending" | "failed" | "unknown";
             /** Format: date-time */
             createdAt: string;
             completedAt: string | null;
@@ -2504,7 +2621,14 @@ export interface components {
             reportedSeverity: "small" | "medium" | "large";
             categoryId?: ("battery" | "biological" | "cardboard" | "clothes" | "glass" | "metal" | "paper" | "plastic" | "shoes" | "trash") | null;
             scanId?: string | null;
-        };
+            publicationChannels?: ("web" | "instagram")[];
+            /** @enum {string} */
+            observationSource: "firsthand" | "secondhand";
+            inference?: string | null;
+            sourceReference?: string | null;
+            contextFlags?: ("burning" | "near_waterway" | "sharp_objects")[];
+            photoUnavailableReason?: "unsafe" | null;
+        } & (unknown & unknown & unknown);
         ReportUpdateInput: {
             mediaIds?: string[];
             description?: string;
@@ -2514,7 +2638,13 @@ export interface components {
             /** @enum {string} */
             reportedSeverity?: "small" | "medium" | "large";
             categoryId?: ("battery" | "biological" | "cardboard" | "clothes" | "glass" | "metal" | "paper" | "plastic" | "shoes" | "trash") | null;
-        };
+            /** @enum {string} */
+            observationSource?: "firsthand" | "secondhand";
+            inference?: string | null;
+            sourceReference?: string | null;
+            contextFlags?: ("burning" | "near_waterway" | "sharp_objects")[];
+            photoUnavailableReason?: "unsafe" | null;
+        } & (unknown & unknown);
         ReportEvent: {
             /** Format: uuid */
             id: string;
@@ -2548,6 +2678,11 @@ export interface components {
             publishedMediaIds: string[];
             duplicateOfId: string | null;
             timeline: components["schemas"]["ReportEvent"][];
+            observationSource: ("firsthand" | "secondhand") | null;
+            inference: string | null;
+            sourceReference: string | null;
+            contextFlags: ("burning" | "near_waterway" | "sharp_objects")[];
+            photoUnavailableReason: "unsafe" | null;
         };
         PublicReport: {
             /** Format: uuid */
@@ -3109,31 +3244,6 @@ export interface components {
             observedAt: string | null;
             caption: string;
         };
-        PublicIncidentListItem: {
-            /** Format: uuid */
-            id: string;
-            title: string;
-            summary: string;
-            /** @enum {string} */
-            status: "verified" | "in_progress" | "resolved";
-            categoryId: components["schemas"]["CategoryId"] | null;
-            area: {
-                cellId: string;
-                label: string;
-            };
-            /** Format: date-time */
-            occurredAt: string;
-            lastObservedAt: string | null;
-            /** Format: date-time */
-            updatedAt: string;
-            evidence: components["schemas"]["PublicEvidence"][];
-            supportCount: number;
-            canonicalPath: string;
-        };
-        PublicIncidentPage: {
-            items: components["schemas"]["PublicIncidentListItem"][];
-            nextCursor: string | null;
-        };
         PublicIncident: {
             /** @constant */
             kind: "incident";
@@ -3159,6 +3269,17 @@ export interface components {
             supportClosed: boolean;
             relatedActivityIds: string[];
             canonicalPath: string;
+            latestCorrection: {
+                summary: string;
+                /** Format: date-time */
+                createdAt: string;
+            } | null;
+            handling: {
+                /** @enum {string} */
+                progress: "assigned" | "accepted" | "working" | "done";
+                /** Format: date-time */
+                updatedAt: string;
+            } | null;
         };
         CanonicalRedirect: {
             /** @constant */
@@ -3168,6 +3289,7 @@ export interface components {
             canonicalPath: string;
         };
         PublicIncidentResult: components["schemas"]["PublicIncident"] | components["schemas"]["CanonicalRedirect"];
+        RegistrationClosedReason: "deadline_passed" | "manually_closed" | "activity_not_open" | "source_unavailable" | null;
         PublicActivity: {
             /** @constant */
             kind: "activity";
@@ -3198,12 +3320,12 @@ export interface components {
             acceptedCount: number;
             availableSeats: number;
             registrationOpen: boolean;
+            registrationClosedReason: components["schemas"]["RegistrationClosedReason"];
             equipment: string[];
             accessibilityNotes: string;
             wasteHandoverPlan: string;
             resultOutcome: "partial" | "complete" | null;
             canonicalPath: string;
-            registrationClosedReason: components["schemas"]["RegistrationClosedReason"];
         };
         ActivityNotice: {
             /** @constant */
@@ -3473,8 +3595,11 @@ export interface components {
             revision: number;
             status: components["schemas"]["ActivityStatus"];
             coordinatorAcceptedAt: string | null;
+            coordinatorDisplayName?: string | null;
             acceptedCount: number;
             availableSeats: number;
+            registrationOpen: boolean;
+            registrationClosedReason: components["schemas"]["RegistrationClosedReason"];
             holdReason: string | null;
             priorState: components["schemas"]["ActivityStatus"] | null;
             /** Format: date-time */
@@ -3491,9 +3616,6 @@ export interface components {
                 resume: components["schemas"]["ActionPermission"];
                 requestResult: components["schemas"]["ActionPermission"];
             };
-            registrationOpen: boolean;
-            registrationClosedReason: components["schemas"]["RegistrationClosedReason"];
-            coordinatorDisplayName?: string | null;
         };
         ManagedActivityPage: {
             items: components["schemas"]["ManagedActivity"][];
@@ -3640,7 +3762,6 @@ export interface components {
             instagramAllowed: boolean;
             latestReview: components["schemas"]["ReviewRun"] | null;
             approvedResolutionEvidence: components["schemas"]["ApprovedResolutionEvidence"][];
-            /** @description True when evidence used by the current resolved decision is revoked, missing, or no longer eligible; a moderator must review the resolution. */
             resolutionReviewRequired: boolean;
             publicationAssets: {
                 /** Format: uuid */
@@ -3664,6 +3785,12 @@ export interface components {
                 outcome: "partial" | "complete";
                 summary: string;
             }[];
+            actions: {
+                moderate: components["schemas"]["ActionPermission"];
+                withdraw: components["schemas"]["ActionPermission"];
+                restore: components["schemas"]["ActionPermission"];
+                createInstagramDraft: components["schemas"]["ActionPermission"];
+            };
             /** @description Existing series only. If a kind/milestone pair is absent, its first generation can be created when the overall action is allowed. */
             instagramPublicationSeries: {
                 /** @enum {string} */
@@ -3678,12 +3805,6 @@ export interface components {
                 canCreate: boolean;
                 reasonCode: "INVALID_TRANSITION" | null;
             }[];
-            actions: {
-                moderate: components["schemas"]["ActionPermission"];
-                withdraw: components["schemas"]["ActionPermission"];
-                restore: components["schemas"]["ActionPermission"];
-                createInstagramDraft: components["schemas"]["ActionPermission"];
-            };
         };
         CommunityUpdateDecision: {
             /** @enum {string} */
@@ -3896,6 +4017,10 @@ export interface components {
                 /** Format: uuid */
                 mediaId: string;
                 publicSummary: string;
+                /** Format: uuid */
+                canonicalId: string;
+                /** Format: uri */
+                publicUrl: string;
             };
             status: components["schemas"]["PublicationStatus"];
             caption: string;
@@ -3917,6 +4042,15 @@ export interface components {
                 publish: components["schemas"]["ActionPermission"];
                 cancel: components["schemas"]["ActionPermission"];
                 retract: components["schemas"]["ActionPermission"];
+            };
+            sourceUpdate: {
+                currentSourceRevision: number;
+                currentStatus: components["schemas"]["ReportStatus"];
+                changed: boolean;
+                followUpRequired: boolean;
+                reason: ("SOURCE_REVISION_CHANGED" | "SOURCE_NOT_APPROVED") | null;
+                /** Format: uri */
+                publicUrl: string;
             };
         };
         InstagramOverview: {
@@ -4002,10 +4136,6 @@ export interface components {
             /** @enum {string} */
             scope: "all" | "instagram";
             operations: components["schemas"]["PublicationOperation"][];
-        };
-        PublicIncidentPageR1Response: {
-            data: components["schemas"]["PublicIncidentPage"];
-            meta: components["schemas"]["Meta"];
         };
         PublicIncidentResultR1Response: {
             data: components["schemas"]["PublicIncidentResult"];
@@ -4208,6 +4338,35 @@ export interface components {
             data: components["schemas"]["HealthLivenessR1"];
             meta: components["schemas"]["Meta"];
         };
+        PublicIncidentListItem: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            summary: string;
+            /** @enum {string} */
+            status: "verified" | "in_progress" | "resolved";
+            categoryId: components["schemas"]["CategoryId"] | null;
+            area: {
+                cellId: string;
+                label: string;
+            };
+            /** Format: date-time */
+            occurredAt: string;
+            lastObservedAt: string | null;
+            /** Format: date-time */
+            updatedAt: string;
+            evidence: components["schemas"]["PublicEvidence"][];
+            supportCount: number;
+            canonicalPath: string;
+        };
+        PublicIncidentPage: {
+            items: components["schemas"]["PublicIncidentListItem"][];
+            nextCursor: string | null;
+        };
+        PublicIncidentPageR1Response: {
+            data: components["schemas"]["PublicIncidentPage"];
+            meta: components["schemas"]["Meta"];
+        };
         InstagramReportSource: {
             /** Format: uuid */
             reportId: string;
@@ -4221,6 +4380,10 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
             mediaIds: string[];
+            /** Format: uuid */
+            canonicalId: string;
+            /** Format: uri */
+            publicUrl: string;
         };
         InstagramReportSourcePage: {
             items: components["schemas"]["InstagramReportSource"][];
@@ -4230,7 +4393,96 @@ export interface components {
             data: components["schemas"]["InstagramReportSourcePage"];
             meta: components["schemas"]["Meta"];
         };
-        RegistrationClosedReason: "deadline_passed" | "manually_closed" | "activity_not_open" | "source_unavailable" | null;
+        TrustPolicyInput: {
+            operatorLabel: string | null;
+            contactUrl: string | null;
+            reviewNotice: string | null;
+            retentionNotice: string | null;
+        };
+        TrustPolicy: {
+            operatorLabel: string | null;
+            contactUrl: string | null;
+            reviewNotice: string | null;
+            retentionNotice: string | null;
+            revision: number;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ReportAppealInput: {
+            reason: string;
+            mediaIds?: string[];
+        };
+        ReportAppealDecisionInput: {
+            /** @enum {string} */
+            action: "accept_review" | "reject" | "request_evidence";
+            reason: string;
+            reportRevision: number;
+        };
+        ReportAppeal: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            reportId: string;
+            sourceRevision: number;
+            reportRevision: number;
+            reportStatus: components["schemas"]["ReportStatus"];
+            reason: string;
+            mediaIds: string[];
+            /** @enum {string} */
+            status: "pending" | "needs_evidence" | "accepted" | "rejected";
+            revision: number;
+            decisionReason: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ReportAppealPage: {
+            items: components["schemas"]["ReportAppeal"][];
+            nextCursor: string | null;
+        };
+        getPublicTrustPolicyResponse: {
+            data: components["schemas"]["TrustPolicy"];
+            meta: components["schemas"]["Meta"];
+        };
+        getTrustSettingsResponse: {
+            data: components["schemas"]["TrustPolicy"];
+            meta: components["schemas"]["Meta"];
+        };
+        saveTrustSettingsResponse: {
+            data: components["schemas"]["TrustPolicy"];
+            meta: components["schemas"]["Meta"];
+        };
+        listMyReportAppealsResponse: {
+            data: components["schemas"]["ReportAppealPage"];
+            meta: components["schemas"]["Meta"];
+        };
+        createReportAppealResponse: {
+            data: components["schemas"]["ReportAppeal"];
+            meta: components["schemas"]["Meta"];
+        };
+        reviseReportAppealResponse: {
+            data: components["schemas"]["ReportAppeal"];
+            meta: components["schemas"]["Meta"];
+        };
+        PrivateEvidenceUrl: {
+            /** Format: uri */
+            url: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        getPrivateAppealEvidenceUrlResponse: {
+            data: components["schemas"]["PrivateEvidenceUrl"];
+            meta: components["schemas"]["Meta"];
+        };
+        listReportAppealsResponse: {
+            data: components["schemas"]["ReportAppealPage"];
+            meta: components["schemas"]["Meta"];
+        };
+        decideReportAppealResponse: {
+            data: components["schemas"]["ReportAppeal"];
+            meta: components["schemas"]["Meta"];
+        };
     };
     responses: never;
     parameters: never;
@@ -10157,147 +10409,6 @@ export interface operations {
             };
         };
     };
-    r1IncidentsControllerList: {
-        parameters: {
-            query?: {
-                limit?: number;
-                /** @description Opaque signed cursor bound to filters. Preserve verbatim; null nextCursor ends pagination. */
-                cursor?: string;
-                /** @description Searches the public summary, area cell, or incident id. */
-                search?: string;
-                status?: "verified" | "in_progress" | "resolved";
-                categoryId?: components["schemas"]["CategoryId"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublicIncidentPageR1Response"];
-                };
-            };
-            /** @description Invalid body, header, query or cursor */
-            400: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Active session required */
-            401: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Role, relationship, email verification or CSRF denied */
-            403: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Missing resource or inaccessible private resource */
-            404: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Revision, idempotency, transition or source precondition conflict */
-            409: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Previously public incident withdrawn; no historic content returned */
-            410: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Evidence, consent, rendition or measurement invalid */
-            422: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Rate limited; respect Retry-After */
-            429: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    "Retry-After"?: number;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Unexpected server error */
-            500: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Feature disabled or dependency unavailable */
-            503: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-        };
-    };
     r1IncidentsControllerGet: {
         parameters: {
             query?: never;
@@ -11826,108 +11937,6 @@ export interface operations {
             };
         };
     };
-    r1ActivitiesControllerSourcePhoto: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Short-lived signed URL for source evidence, available only to accepted members of an eligible public activity */
-            200: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MediaUrlR1Response"];
-                };
-            };
-            /** @description Invalid body, header, query or cursor */
-            400: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Active session required */
-            401: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Role, relationship, email verification or CSRF denied */
-            403: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Missing resource or inaccessible private resource */
-            404: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Rate limited; respect Retry-After */
-            429: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    "Retry-After"?: number;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Unexpected server error */
-            500: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Feature disabled or dependency unavailable */
-            503: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-        };
-    };
     r1ActivitiesControllerMedia: {
         parameters: {
             query?: never;
@@ -12640,6 +12649,7 @@ export interface operations {
                 /** @description Opaque signed cursor bound to filters. Preserve verbatim; null nextCursor ends pagination. */
                 cursor?: string;
                 status?: "submitted" | "needs_evidence" | "approved" | "rejected";
+                reportId?: string;
             };
             header?: never;
             path?: never;
@@ -21490,6 +21500,7 @@ export interface operations {
             200: {
                 headers: {
                     "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
                     [name: string]: unknown;
                 };
                 content: {
@@ -21511,6 +21522,7 @@ export interface operations {
             200: {
                 headers: {
                     "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
                     [name: string]: unknown;
                 };
                 content: {
@@ -21521,149 +21533,11 @@ export interface operations {
             503: {
                 headers: {
                     "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["HealthReadinessR1Response"];
-                };
-            };
-        };
-    };
-    r1PublicationsControllerReportSources: {
-        parameters: {
-            query?: {
-                limit?: number;
-                /** @description Opaque signed cursor bound to normalized search. Preserve verbatim; null nextCursor ends pagination. */
-                cursor?: string;
-                /** @description Search public summary, category, report ID, or report date. */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["InstagramReportSourcePageR1Response"];
-                };
-            };
-            /** @description Invalid body, header, query or cursor */
-            400: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Active session required */
-            401: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Role, relationship, email verification or CSRF denied */
-            403: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Missing resource or inaccessible private resource */
-            404: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Revision, idempotency, transition or source precondition conflict */
-            409: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Previously public incident withdrawn; no historic content returned */
-            410: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Evidence, consent, rendition or measurement invalid */
-            422: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Rate limited; respect Retry-After */
-            429: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    "Retry-After"?: number;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Unexpected server error */
-            500: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
-                };
-            };
-            /** @description Feature disabled or dependency unavailable */
-            503: {
-                headers: {
-                    "X-Contract-Version": components["headers"]["ContractVersion"];
-                    "Cache-Control"?: "no-store";
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
         };
@@ -21788,6 +21662,40 @@ export interface operations {
                     assigneeId: string | null;
                     dueAt: string | null;
                     note: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    requestReporterEvidence: {
+        parameters: {
+            query?: never;
+            header?: {
+                "idempotency-key"?: string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    message: string;
                 };
             };
         };
@@ -22097,22 +22005,585 @@ export interface operations {
             };
         };
     };
-    requestReporterEvidence: {
+    r1IncidentsControllerList: {
+        parameters: {
+            query?: {
+                limit?: number;
+                /** @description Opaque signed cursor bound to filters. Preserve verbatim; null nextCursor ends pagination. */
+                cursor?: string;
+                /** @description Searches the public summary, area cell, or incident id. */
+                search?: string;
+                status?: "verified" | "in_progress" | "resolved";
+                categoryId?: components["schemas"]["CategoryId"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicIncidentPageR1Response"];
+                };
+            };
+            /** @description Invalid body, header, query or cursor */
+            400: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Active session required */
+            401: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Role, relationship, email verification or CSRF denied */
+            403: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Missing resource or inaccessible private resource */
+            404: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Revision, idempotency, transition or source precondition conflict */
+            409: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Previously public incident withdrawn; no historic content returned */
+            410: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Evidence, consent, rendition or measurement invalid */
+            422: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Rate limited; respect Retry-After */
+            429: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unexpected server error */
+            500: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Feature disabled or dependency unavailable */
+            503: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    r1ActivitiesControllerSourcePhoto: {
         parameters: {
             query?: never;
-            header?: {
-                "idempotency-key"?: string;
-            };
+            header?: never;
             path: {
                 id: string;
             };
             cookie?: never;
         };
+        requestBody?: never;
+        responses: {
+            /** @description Short-lived signed URL for source evidence, available only to accepted members of an eligible public activity */
+            200: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaUrlR1Response"];
+                };
+            };
+            /** @description Invalid body, header, query or cursor */
+            400: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Active session required */
+            401: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Role, relationship, email verification or CSRF denied */
+            403: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Missing resource or inaccessible private resource */
+            404: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Rate limited; respect Retry-After */
+            429: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unexpected server error */
+            500: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Feature disabled or dependency unavailable */
+            503: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    r1PublicationsControllerReportSources: {
+        parameters: {
+            query?: {
+                limit?: number;
+                /** @description Opaque signed cursor bound to normalized search. Preserve verbatim; null nextCursor ends pagination. */
+                cursor?: string;
+                /** @description Search public summary, category, report ID, or report date. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InstagramReportSourcePageR1Response"];
+                };
+            };
+            /** @description Invalid body, header, query or cursor */
+            400: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Active session required */
+            401: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Role, relationship, email verification or CSRF denied */
+            403: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Missing resource or inaccessible private resource */
+            404: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Revision, idempotency, transition or source precondition conflict */
+            409: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Previously public incident withdrawn; no historic content returned */
+            410: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Evidence, consent, rendition or measurement invalid */
+            422: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Rate limited; respect Retry-After */
+            429: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unexpected server error */
+            500: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Feature disabled or dependency unavailable */
+            503: {
+                headers: {
+                    "X-Contract-Version": components["headers"]["ContractVersion"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    getPublicTrustPolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["getPublicTrustPolicyResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    getTrustSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["getTrustSettingsResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    saveTrustSettings: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": string;
+                "idempotency-key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                "application/json": {
-                    message: string;
-                };
+                "application/json": components["schemas"]["TrustPolicyInput"];
             };
         };
         responses: {
@@ -22122,11 +22593,667 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        data: {
-                            [key: string]: unknown;
-                        };
-                    };
+                    "application/json": components["schemas"]["saveTrustSettingsResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    listMyReportAppeals: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["listMyReportAppealsResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    createReportAppeal: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": string;
+                "idempotency-key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportAppealInput"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["createReportAppealResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    reviseReportAppeal: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": string;
+                "idempotency-key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportAppealInput"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["reviseReportAppealResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    getPrivateAppealEvidenceUrl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["getPrivateAppealEvidenceUrlResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    listReportAppeals: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                status?: "pending" | "needs_evidence" | "accepted" | "rejected";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["listReportAppealsResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    decideReportAppeal: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": string;
+                "idempotency-key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportAppealDecisionInput"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["decideReportAppealResponse"];
+                };
+            };
+            /** @description Domain error */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Domain error */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
         };

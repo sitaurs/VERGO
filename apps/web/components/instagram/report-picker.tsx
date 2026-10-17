@@ -227,10 +227,12 @@ function EligibleSource({
           : null,
       source: {
         reportId: report.reportId,
+        canonicalId: report.canonicalId,
+        publicUrl: report.publicUrl,
         sourceRevision: lifecycle.sourceRevision,
         scanId: report.scanId,
         status: incident.status,
-        occurredAt: incident.occurredAt,
+        occurredAt: kind === "resolution" ? selected!.observedAt : incident.occurredAt,
         area: incident.area,
         title:
           kind === "resolution"

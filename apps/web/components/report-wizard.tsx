@@ -10,6 +10,7 @@ import ReportMap, { type ReportPoint } from "./report-map";
 import { createReport, getReportCsrf, uploadReportPhoto } from "./report-client";
 import type { ReportInput } from "../lib/api/client";
 import styles from "./report-wizard.module.css";
+import PublicTrustNotice from "./trust/public-trust-notice";
 import { useI18n } from "../lib/i18n/provider";
 
 
@@ -53,6 +54,11 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
   const [previews, setPreviews] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState<NonNullable<ReportInput["categoryId"]> | "">("");
   const [description, setDescription] = useState("");
+  const [observationSource, setObservationSource] = useState<"firsthand" | "secondhand" | "">("");
+  const [inference, setInference] = useState("");
+  const [sourceReference, setSourceReference] = useState("");
+  const [contextFlags, setContextFlags] = useState<Array<"burning" | "near_waterway" | "sharp_objects">>([]);
+  const [photoUnsafe, setPhotoUnsafe] = useState(false);
   const [severity, setSeverity] = useState<Severity | "">("");
   const [point, setPoint] = useState<ReportPoint | null>(null);
   const [pointConfirmed, setPointConfirmed] = useState(false);
@@ -100,11 +106,12 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
       setError("Maksimal 3 foto untuk satu laporan.");
       return;
     }
-    if (valid.length) { setPhotos(current => [...current, ...valid]); invalidateSubmission(true); }
+    if (valid.length) { setPhotos(current => [...current, ...valid]); setPhotoUnsafe(false); invalidateSubmission(true); }
   }
 
   function goToLocation() {
-    if (!photos.length) return setError("Tambahkan setidaknya satu foto bukti untuk melanjutkan.");
+    if (!observationSource) return setError("Pilih apakah Anda melihat langsung atau menerima informasi pihak lain.");
+    if (!photos.length && !photoUnsafe) return setError("Tambahkan foto atau pilih alasan tidak aman mengambil foto.");
     if (description.trim().length < 20 || description.trim().length > 2000) return setError("Keterangan harus berisi 20–2000 karakter.");
     if (!severity) return setError("Pilih tingkat tumpukan berdasarkan kondisi yang Anda lihat.");
     setError("");
@@ -137,7 +144,7 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
   }
 
   async function submit() {
-    if (busy || !point || !severity) return;
+    if (busy || !point || !severity || !observationSource) return;
     setBusy(true);
     setError("");
     try {
@@ -153,11 +160,16 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
       const result = await createReport({
         mediaIds: mediaIdsRef.current,
         description: description.trim(),
+        observationSource,
+        inference: inference.trim() || null,
+        sourceReference: observationSource === "secondhand" ? sourceReference.trim() || null : null,
+        contextFlags,
+        photoUnavailableReason: photos.length ? null : "unsafe",
         location: point,
         occurredAt,
         reportedSeverity: severity,
         categoryId: categoryId || null,
-        publicationChannels,
+        publicationChannels: photos.length ? publicationChannels : [],
       }, csrfToken, idempotencyRef.current);
       if (!result.id || result.status !== "submitted") throw new Error("Server belum mengonfirmasi status laporan. Coba buka Laporan saya sebelum mengirim ulang.");
       onSubmitted({
@@ -193,6 +205,7 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
     </ol>
 
     {step === 1 && <>
+      <div className={styles.infoBar}><ShieldCheck size={22}/><span>{t("Ambil foto dari jarak aman. Jangan menyentuh atau mendekati sampah berbahaya. Wajah atau selfie tidak diperlukan; foto asli hanya untuk pemeriksaan.")}</span></div>
       <section className={`${styles.card} ${styles.evidenceCard}`} aria-label={t("Bukti foto dan keterangan")}>
         <div className={styles.photosColumn}>
           <h2>{t("Bukti foto")}</h2>
@@ -204,13 +217,19 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
             {photos.length < 3 && <button className={styles.addPhoto} type="button" onClick={() => fileRef.current?.click()}><Camera size={35} strokeWidth={1.8} /><strong>{t("Tambah foto")}</strong></button>}
           </div>
           <input ref={fileRef} className={styles.srOnly} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={addPhotos} aria-label={t("Pilih hingga tiga foto bukti")} />
+          {!photos.length && <label className={styles.unsafeChoice}><input type="checkbox" checked={photoUnsafe} onChange={event=>{setPhotoUnsafe(event.target.checked);setPublicationChannels([]);invalidateSubmission();}}/><span>{t("Tidak aman mengambil foto")}</span></label>}
+          {photoUnsafe && !photos.length && <p className={styles.privateNotice}>{t("Informasi dapat dikirim tanpa foto. Tetap privat dan belum dapat diverifikasi sampai bukti dilengkapi.")}</p>}
           <p className={styles.photoCaption}>{photos.length} {" "}{t("dari 3 foto")}{" "}<span>{t("· JPG, PNG, atau WebP · maks. 10 MB")}</span></p>
         </div>
         <div className={styles.detailsColumn}>
+          <label className={styles.field}><span>{t("Sumber pengamatan")} <small>{t("Wajib")}</small></span><span className={styles.selectShell}><select value={observationSource} onChange={event=>{setObservationSource(event.target.value as typeof observationSource);if(event.target.value!=="secondhand")setSourceReference("");invalidateSubmission();}}><option value="">{t("Pilih sumber pengamatan")}</option><option value="firsthand">{t("Saya melihat langsung")}</option><option value="secondhand">{t("Informasi dari pihak lain")}</option></select></span></label>
+          {observationSource === "secondhand" && <label className={styles.field}><span>{t("Rujukan informasi (opsional)")}</span><textarea value={sourceReference} maxLength={1000} onChange={event=>{setSourceReference(event.target.value);invalidateSubmission();}} placeholder={t("Jelaskan dari mana dan kapan informasi diperoleh. Jangan membagikan identitas pribadi tanpa izin.")}/></label>}
           <label className={styles.field}><span>{t("Jenis sampah")}{" "}<small>{t("Opsional")}</small></span><span className={styles.selectShell}><Recycle size={24} /><select value={categoryId} onChange={event => { setCategoryId(event.target.value as typeof categoryId); invalidateSubmission(); }}><option value="">{t("Pilih jenis sampah")}</option>{categoryOptions.map(({ id, label }) => <option key={id} value={id}>{t(label)}</option>)}</select></span></label>
           <fieldset className={styles.severityField}><legend>{t("Tingkat tumpukan")}{" "}<span>{t("Wajib")}</span></legend><div className={styles.severityOptions}>{severities.map(item => <label key={item.id} className={severity === item.id ? styles.selectedSeverity : ""}><input type="radio" name="severity" value={item.id} checked={severity === item.id} onChange={() => { setSeverity(item.id); invalidateSubmission(); }} /><strong>{t(item.label)}</strong><small>{t(item.detail)}</small></label>)}</div></fieldset>
-          <label className={styles.field}><span>{t("Keterangan")}{" "}<small>{t("Minimal 20 karakter")}</small></span><textarea value={description} onChange={event => { setDescription(event.target.value); invalidateSubmission(); }} maxLength={2000} placeholder={t("Ceritakan kondisi temuan, jenis sampah, dan hal yang perlu diperhatikan…")} rows={4} /></label>
+          <label className={styles.field}><span>{t("Kondisi yang terlihat")}{" "}<small>{t("Minimal 20 karakter")}</small></span><textarea value={description} onChange={event => { setDescription(event.target.value); invalidateSubmission(); }} maxLength={2000} placeholder={t("Tuliskan yang terlihat: benda, posisi tumpukan, dan kondisi sekitarnya. Hindari menuduh pihak tertentu.")} rows={4} /></label>
           <p className={styles.counter}>{description.trim().length} {" "}{t("/ 2000 karakter")}</p>
+          <label className={styles.field}><span>{t("Dugaan atau catatan tambahan (opsional)")}</span><textarea value={inference} maxLength={1000} rows={3} onChange={event=>{setInference(event.target.value);invalidateSubmission();}} placeholder={t("Pisahkan dugaan dari kondisi yang benar-benar terlihat.")}/></label>
+          <fieldset className={styles.contextField}><legend>{t("Konteks yang terlihat (opsional)")}</legend>{([['burning','Terlihat pembakaran'],['near_waterway','Dekat saluran air'],['sharp_objects','Terlihat benda tajam']] as const).map(([flag,label])=><label key={flag}><input type="checkbox" checked={contextFlags.includes(flag)} onChange={event=>{setContextFlags(current=>event.target.checked?[...current,flag]:current.filter(value=>value!==flag));invalidateSubmission();}}/>{t(label)}</label>)}<small>{t("Pilihan ini adalah keterangan pelapor untuk diperiksa, bukan penilaian medis atau deteksi AI.")}</small></fieldset>
         </div>
       </section>
       <div className={styles.infoBar}><Info size={22} /><span>{t("Lokasi rinci dan waktu kejadian diisi pada langkah berikutnya.")}</span></div>
@@ -220,25 +239,26 @@ export default function ReportWizard({ onClose, onSubmitted, categories }: Props
     {step === 2 && <>
       <section className={`${styles.card} ${styles.locationCard}`} aria-label={t("Lokasi dan waktu temuan")}>
         <div className={styles.mapColumn}><div className={styles.sectionHeading}><h2>{t("Titik lokasi")}</h2><button type="button" onClick={useCurrentLocation} disabled={locating}><LocateFixed size={18} />{locating ? t("Mencari…") : t("Lokasi saya")}</button></div><div className={styles.mapFrame}><ReportMap point={point} onPick={picked => { setPoint(picked); setPointConfirmed(false); invalidateSubmission(); }} /></div><div className={styles.mapBottom}><span><MapPin size={16} />{point ? `${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}` : t("Klik peta atau geser pin untuk memilih titik")}</span><button type="button" disabled={!point} className={pointConfirmed ? styles.confirmedButton : styles.confirmButton} onClick={() => { if (!point) return; setPointConfirmed(true); setError(""); }}><Check size={17} />{pointConfirmed ? t("Titik dikonfirmasi") : t("Konfirmasi pin")}</button></div></div>
-        <div className={styles.timeColumn}><h2>{t("Waktu kejadian")}</h2><label className={styles.field}><span>{t("Tanggal")}</span><span className={styles.inputShell}><input type="date" value={date} max={localDateTime().date} onChange={event => { setDate(event.target.value); invalidateSubmission(); }} /><CalendarDays size={21} /></span></label><label className={styles.field}><span>{t("Jam")}</span><span className={styles.inputShell}><input type="time" value={time} onChange={event => { setTime(event.target.value); invalidateSubmission(); }} /><Clock3 size={21} /></span></label><div className={styles.sideNote}><Info size={23} /><span>{t("Pastikan pin berada di lokasi temuan. Lokasi perangkat hanya digunakan jika Anda memilihnya.")}</span></div></div>
+        <div className={styles.timeColumn}><h2>{t("Waktu kondisi diamati")}</h2><label className={styles.field}><span>{t("Tanggal")}</span><span className={styles.inputShell}><input type="date" value={date} max={localDateTime().date} onChange={event => { setDate(event.target.value); invalidateSubmission(); }} /><CalendarDays size={21} /></span></label><label className={styles.field}><span>{t("Jam")}</span><span className={styles.inputShell}><input type="time" value={time} onChange={event => { setTime(event.target.value); invalidateSubmission(); }} /><Clock3 size={21} /></span></label><div className={styles.sideNote}><Info size={23} /><span>{t("Pastikan pin berada di lokasi temuan. Lokasi perangkat hanya digunakan jika Anda memilihnya.")}</span></div></div>
       </section>
       <div className={styles.actions}><button className={styles.textButton} type="button" onClick={() => { setError(""); setStep(1); }}><ArrowLeft size={18} />{t("Kembali ke bukti")}</button><button className={styles.primaryButton} type="button" onClick={goToReview}>{t("Lanjut ke tinjau")}{" "}<ArrowRight size={22} /></button></div>
     </>}
 
     {step === 3 && <>
       <section className={`${styles.card} ${styles.reviewCard}`} aria-label={t("Ringkasan laporan")}>
-        <div className={styles.reviewColumn}><div className={styles.sectionHeading}><h2>{t("Bukti temuan")}</h2><button type="button" onClick={() => { setError(""); setStep(1); }}>{t("Ubah")}</button></div><div className={styles.reviewPhotos}>{previews.map((url, index) => <div className={styles.reviewPhoto} key={url}><Image src={url} alt={t("Bukti temuan {0}", { "0": index + 1 })} fill unoptimized sizes="(max-width: 760px) 80vw, 350px" /></div>)}</div><div className={styles.reviewChips}><span><Recycle size={17} />{t(categoryLabel)}</span><span><SignalMedium size={18} />{`${t("Tumpukan")} ${t(severityLabel)}`}</span></div><p className={styles.reviewDescription}>{description.trim()}</p></div>
+        <div className={styles.reviewColumn}><div className={styles.sectionHeading}><h2>{t("Bukti temuan")}</h2><button type="button" onClick={() => { setError(""); setStep(1); }}>{t("Ubah")}</button></div><div className={styles.reviewPhotos}>{previews.map((url, index) => <div className={styles.reviewPhoto} key={url}><Image src={url} alt={t("Bukti temuan {0}", { "0": index + 1 })} fill unoptimized sizes="(max-width: 760px) 80vw, 350px" /></div>)}</div><div className={styles.reviewChips}><span><Recycle size={17} />{t(categoryLabel)}</span><span><SignalMedium size={18} />{`${t("Tumpukan")} ${t(severityLabel)}`}</span></div><p className={styles.reviewDescription}>{description.trim()}</p><p>{t(observationSource==="firsthand"?"Saya melihat langsung":"Informasi dari pihak lain")}</p>{inference.trim()&&<p className={styles.reviewDescription}><strong>{t("Dugaan atau catatan tambahan (opsional)")}</strong>: {inference.trim()}</p>}{sourceReference.trim()&&<p className={styles.reviewDescription}><strong>{t("Rujukan informasi (opsional)")}</strong>: {sourceReference.trim()}</p>}{photoUnsafe&&!photos.length&&<p className={styles.privateNotice}>{t("Tanpa foto: informasi tetap privat sampai bukti dilengkapi.")}</p>}</div>
         <div className={styles.reviewColumn}><div className={styles.sectionHeading}><h2>{t("Lokasi & waktu")}</h2><button type="button" onClick={() => { setError(""); setStep(2); }}>{t("Ubah")}</button></div><div className={styles.reviewMap}><ReportMap point={point} readOnly /></div><div className={styles.reviewFacts}><span><MapPin size={19} />{point?.latitude.toFixed(5)}, {point?.longitude.toFixed(5)}</span><span><CalendarDays size={19} />{occurredAt && !Number.isNaN(occurredAt.getTime()) ? formatDateTime(occurredAt.toISOString(), intlLocale) : t("Waktu belum dipilih")}</span><span><SignalMedium size={19} />{t("Tingkat tumpukan: {0}", { "0": t(severityLabel) })}</span></div></div>
       </section>
       <div className={styles.infoBar}><ShieldCheck size={23} /><span>{t("Laporan akan ditinjau sebelum dipublikasikan. Foto dan koordinat rinci tidak langsung tampil di peta publik.")}</span></div>
-      <fieldset className={styles.consentSection}>
+      <PublicTrustNotice/>
+      {photos.length > 0 && <fieldset className={styles.consentSection}>
         <legend>{t("Izin penggunaan foto")}</legend>
         <p>{t("Pilihan ini hanya memberi izin untuk peninjauan publikasi. Moderator tetap harus menyetujui foto sebelum tampil.")}</p>
         <div className={styles.consentOptions}>
-          <label><input type="checkbox" checked={publicationChannels.includes("web")} onChange={event => setPublicationChannels(current => event.target.checked ? [...current, "web"] : current.filter(channel => channel !== "web"))} />{t("Publik di VERGO")}</label>
-          <label><input type="checkbox" checked={publicationChannels.includes("instagram")} onChange={event => setPublicationChannels(current => event.target.checked ? [...current, "instagram"] : current.filter(channel => channel !== "instagram"))} />{t("Instagram VERGO")}</label>
+          <label><input type="checkbox" checked={publicationChannels.includes("web")} onChange={event => {setPublicationChannels(current => event.target.checked ? [...current, "web"] : current.filter(channel => channel !== "web"));invalidateSubmission();}} />{t("Publik di VERGO")}</label>
+          <label><input type="checkbox" checked={publicationChannels.includes("instagram")} onChange={event => {setPublicationChannels(current => event.target.checked ? [...current, "instagram"] : current.filter(channel => channel !== "instagram"));invalidateSubmission();}} />{t("Instagram VERGO")}</label>
         </div>
-      </fieldset>
+      </fieldset>}
       <div className={styles.actions}><button className={styles.textButton} type="button" disabled={busy} onClick={() => { setError(""); setStep(2); }}><ArrowLeft size={18} />{t("Kembali")}</button><button className={styles.primaryButton} type="button" disabled={busy} onClick={submit}>{busy ? t(phase) : t("Kirim laporan")}{!busy && <Send size={21} />}</button></div>
     </>}
 

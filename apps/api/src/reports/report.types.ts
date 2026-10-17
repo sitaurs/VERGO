@@ -2,6 +2,21 @@ import type { CategoryId } from '../scans/scan.types.js';
 
 export type ReportStatus = 'submitted' | 'verified' | 'in_progress' | 'resolved' | 'rejected' | 'duplicate';
 export type ReportSeverity = 'small' | 'medium' | 'large';
+export const OBSERVATION_SOURCES = ['firsthand', 'secondhand'] as const;
+export type ObservationSource = (typeof OBSERVATION_SOURCES)[number];
+export const REPORT_CONTEXT_FLAGS = ['burning', 'near_waterway', 'sharp_objects'] as const;
+export type ReportContextFlag = (typeof REPORT_CONTEXT_FLAGS)[number];
+export type PhotoUnavailableReason = 'unsafe';
+
+/** Private reporter assertions. These are not moderator findings or AI diagnoses. */
+export interface ReportObservation {
+  /** Null denotes a legacy report whose source was never collected. */
+  observationSource: ObservationSource | null;
+  inference: string | null;
+  sourceReference: string | null;
+  contextFlags: ReportContextFlag[];
+  photoUnavailableReason: PhotoUnavailableReason | null;
+}
 
 export interface LocationView {
   latitude: number;
@@ -24,7 +39,7 @@ export interface ReportStatusEventRecord {
 }
 
 /** A report row joined with its media + timeline, as read from the database. */
-export interface ReportRecord {
+export interface ReportRecord extends ReportObservation {
   id: string;
   revision: number;
   status: ReportStatus;
@@ -46,7 +61,7 @@ export interface ReportRecord {
 }
 
 /** OpenAPI `Report`. */
-export interface ReportView {
+export interface ReportView extends ReportObservation {
   id: string;
   revision: number;
   status: ReportStatus;
@@ -74,6 +89,11 @@ export function toReportView(record: ReportRecord): ReportView {
     categoryId: record.categoryId,
     scanId: record.scanId,
     description: record.description,
+    observationSource: record.observationSource ?? null,
+    inference: record.inference ?? null,
+    sourceReference: record.sourceReference ?? null,
+    contextFlags: record.contextFlags ?? [],
+    photoUnavailableReason: record.photoUnavailableReason ?? null,
     reportedSeverity: record.reportedSeverity,
     location: { latitude: record.latitude, longitude: record.longitude },
     occurredAt: record.occurredAt.toISOString(),

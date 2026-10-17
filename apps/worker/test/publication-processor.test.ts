@@ -24,3 +24,14 @@ test('resolution drafts continue to require the approved milestone evidence sour
 
   assert.equal(selectPublicationAsset(assets, sources)?.media_id, 'after-photo');
 });
+
+test('automatic captions preserve a canonical status link and refresh observation metadata without duplicate footer', async () => {
+  const { publicationStatusCaption } = await import('../src/publication-processor.js');
+  const source = { occurredAt: '2026-10-05T00:00:00Z', area: { label: 'Kauman, Kota Malang' }, publicUrl: 'https://vergo.example/incidents/report-1' };
+  const caption = publicationStatusCaption('Penanganan sebagian. Bukti terbaru.', source);
+  assert.match(caption, /Penanganan sebagian/);
+  assert.match(caption, /Laporan warga · bukti ditinjau moderator/);
+  assert.match(caption, /Pengamatan: 5 Okt 2026 · Kauman, Kota Malang/);
+  assert.ok(caption.endsWith(source.publicUrl));
+  assert.equal(publicationStatusCaption(caption, source), caption);
+});

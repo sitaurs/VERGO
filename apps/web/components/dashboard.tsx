@@ -153,6 +153,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     setTab(readDashboardTab());
+    const compose = new URLSearchParams(window.location.search).get("compose") === "report";
+    setReportComposerRequested(compose);
+    setReportWizardOpen(compose);
     const controller = new AbortController();
     void refreshData(controller.signal);
     return () => controller.abort();
@@ -164,7 +167,9 @@ export default function Dashboard() {
       setProfileOpen(false);
       setMobileSearchOpen(false);
       setReportWizardOpen(false);
-      setReportComposerRequested(false);
+      const compose = new URLSearchParams(window.location.search).get("compose") === "report";
+      setReportComposerRequested(compose);
+      setReportWizardOpen(compose);
     };
     window.addEventListener("popstate", restoreView);
     return () => window.removeEventListener("popstate", restoreView);
@@ -205,6 +210,8 @@ export default function Dashboard() {
     if (next === "dashboard") url.searchParams.delete("view");
     else url.searchParams.set("view", next);
     url.searchParams.delete("community");
+    url.searchParams.delete("compose");
+    url.searchParams.delete("report");
     if (next !== "admin-instagram") url.searchParams.delete("publication");
     if (next !== "admin-activities") {
       url.searchParams.delete("activity");

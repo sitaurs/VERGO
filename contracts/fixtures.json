@@ -284,7 +284,12 @@
               "note": "Laporan diterima untuk diperiksa.",
               "createdAt": "2026-09-24T04:00:00Z"
             }
-          ]
+          ],
+          "observationSource": null,
+          "inference": null,
+          "sourceReference": null,
+          "contextFlags": [],
+          "photoUnavailableReason": null
         },
         "meta": {
           "requestId": "fixture-report_submitted"
@@ -302,7 +307,8 @@
         "occurredAt": "2026-09-23T04:00:00Z",
         "reportedSeverity": "medium",
         "categoryId": "plastic",
-        "scanId": null
+        "scanId": null,
+        "observationSource": "firsthand"
       }
     },
     {
@@ -345,7 +351,12 @@
               "note": "Keputusan contoh untuk menguji state UI.",
               "createdAt": "2026-09-24T04:00:00Z"
             }
-          ]
+          ],
+          "observationSource": null,
+          "inference": null,
+          "sourceReference": null,
+          "contextFlags": [],
+          "photoUnavailableReason": null
         },
         "meta": {
           "requestId": "fixture-report_verified"
@@ -392,7 +403,12 @@
               "note": "Keputusan contoh untuk menguji state UI.",
               "createdAt": "2026-09-24T04:00:00Z"
             }
-          ]
+          ],
+          "observationSource": null,
+          "inference": null,
+          "sourceReference": null,
+          "contextFlags": [],
+          "photoUnavailableReason": null
         },
         "meta": {
           "requestId": "fixture-report_in_progress"
@@ -441,7 +457,12 @@
               "note": "Keputusan contoh untuk menguji state UI.",
               "createdAt": "2026-09-24T04:00:00Z"
             }
-          ]
+          ],
+          "observationSource": null,
+          "inference": null,
+          "sourceReference": null,
+          "contextFlags": [],
+          "photoUnavailableReason": null
         },
         "meta": {
           "requestId": "fixture-report_resolved"
@@ -488,7 +509,12 @@
               "note": "Keputusan contoh untuk menguji state UI.",
               "createdAt": "2026-09-24T04:00:00Z"
             }
-          ]
+          ],
+          "observationSource": null,
+          "inference": null,
+          "sourceReference": null,
+          "contextFlags": [],
+          "photoUnavailableReason": null
         },
         "meta": {
           "requestId": "fixture-report_rejected"
@@ -535,7 +561,12 @@
               "note": "Keputusan contoh untuk menguji state UI.",
               "createdAt": "2026-09-24T04:00:00Z"
             }
-          ]
+          ],
+          "observationSource": null,
+          "inference": null,
+          "sourceReference": null,
+          "contextFlags": [],
+          "photoUnavailableReason": null
         },
         "meta": {
           "requestId": "fixture-report_duplicate"

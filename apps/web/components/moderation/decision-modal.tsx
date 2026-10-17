@@ -11,6 +11,7 @@ import ui from "./decision-dialog.module.css";
 import { DecisionDialogShell } from "./decision-dialog-shell";
 import { ReportEvidenceCard, type ReviewPhoto } from "./report-evidence-card";
 import { RequestEvidenceModal } from "./request-evidence-modal";
+import ReportObservationSummary from "../trust/report-observation-summary";
 import { STATUS_LABEL, TRANSITIONS, VERIFIED_FAMILY } from "./report-status";
 
 function fmt(value: string, locale: string) {
@@ -60,6 +61,7 @@ export function DecisionModal({ report, categoryName, onClose, onDecided }: {
   const needsResolutionMedia = next === "resolved";
   const canPublish = VERIFIED_FAMILY.includes(next);
   const canSuggestDuplicates = options.includes("duplicate");
+  const missingSafeEvidence = report.photoUnavailableReason === "unsafe" && report.mediaIds.length === 0;
 
   useEffect(() => {
     if (!canSuggestDuplicates) return;
@@ -103,6 +105,7 @@ export function DecisionModal({ report, categoryName, onClose, onDecided }: {
     ...(needsDuplicate && !duplicateOk ? ["Pilih laporan kanonis untuk keputusan duplikat."] : []),
     ...(isInitialVerify && !summaryOk ? ["Tulis ringkasan publik sepanjang 20–500 karakter untuk verifikasi awal."] : []),
     ...(needsResolutionMedia && !resolutionIds.length ? ["Unggah minimal satu foto bukti penyelesaian."] : []),
+    ...(missingSafeEvidence ? ["Minta bukti foto yang aman sebelum memverifikasi laporan ini."] : []),
     ...(uploading ? ["Tunggu unggahan bukti penyelesaian selesai."] : []),
     ...(evidenceBusy ? ["Tunggu perubahan bukti publik selesai."] : []),
     ...(busy ? ["Keputusan sedang disimpan."] : []),
@@ -259,6 +262,7 @@ export function DecisionModal({ report, categoryName, onClose, onDecided }: {
         <div className={ui.sectionHeading}><h3>{t("Bukti laporan")}</h3><span className={ui.count}>{t("{0} foto", { "0": report.mediaIds.length })}</span></div>
         {loadingEvidence && <div className={ui.empty} role="status"><Loader2 className={ui.spin} size={28} />{t("Memuat bukti laporan…")}</div>}
         {!loadingEvidence && report.mediaIds.length === 0 && <div className={ui.empty}><ImageOff size={30} /><span>{t("Laporan ini tidak memiliki foto bukti.")}</span></div>}
+        {missingSafeEvidence && <p className={ui.notice}>{t("Pelapor menyatakan mengambil foto tidak aman. Jangan minta pelapor mendekat; lengkapi bukti aman sebelum verifikasi.")}</p>}
         {mediaReview.map((item, index) => <ReportEvidenceCard key={item.mediaId} item={item} index={index} canPublish={canPublish}
           selected={renditionChoice[item.mediaId] ?? ""} pending={pending}
           webApproved={approvedFor(item.mediaId, renditionChoice[item.mediaId], "web")}
@@ -268,7 +272,7 @@ export function DecisionModal({ report, categoryName, onClose, onDecided }: {
           onRefresh={() => void refreshReportEvidence()} />)}
         {evidenceMessage && <p className={ui.success} role="status">{t(evidenceMessage)}</p>}
         {evidenceError && <div className={ui.error} role="alert"><p>{t(evidenceError)}</p><button type="button" className={ui.textButton} onClick={() => void refreshReportEvidence()} disabled={pending}><RefreshCw size={15} />{t("Muat ulang bukti")}</button></div>}
-        <details className={ui.sourceDetails}><summary>{t("Keterangan laporan")}</summary><strong>{t(categoryName(report.categoryId))}</strong><p>{report.description || t("Tanpa deskripsi")}</p><small>{fmt(report.occurredAt, intlLocale)}</small></details>
+        <details className={ui.sourceDetails}><summary>{t("Keterangan laporan")}</summary><strong>{t(categoryName(report.categoryId))}</strong><p>{report.description || t("Tanpa deskripsi")}</p><small>{fmt(report.occurredAt, intlLocale)}</small><ReportObservationSummary report={report}/></details>
       </section>
       <section className={ui.decisionColumn} aria-label={t("Keputusan moderator")} aria-busy={busy}>
         <h3>{t("Keputusan moderator")}</h3>
