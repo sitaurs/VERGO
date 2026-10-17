@@ -107,6 +107,7 @@ export function permissionReason(code: string | null | undefined): string {
     PERMISSION_MISSING:
       "Izin publikasi Instagram belum lengkap; periksa otorisasi akun.",
     RENDITION_NOT_READY: "Gambar final belum siap.",
+    MAP_PROVIDER_UNCONFIGURED: "Peta poster belum dikonfigurasi oleh pengelola.",
     AUTOMATION_DISABLED: "Pembuatan draf otomatis belum diaktifkan.",
     COORDINATOR_REQUIRED:
       "Tindakan ini memerlukan koordinator yang telah menerima penugasan.",

@@ -39,6 +39,6 @@ export function sourceUpdateState(post:{source_revision:number;published_at:unkn
 
 export function publicationContextReady(post:Record<string,any>,origin:string):boolean {
  const source=post.source_snapshot;
- if(post.template_version!=='vergo-feed-status-v5'||!source?.reportId||!Number.isFinite(Date.parse(source.occurredAt))||!source.area?.label)return false;
+ if(post.template_version!=='vergo-feed-status-v6'||!source?.reportId||!Number.isFinite(Date.parse(source.occurredAt))||!source.area?.label)return false;
  return source.publicUrl===incidentPublicUrl(origin,source.reportId)&&post.caption===publicationCaption(post.caption,source);
 }

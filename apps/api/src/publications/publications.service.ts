@@ -24,11 +24,12 @@ export class PublicationsService{
   const counts=await this.store.db`SELECT status,count(*)::int AS n FROM instagram_posts GROUP BY status`;
   const byStatus=Object.fromEntries(POST_STATUSES.map(s=>[s,0])) as Record<PostStatus,number>;for(const row of counts)byStatus[row.status as PostStatus]=row.n;
   const health=this.health(account),connected=health==='connected',canConnect=this.connectConfigured();
-  const render=this.config.SAP_INSTAGRAM_RENDER_ENABLED&&!!this.config.POSTER_OVERPASS_URL;
+  const mapConfigured=!!this.config.POSTER_MAPBOX_TOKEN;
+  const render=this.config.SAP_INSTAGRAM_RENDER_ENABLED&&mapConfigured;
   const publish=connected&&render&&this.config.SAP_INSTAGRAM_PUBLISH_ENABLED&&REQUIRED_SCOPES.every(s=>account.scopes.includes(s));
   const retract=connected&&this.config.META_DELETE_ENABLED&&DELETE_SCOPES.every(s=>account.scopes.includes(s));
   return {account:{username:account.username,status:health},capabilities:{canCreateDraft:connected&&render,canPublish:publish,canRetract:retract,canConnect,canAutomate:false},
-   capabilityReasons:{canCreateDraft:connected&&render?null:!connected?'INSTAGRAM_ACCOUNT_REQUIRED':'RENDER_DISABLED',canPublish:publish?null:!connected?'INSTAGRAM_ACCOUNT_REQUIRED':!render?'RENDER_DISABLED':!this.config.SAP_INSTAGRAM_PUBLISH_ENABLED?'PUBLISH_DISABLED':'META_PERMISSION_REQUIRED',canRetract:retract?null:!connected?'INSTAGRAM_ACCOUNT_REQUIRED':!this.config.META_DELETE_ENABLED?'DELETE_READINESS_REQUIRED':'META_PERMISSION_REQUIRED',canConnect:canConnect?null:'META_CONFIGURATION_REQUIRED',canAutomate:'APPROVAL_REQUIRED'},
+   capabilityReasons:{canCreateDraft:connected&&render?null:!connected?'INSTAGRAM_ACCOUNT_REQUIRED':!this.config.SAP_INSTAGRAM_RENDER_ENABLED?'RENDER_DISABLED':'MAP_PROVIDER_UNCONFIGURED',canPublish:publish?null:!connected?'INSTAGRAM_ACCOUNT_REQUIRED':!this.config.SAP_INSTAGRAM_RENDER_ENABLED?'RENDER_DISABLED':!mapConfigured?'MAP_PROVIDER_UNCONFIGURED':!this.config.SAP_INSTAGRAM_PUBLISH_ENABLED?'PUBLISH_DISABLED':'META_PERMISSION_REQUIRED',canRetract:retract?null:!connected?'INSTAGRAM_ACCOUNT_REQUIRED':!this.config.META_DELETE_ENABLED?'DELETE_READINESS_REQUIRED':'META_PERMISSION_REQUIRED',canConnect:canConnect?null:'META_CONFIGURATION_REQUIRED',canAutomate:'APPROVAL_REQUIRED'},
    settings:{revision:settings.revision,...settings.payload},stats:{total:Object.values(byStatus).reduce((a,b)=>a+b,0),byStatus}};
  }
  async list(actor:Actor,query:Record<string,unknown>,reportId?:string){
@@ -72,7 +73,7 @@ export class PublicationsService{
  async get(actor:Actor,id:string){this.gate(actor);return this.dto(await this.post(this.store.db,input.uuid(id)));}
  async preview(actor:Actor,id:string){const post=await this.get(actor,id);return {postId:post.id,revision:post.revision,contentRevision:post.contentRevision,sourceRevision:post.source.sourceRevision,caption:post.caption,altText:post.altText,rendition:post.rendition,approval:post.approval};}
  async create(actor:Actor,key:string,raw:unknown){
-  this.gate(actor);if(!this.config.SAP_INSTAGRAM_RENDER_ENABLED)fail(503,'RENDER_DISABLED');if(!this.config.POSTER_OVERPASS_URL)fail(503,'MAP_PROVIDER_UNCONFIGURED');const b=input.object(raw,['reportId','mediaId','caption','altText','kind','milestoneId','replacesPostId']);
+  this.gate(actor);if(!this.config.SAP_INSTAGRAM_RENDER_ENABLED)fail(503,'RENDER_DISABLED');if(!this.config.POSTER_MAPBOX_TOKEN)fail(503,'MAP_PROVIDER_UNCONFIGURED');const b=input.object(raw,['reportId','mediaId','caption','altText','kind','milestoneId','replacesPostId']);
   const reportId=input.uuid(b.reportId),mediaId=input.uuid(b.mediaId),captionInput=input.text(b.caption,1,2200),altText=input.text(b.altText,1,1000),kind=input.enumeration(b.kind,['initial','resolution'] as const),milestoneId=b.milestoneId===null?null:input.uuid(b.milestoneId),replacesPostId=b.replacesPostId===null?null:input.uuid(b.replacesPostId);
   if((kind==='initial')!==(milestoneId===null))fail(400,'VALIDATION_ERROR');
   return this.store.mutate(actor,'instagram.create',key,{reportId,mediaId,caption:captionInput,altText,kind,milestoneId,replacesPostId},async tx=>{

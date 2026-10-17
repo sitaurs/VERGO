@@ -130,7 +130,7 @@ export class PublicationProcessor{
    if(media.id===published.id&&typeof media.permalink==='string'&&/^https:\/\//.test(media.permalink))await this.sql`UPDATE instagram_posts SET permalink=${media.permalink} WHERE id=${post.id} AND provider_media_id=${published.id}`;
   }catch{}
  }
- private approved(post:Row){return post.template_version==='vergo-feed-status-v5'&&post.source_snapshot?.publicUrl===new URL(`/incidents/${post.report_id}`,this.config.APP_ORIGIN).toString()&&post.caption===publicationStatusCaption(post.caption,post.source_snapshot)&&post.approval?.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready'&&!!post.rendition_object_key;}
+ private approved(post:Row){return post.template_version==='vergo-feed-status-v6'&&post.source_snapshot?.publicUrl===new URL(`/incidents/${post.report_id}`,this.config.APP_ORIGIN).toString()&&post.caption===publicationStatusCaption(post.caption,post.source_snapshot)&&post.approval?.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready'&&!!post.rendition_object_key;}
  private async inspectUncertain(op:Row,post:Row,token:string){
   if(post.provider_media_id){await this.successPublish(op,post,post.provider_media_id,post.permalink);return;}
   if(post.provider_container_id){try{await this.stage(op,'uncertain');await this.graph(post.provider_container_id,token,{fields:'id,status_code'});}catch(error){if(error instanceof LeaseLost)throw error;}}

@@ -119,7 +119,7 @@ export class ExtensionJobs {
         },
         configuration: {
           hermesTransportConfigured: Boolean(this.config.HERMES_REVIEW_URL && this.config.HERMES_REVIEW_SECRET && this.config.HERMES_MODEL_VERSION !== 'unconfigured'),
-          mapProviderConfigured: Boolean(this.config.POSTER_OVERPASS_URL),
+          mapProviderConfigured: Boolean(this.config.POSTER_MAPBOX_TOKEN),
           instagramOAuthConfigured: Boolean(this.config.META_APP_ID && this.config.META_APP_SECRET && this.config.META_LOGIN_CONFIG_ID && this.config.META_GRAPH_VERSION),
         },
         queues: {

@@ -27,7 +27,7 @@ test('legacy Instagram branding and host are removed from newly saved captions a
  assert.equal(normalizeInstagramHashtags('#SAP #Lingkungan'),'#VERGO #Lingkungan');
 });
 test('older previews or captions missing current canonical context cannot be approved for publication',()=>{
- const post={source_snapshot:source,caption:publicationCaption('Sampah terlihat.',source),template_version:'vergo-feed-status-v5'};
+ const post={source_snapshot:source,caption:publicationCaption('Sampah terlihat.',source),template_version:'vergo-feed-status-v6'};
  assert.equal(publicationContextReady(post,origin),true);
  assert.equal(publicationContextReady({...post,template_version:'vergo-feed-status-v4'},origin),false);
  assert.equal(publicationContextReady({...post,template_version:'sap-feed-reference-v3'},origin),false);

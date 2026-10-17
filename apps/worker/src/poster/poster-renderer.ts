@@ -12,7 +12,7 @@ export type PosterSource = {
   mediaId:string;publicSummary:string;
 };
 export type PosterInput = {source:PosterSource;photo:Buffer;outcome:'initial'|'partial'|'complete';reportCode:string};
-export type RenderedPoster = {bytes:Buffer;source:PosterSource;map:MapMetadata;mapData:MapData;templateVersion:'vergo-feed-status-v5'};
+export type RenderedPoster = {bytes:Buffer;source:PosterSource;map:MapMetadata;mapData:MapData;templateVersion:'vergo-feed-status-v6'};
 const WIDTH=1080, HEIGHT=1350, CREAM='#f8f4e7', GREEN='#115239';
 const BLACK_FONT=fileURLToPath(new URL('./assets/fonts/Roboto-Black.ttf',import.meta.resolve('@sap/worker/package.json')));
 const BODY_FONT=fileURLToPath(new URL('./assets/fonts/RobotoCondensed-Bold.ttf',import.meta.resolve('@sap/worker/package.json')));
@@ -33,7 +33,7 @@ export async function assertPosterFonts(): Promise<void> {
   } catch { throw new Error('POSTER_FONT_UNAVAILABLE'); }
 }
 
-/** The template uses real approved photo bytes and actual OSM geometry. No illustrative fallback. */
+/** The template uses real approved photo bytes and a real Mapbox basemap. No illustrative fallback. */
 export class PosterRenderer {
   private readonly maps:MapSnapshotService;
   private fontsReady:Promise<void>|undefined;
@@ -67,7 +67,18 @@ export class PosterRenderer {
     layers.push(await this.text(publicUrl,22,GREEN,220,1302,810,35,false));
     layers.push(await this.text('Kondisi dapat berubah setelah tanggal pengamatan.',21,GREEN,230,1258,630,31,false));
     const photo=await sharp(input.photo,{limitInputPixels:25000000,failOn:'warning'}).rotate().resize(WIDTH,490,{fit:'cover',position:'attention'}).flatten({background:CREAM}).jpeg({quality:94}).toBuffer();
-    const mapPng=await sharp(map.svg,{limitInputPixels:25000000}).png().toBuffer();
+    const mapFreshness=map.metadata.cacheStatus==='stale'
+      ? `<rect x="317" y="8" width="155" height="28" rx="14" fill="#f8f4e7" fill-opacity=".96"/><text x="394" y="27" text-anchor="middle" font-family="DejaVu Sans" font-size="11" font-weight="700" fill="#153c2c">Peta dasar ${xml(new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',timeZone:'Asia/Jakarta'}).format(new Date(map.metadata.fetchedAt)))}</text>`
+      : '';
+    const mapLabels=Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="288" viewBox="0 0 480 288">
+      <rect x="8" y="8" width="138" height="28" rx="14" fill="#f8f4e7" fill-opacity=".96"/>
+      <text x="77" y="27" text-anchor="middle" font-family="DejaVu Sans" font-size="12" font-weight="700" fill="#153c2c">Area laporan</text>
+      ${mapFreshness}
+      <rect x="184" y="${Math.round(288/2-11)}" width="112" height="22" rx="4" fill="#14694a"/>
+      <text x="240" y="${Math.round(288/2+4)}" text-anchor="middle" font-family="DejaVu Sans" font-size="12" font-weight="700" fill="white">Area kejadian</text>
+    </svg>`);
+    const mapPng=await sharp(map.image,{limitInputPixels:25000000}).resize(480,288,{fit:'cover'})
+      .composite([{input:mapLabels}]).png().toBuffer();
     const flecks=Array.from({length:550},(_,i)=>`<circle cx="${(i*719)%WIDTH}" cy="${(i*487)%HEIGHT}" r="${i%3===0?1.1:.55}" fill="#cabf98" opacity=".12"/>`).join('');
     const base=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${WIDTH}" height="${HEIGHT}">
       <defs><clipPath id="photo"><path d="M0 550L975 420L1080 486V845L0 906Z"/></clipPath></defs>
@@ -95,7 +106,7 @@ export class PosterRenderer {
     </svg>`;
     const bytes=await sharp(Buffer.from(base),{limitInputPixels:25000000}).composite(layers).flatten({background:CREAM}).toColourspace('srgb').jpeg({quality:93,mozjpeg:true}).toBuffer();
     if(bytes.length>7*1024*1024)throw new Error('POSTER_SIZE_EXCEEDED');
-    return {bytes,source,map:map.metadata,mapData:map.data,templateVersion:'vergo-feed-status-v5'};
+    return {bytes,source,map:map.metadata,mapData:map.data,templateVersion:'vergo-feed-status-v6'};
   }
   private async text(value:string,size:number,color:string,left:number,top:number,width:number,height:number,black:boolean):Promise<Layer> {
     if([...value].length>250)throw new Error('POSTER_TEXT_INVALID');

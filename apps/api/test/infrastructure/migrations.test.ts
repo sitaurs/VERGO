@@ -210,6 +210,15 @@ test('Instagram brand migration updates settings, defaults new renditions, and i
   assert.doesNotMatch(migration.sql, /\b(?:DROP|TRUNCATE)\b/i);
 });
 
+test('Mapbox poster migration bumps the preview version and invalidates old editable approvals', async () => {
+  const files = await loadMigrations();
+  const migration = files.find(file => file.filename === '0025_mapbox_poster.sql');
+  assert.ok(migration, 'expected the Mapbox poster migration');
+  assert.match(migration.sql, /template_version SET DEFAULT 'vergo-feed-status-v6'/i);
+  assert.match(migration.sql, /UPDATE instagram_posts[\s\S]*'status', 'invalidated'[\s\S]*WHERE template_version <> 'vergo-feed-status-v6'[\s\S]*AND status IN \('draft', 'failed'\)/i);
+  assert.doesNotMatch(migration.sql, /\b(?:DROP|TRUNCATE)\b/i);
+});
+
 test('appeals are private, bounded, and leave operator/retention promises unset by default', async () => {
   const files=await loadMigrations();
   const migration=files.find(file=>file.filename==='0023_report_appeals_and_trust.sql');
