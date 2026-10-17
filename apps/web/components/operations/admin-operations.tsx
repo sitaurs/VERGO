@@ -1,13 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { Check, Download, Loader2, MapPin, Pencil, RefreshCw, ShieldCheck, X } from "lucide-react";
+import Image from "next/image";
+import { Check, CircleCheck, Clock3, Download, FileText, Loader2, MapPin, Pencil, RefreshCw, RotateCcw, Settings2, ShieldCheck, UserRound, X } from "lucide-react";
 import type { LayerGroup, Map as LeafletMap } from "leaflet";
 import { ApiError, apiGet, apiMutate, reauthenticate, type SapReportStatus } from "../../lib/api/client";
 import { useI18n } from "../../lib/i18n/provider";
 import { MALANG_CENTER, MALANG_DEFAULT_ZOOM } from "../../lib/malang";
 import { STATUS_LABEL } from "../moderation/report-status";
 import styles from "./operations.module.css";
+import workspace from "./admin-sla.module.css";
 import ReportAssignmentWorkspace from "./report-assignment-workspace";
 
 type Notify = (message: string) => void;
@@ -78,13 +80,13 @@ function Dialog({ title, busy, onClose, children, footer }: { title: string; bus
   </dialog>;
 }
 
-function UserPicker({ value, name, label, onChange, disabled = false, filter = false }: { value: string; name?: string | null; label: string; onChange: (id: string, name: string) => void; disabled?: boolean; filter?: boolean }) {
+function UserPicker({ value, name, label, onChange, disabled = false, filter = false, inline = false }: { value: string; name?: string | null; label: string; onChange: (id: string, name: string) => void; disabled?: boolean; filter?: boolean; inline?: boolean }) {
   const { t } = useI18n();
   const [search, setSearch] = useState("");
   const query = useDebounced(search);
   const page = usePage<AdminUser>(`/admin/users?${new URLSearchParams({ limit: "50", ...(query ? { search: query } : {}) })}`);
   const eligible = page.items.filter(user => user.role === "admin" && user.emailVerified);
-  return <div className={styles.picker}>
+  return <div className={inline ? workspace.filterPicker : styles.picker}>
     <label className={styles.field}><span>{t("Cari pengguna")}</span><input type="search" value={search} onChange={event => setSearch(event.target.value)} disabled={disabled} placeholder={t("Nama atau email")} /></label>
     <label className={styles.field}><span>{label}</span><select value={value} disabled={disabled} onChange={event => { const user = eligible.find(item => item.id === event.target.value); onChange(event.target.value, event.target.value ? user?.displayName || name || "" : ""); }}>
       <option value="">{t(filter ? "Semua penanggung jawab" : "Belum ditugaskan")}</option>
@@ -95,7 +97,7 @@ function UserPicker({ value, name, label, onChange, disabled = false, filter = f
     {page.loading && <span className={styles.muted} role="status">{t("Memuat pengguna...")}</span>}
     {page.error && <div className={styles.error} role="alert">{t(page.error)} <button type="button" className={styles.button} onClick={() => void page.reload()} disabled={disabled || page.loading}>{t("Coba lagi")}</button></div>}
     {!page.loading && !page.error && !eligible.length && <span className={styles.muted}>{t("Tidak ada admin terverifikasi pada halaman yang dimuat.")}</span>}
-    <Pager count={eligible.length} cursor={page.cursor} loading={page.loading || disabled} more={() => void page.more()} />
+    {(!inline || page.cursor) && <Pager count={eligible.length} cursor={page.cursor} loading={page.loading || disabled} more={() => void page.more()} />}
   </div>;
 }
 
@@ -214,6 +216,7 @@ function Reports({ notify }: { notify?: Notify }) {
   const [assigneeId, setAssigneeId] = useState("");
   const [assigneeName, setAssigneeName] = useState("");
   const [overdue, setOverdue] = useState(false);
+  const [pickerVersion, setPickerVersion] = useState(0);
   const params = new URLSearchParams({ limit: "50", ...(status ? { status } : {}), ...(assigneeId ? { assigneeId } : {}), ...(overdue ? { overdue: "true" } : {}) });
   const page = usePage<OperationReport>(`/admin/report-operations?${params}`);
   const [active, setActive] = useState<OperationReport | null>(null);
@@ -221,6 +224,14 @@ function Reports({ notify }: { notify?: Notify }) {
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState("");
   const exportLock = useRef(false);
+  const finished = (report: OperationReport) => report.status === "resolved" || report.assignment?.progress === "done";
+  const closed = (report: OperationReport) => finished(report) || ["rejected", "duplicate"].includes(report.status);
+  const statistics = [
+    { label: "Total laporan", count: page.items.length, icon: FileText },
+    { label: "Belum ditugaskan", count: page.items.filter(report => !report.assignment?.assigneeId && !closed(report)).length, icon: UserRound, tone: "amber" },
+    { label: "Tugas aktif", count: page.items.filter(report => report.assignment?.assigneeId && !closed(report)).length, icon: Settings2 },
+    { label: "Selesai", count: page.items.filter(finished).length, icon: CircleCheck },
+  ];
   async function exportCsv() {
     if (exportLock.current) return;
     exportLock.current = true; setExporting(true); setExportError("");
@@ -237,20 +248,40 @@ function Reports({ notify }: { notify?: Notify }) {
     } catch (cause) { setExportError(errorMessage(cause)); }
     finally { exportLock.current = false; setExporting(false); }
   }
-  return <section className={styles.page} aria-label={t("Penugasan dan SLA")}>
-    <header className={styles.header}><h2>{t("Penugasan dan SLA")}</h2><div className={styles.actions}><button type="button" className={styles.button} disabled={exporting} onClick={() => void exportCsv()}>{exporting ? <Loader2 size={17} className={styles.spin} /> : <Download size={17} />}{t("Ekspor CSV")}</button><button type="button" className={styles.icon} title={t("Muat ulang")} aria-label={t("Muat ulang")} disabled={page.loading} onClick={() => void page.reload()}><RefreshCw size={18} /></button></div></header>
-    <div className={styles.toolbar}>
-      <label className={`${styles.field} ${styles.filter}`}><span>{t("Status laporan")}</span><select value={status} onChange={event => setStatus(event.target.value)}><option value="">{t("Semua status")}</option>{statuses.map(item => <option key={item} value={item}>{t(STATUS_LABEL[item])}</option>)}</select></label>
-      <div className={styles.filter}><UserPicker value={assigneeId} name={assigneeName} label={t("Filter penanggung jawab")} filter onChange={(id, name) => { setAssigneeId(id); setAssigneeName(name); }} /></div>
-      <label className={styles.check}><input type="checkbox" checked={overdue} onChange={event => setOverdue(event.target.checked)} />{t("Lewat tenggat saja")}</label>
+  return <section className={`${styles.page} ${workspace.workspace}`} aria-label={t("Penugasan dan SLA")}>
+    <header className={workspace.heading}>
+      <div><p className={workspace.eyebrow}>{t("OPERASIONAL LAPORAN")}</p><h1>{t("Penugasan dan SLA")}</h1><p>{t("Atur penanggung jawab dan pantau tenggat penanganan laporan.")}</p></div>
+      <div className={workspace.headingActions}>
+        <Image src="/images/admin-workspaces/sla.webp" alt="" width={160} height={120} className={workspace.art} aria-hidden="true" />
+        <button type="button" className={styles.button} disabled={page.loading} onClick={() => void page.reload()}><RefreshCw size={17} aria-hidden="true" />{t("Muat ulang")}</button>
+        <button type="button" className={`${styles.button} ${workspace.export}`} disabled={exporting} onClick={() => void exportCsv()}>{exporting ? <Loader2 size={17} className={styles.spin} /> : <Download size={17} aria-hidden="true" />}{t("Ekspor CSV")}</button>
+      </div>
+    </header>
+    <div className={workspace.stats} aria-busy={page.loading}>{statistics.map(({ label, count, icon: Icon, tone }) => <div key={label} className={workspace.stat} data-tone={tone}>
+      <span className={workspace.statIcon}><Icon size={25} aria-hidden="true" /></span><div><strong>{page.loading && !page.items.length ? "—" : count}</strong><small>{t(label)}</small></div>
+    </div>)}</div>
+    <p className={workspace.scope}>{t("Ringkasan mengikuti filter dan laporan yang sudah dimuat.")}</p>
+    <div className={workspace.filters}>
+      <label className={styles.field}><span>{t("Status laporan")}</span><select value={status} onChange={event => setStatus(event.target.value)}><option value="">{t("Semua status")}</option>{statuses.map(item => <option key={item} value={item}>{t(STATUS_LABEL[item])}</option>)}</select></label>
+      <UserPicker key={pickerVersion} value={assigneeId} name={assigneeName} label={t("Penanggung jawab")} filter inline onChange={(id, name) => { setAssigneeId(id); setAssigneeName(name); }} />
+      <label className={`${styles.check} ${workspace.overdueOnly}`}><input type="checkbox" checked={overdue} onChange={event => setOverdue(event.target.checked)} />{t("Lewat tenggat saja")}</label>
+      <button type="button" className={`${styles.button} ${workspace.reset}`} onClick={() => { setStatus(""); setAssigneeId(""); setAssigneeName(""); setOverdue(false); setPickerVersion(version => version + 1); }}><RotateCcw size={16} aria-hidden="true" />{t("Reset filter")}</button>
     </div>
-    <p className={styles.muted}>{t("Ekspor CSV mengikuti filter status laporan.")}</p>
     {message && <p className={styles.success} role="status">{t(message)}</p>}
     {(page.error || exportError) && <p className={styles.error} role="alert">{t(page.error || exportError)}</p>}
-    <div className={styles.tableScroll} aria-busy={page.loading}><table className={styles.table}><thead><tr><th scope="col">{t("Laporan")}</th><th scope="col">{t("Status")}</th><th scope="col">{t("Penanggung jawab")}</th><th scope="col">{t("Tenggat")}</th><th scope="col">{t("Tindakan")}</th></tr></thead><tbody>{page.items.map(report => <tr key={report.id}><td><strong>{report.description || t("Laporan")}</strong><small><DateLabel value={report.createdAt} /></small>{report.assignment?.note && <small>{report.assignment.note}</small>}</td><td><span className={styles.badge}>{t(STATUS_LABEL[report.status])}</span></td><td>{report.assignment?.assigneeName || report.assignment?.assigneeId || t("Belum ditugaskan")}</td><td><DateLabel value={report.assignment?.dueAt || null} /><small>{report.assignment?.completed ? <span className={`${styles.badge} ${styles.complete}`}>{t("Selesai")}</span> : report.assignment?.overdue ? <span className={`${styles.badge} ${styles.overdue}`}>{t("Lewat tenggat")}</span> : null}</small></td><td><button type="button" className={styles.button} onClick={() => setActive(report)}><Pencil size={16} />{t("Ubah penugasan")}</button></td></tr>)}</tbody></table></div>
-    {page.loading && <div className={styles.empty} role="status"><Loader2 size={20} className={styles.spin} />{t("Memuat laporan...")}</div>}
-    {!page.loading && !page.error && !page.items.length && <div className={styles.empty}>{t("Tidak ada laporan sesuai filter.")}</div>}
-    <Pager count={page.items.length} cursor={page.cursor} loading={page.loading} more={() => void page.more()} />
+    <section className={workspace.panel} aria-labelledby="sla-list-title">
+      <header className={workspace.panelHeader}><h2 id="sla-list-title">{t("Daftar penugasan")}<span className={workspace.count}>{t("{0} laporan", { "0": page.items.length })}</span></h2><p>{t("Ekspor CSV mengikuti filter status laporan.")}</p></header>
+      <div className={styles.tableScroll} tabIndex={0} role="region" aria-label={t("Daftar penugasan")} aria-busy={page.loading}><table className={`${styles.table} ${workspace.table}`}><thead><tr><th scope="col">{t("Laporan")}</th><th scope="col">{t("Status laporan")}</th><th scope="col">{t("Penanggung jawab")}</th><th scope="col">{t("Tenggat")}</th><th scope="col">{t("Tindakan")}</th></tr></thead><tbody>{page.items.map(report => <tr key={report.id} data-overdue={report.assignment?.overdue && !report.assignment.completed}>
+        <td><div className={workspace.report}><span className={workspace.reportIcon}><FileText size={22} aria-hidden="true" /></span><div><strong>{report.description || t("Laporan")}</strong><small>#{report.id.slice(0, 8)} · <DateLabel value={report.createdAt} /></small></div></div></td>
+        <td><span className={`${styles.badge} ${workspace.status}`} data-status={report.status}>{t(STATUS_LABEL[report.status])}</span></td>
+        <td><div className={workspace.assignee} data-empty={!report.assignment?.assigneeId}><span className={workspace.avatar} aria-hidden="true">{report.assignment?.assigneeName ? report.assignment.assigneeName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("") : <UserRound size={17} />}</span><span>{report.assignment?.assigneeName || report.assignment?.assigneeId || t("Belum ditugaskan")}</span></div></td>
+        <td><div className={workspace.deadline} data-overdue={report.assignment?.overdue && !report.assignment.completed}><DateLabel value={report.assignment?.dueAt || null} />{report.assignment?.completed ? <span><CircleCheck size={14} aria-hidden="true" />{t("Selesai")}</span> : report.assignment?.overdue ? <span><Clock3 size={14} aria-hidden="true" />{t("Lewat tenggat")}</span> : null}</div></td>
+        <td><button type="button" className={styles.button} aria-label={t("Ubah penugasan laporan {0}", { "0": report.id.slice(0, 8) })} onClick={() => setActive(report)}><Pencil size={15} aria-hidden="true" />{t(report.assignment?.assigneeId ? "Ubah" : "Tugaskan")}</button></td>
+      </tr>)}</tbody></table></div>
+      {page.loading && <div className={styles.empty} role="status"><Loader2 size={20} className={styles.spin} />{t("Memuat laporan...")}</div>}
+      {!page.loading && !page.error && !page.items.length && <div className={styles.empty}><FileText size={25} aria-hidden="true" />{t("Tidak ada laporan sesuai filter.")}</div>}
+      <div className={workspace.panelFooter}><Pager count={page.items.length} cursor={page.cursor} loading={page.loading} more={() => void page.more()} /></div>
+    </section>
     {active && <AssignmentDialog report={active} onClose={() => setActive(null)} onRefresh={() => { setActive(null); void page.reload(); }} onSaved={() => { setActive(null); setMessage("Penugasan laporan diperbarui."); notify?.(t("Penugasan laporan diperbarui.")); void page.reload(); }} />}
   </section>;
 }

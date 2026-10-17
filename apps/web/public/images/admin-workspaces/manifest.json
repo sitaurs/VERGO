@@ -1,0 +1,22 @@
+{
+  "tool": "built-in imagegen",
+  "purpose": "Separate decorative artwork derived from approved admin mockups; interface remains HTML and existing Lucide icons.",
+  "assets": {
+    "sla": {
+      "file": "sla.webp",
+      "width": 640,
+      "height": 480,
+      "alpha": true,
+      "bytes": 38526,
+      "sha256": "b14c9df47d8db93699e0799590b07f0b7ab0d2a3d2f4e58d7a35de4eed42f2ec"
+    },
+    "hermes": {
+      "file": "hermes.webp",
+      "width": 640,
+      "height": 480,
+      "alpha": true,
+      "bytes": 40182,
+      "sha256": "3085452a3b27205df3c24161d6a50b6c9e97079213c67dd8cdf2b1c97f612060"
+    }
+  }
+}

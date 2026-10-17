@@ -221,3 +221,8 @@
 @media(max-height:500px) and (max-width:760px){
   .shell:has([data-sap-mobile-chat] input:focus) [data-sap-mobile-dock] nav{display:none}
 }
+
+/* Report previews stay compact; the original content remains in ReportDetail. */
+.reportFinding strong{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;line-height:1.5}
+.reportReadMore{display:inline-flex!important;align-items:center;gap:4px;color:#087f5b;font-size:12px;font-weight:750;min-height:24px}
+.reportPhoto{flex-shrink:0}

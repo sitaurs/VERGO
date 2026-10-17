@@ -142,7 +142,7 @@ export default function PublicationList({
             <span className={styles.statIcon}>
               <Icon size={26} />
             </span>
-            <span>
+            <span className={styles.statCopy}>
               <small>{t(label)}</small>
               <strong><AnimatedNumber value={value ?? "—"} /></strong>
             </span>

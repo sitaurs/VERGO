@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import {
-  ArrowRight, Bell, CalendarDays, Camera, Check, ChevronDown, CircleHelp,
+  ArrowRight, Bell, CalendarDays, Camera, Check, ChevronDown, ChevronRight, CircleHelp,
   Clock3, FilePlus2, FileText, Filter, Focus, ImagePlus, Info, Layers3,
   Leaf, Lightbulb, List, LockKeyhole, LogOut, Mail, Map, MapPin, Minus,
   Plus, ScanLine, Search, Settings, ShieldCheck, SlidersHorizontal, Sparkles,
@@ -232,7 +232,7 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
               key={report.id}
               role="button"
               tabIndex={0}
-              aria-label={t("Lihat detail laporan {0}", { "0": report.description })}
+              aria-label={t("Lihat detail laporan {0}", { "0": report.description.slice(0, 180) })}
               onClick={() => setDetailId(report.id)}
               onKeyDown={event => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -244,7 +244,8 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
               <div className={styles.reportFinding}>
                 <MediaThumbnail className={styles.reportPhoto} mediaId={report.mediaIds[0]} alt={t("Foto laporan {0}", { "0": report.description })} />
                 <div>
-                  <strong>{report.description}</strong>
+                  <strong>{report.description.length > 180 ? `${report.description.slice(0, 180).replace(/\s+\S*$/, "")}…` : report.description}</strong>
+                  {report.description.length > 180 && <span className={styles.reportReadMore}>{t("Baca selengkapnya")}<ChevronRight size={14} aria-hidden="true" /></span>}
                   <span className={styles.reportMobileLabel}>{t("Lokasi")}</span>
                   <span>{report.location.latitude.toFixed(4)}, {report.location.longitude.toFixed(4)}</span>
                   <small>{report.reportedSeverity === "small" ? t("Tumpukan kecil") : report.reportedSeverity === "medium" ? t("Tumpukan sedang") : t("Tumpukan besar")} · {report.timeline.length} {" "}{t("pembaruan")}</small>

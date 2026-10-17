@@ -17,7 +17,8 @@ import { errors } from "./errors";
 import { landing25d } from "./landing-25d";
 import { publicTrust } from "./public-trust";
 import { reportTrust } from "./report-trust";
-const catalogue: Record<string, string> = { ...common, ...landing, ...scan, ...reports, ...activities, ...community, ...evidence, ...impact, ...instagram, ...misc, ...dynamic, ...errors, ...volunteer, ...communityDesign, ...notifications, ...reportAssignments, ...landing25d, ...publicTrust, ...reportTrust };
+import { adminWorkspaces } from "./admin-workspaces";
+const catalogue: Record<string, string> = { ...common, ...landing, ...scan, ...reports, ...activities, ...community, ...evidence, ...impact, ...instagram, ...misc, ...dynamic, ...errors, ...volunteer, ...communityDesign, ...notifications, ...reportAssignments, ...landing25d, ...publicTrust, ...reportTrust, ...adminWorkspaces };
 function productCopy(text: string) {
   return text.replaceAll("SAP Sustainable AI Platform", "VERGO — Verify and Go")
     .replaceAll("Sustainable AI Platform (SAP)", "VERGO")

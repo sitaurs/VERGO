@@ -62,8 +62,8 @@ const summary = (page: Page) => page.getByRole("textbox", { name: /Ringkasan unt
 test("compact review preserves private evidence, human recommendations, and accessible enlargement", async ({ page }, testInfo) => {
   const { requests } = await setup(page);
   await expect(page.getByRole("heading", { name: "Bantuan keputusan" })).toBeVisible();
-  await expect(page.getByText("EVIDENCE_CONFLICT", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Peringatan publikasi:/)).toBeVisible();
+  await expect(page.getByText("Bukti belum selaras", { exact: true })).toHaveAttribute("title", "EVIDENCE_CONFLICT");
+  await expect(page.getByText("Peringatan publikasi", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: /Konfirmasi keputusan:/ })).toBeDisabled();
   await expect(summary(page)).toHaveValue("");
   await openEvidence(page);
@@ -107,7 +107,7 @@ for (const action of ["request_evidence", "reject"] as const) test(`${action} ne
   const { requests } = await setup(page);
   await openEvidence(page);
   await page.getByRole("checkbox", { name: "Izin web", exact: true }).check();
-  await page.getByRole("combobox", { name: "Tindakan", exact: true }).selectOption(action);
+  await page.getByRole("radio", { name: action === "request_evidence" ? /Minta bukti tambahan/ : /Tolak pembaruan/ }).check();
   if (action === "request_evidence") await page.getByRole("textbox", { name: /Bukti tambahan yang diminta/ }).fill("Foto terbaru\nLokasi yang sama\nWaktu pengamatan\nBukti keempat");
   await reason(page).fill("Data belum cukup untuk memastikan kondisi.");
   await page.getByRole("button", { name: /Konfirmasi keputusan:/ }).click();
@@ -128,7 +128,7 @@ test("Hermes reruns and polling remain advice only", async ({ page }) => {
 test("failed Hermes keeps manual decisions available and validates the reason", async ({ page }) => {
   const { requests } = await setup(page, { failed: true });
   await expect(page.getByText(/Keputusan manual tetap tersedia/)).toBeVisible();
-  await page.getByRole("combobox", { name: "Tindakan", exact: true }).selectOption("reject");
+  await page.getByRole("radio", { name: /Tolak pembaruan/ }).check();
   await reason(page).fill("abc");
   await expect(page.getByRole("button", { name: /Konfirmasi keputusan:/ })).toBeDisabled();
   await reason(page).fill("Bukti tidak sesuai dengan laporan.");
