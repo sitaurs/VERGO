@@ -133,6 +133,5 @@ export default function PublicMapSection() {
         </details>
       </aside>
     </div>
-    <p className={s.footnote}><Info size={17} aria-hidden="true" />{t("Area tanpa laporan terverifikasi bukan bukti area bersih. Warna peta merangkum laporan, bukan risiko penyakit.")}</p>
   </section>;
 }
