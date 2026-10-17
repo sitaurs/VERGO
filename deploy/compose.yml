@@ -40,6 +40,7 @@ services:
     environment:
       APP_ORIGIN: https://vergo.venlab.tech
       APP_ORIGIN_ALIASES: https://ecosystech.me
+      META_MEDIA_DELIVERY_ORIGIN: https://vergo.venlab.tech
     command: ["node", "apps/api/dist/main.js"]
     expose:
       - "3001"
@@ -60,6 +61,7 @@ services:
       - /etc/sap/api.env
     environment:
       APP_ORIGIN: https://vergo.venlab.tech
+      META_MEDIA_DELIVERY_ORIGIN: https://vergo.venlab.tech
     command: ["node", "apps/worker/dist/main.js"]
     depends_on:
       postgres:
