@@ -20,7 +20,7 @@ test("hero omits the removed controls and label while preserving motion and link
   await expect(page.locator("[data-landing-motion-toggle]")).toHaveCount(0);
   await expect(page.getByText(/^(Ilustrasi alur VERGO|VERGO workflow illustration)$/)).toHaveCount(0);
   await expect(page.locator("h1")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Mulai scan", exact: true })).toHaveAttribute("href", "/dashboard?view=scan");
+  await expect(page.locator("#beranda").getByRole("link", { name: "Laporkan tumpukan sampah", exact: true })).toHaveAttribute("href", "/dashboard?view=reports&compose=report");
   await expect(page.getByRole("link", { name: "Kejadian publik", exact: true }).first()).toHaveAttribute("href", "/incidents");
   expect(errors).toEqual([]);
   expect(requests.filter(request => !["GET", "HEAD"].includes(request.method))).toEqual([]);
@@ -80,5 +80,31 @@ test("2.5D decoration settles under hover and controls never float", async ({ pa
   await page.mouse.move(1, 1);
   await expect(action).toBeFocused();
   await page.locator("h1").click();
-  await expect.poll(state).toEqual(["running"]);
+  await expect.poll(state).not.toContain("paused");
+});
+
+test("FAQ has bounded illustration motion and preserves native keyboard disclosure", async ({ page }) => {
+  await fixtureApi(page, { guest: true });
+  await page.route("**/api/map-config", route => route.fulfill({ status: 503, json: { available: false } }));
+  await page.goto("/#edukasi");
+  const faq = page.locator("#edukasi");
+  await expect(faq.locator("[data-landing-faq-react]")).toBeVisible();
+  const active = () => faq.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.id.startsWith("vergo-")));
+  await expect.poll(() => faq.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.id === "vergo-ambient").length)).toBeGreaterThan(0);
+  const budgets = await faq.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.id === "vergo-ambient").map(animation => animation.effect!.getTiming()));
+  expect(budgets.every(timing => timing.iterations === 1 && Number(timing.duration) <= 4800)).toBe(true);
+  await expect.poll(async () => (await active()).length).toBe(0);
+  const second = faq.locator("summary").nth(1);
+  await second.focus();
+  await second.press("Enter");
+  await expect(second.locator("..")).toHaveAttribute("open", "");
+  await expect(faq.locator("details").first()).not.toHaveAttribute("open", "");
+  await expect(second).toBeFocused();
+  await expect.poll(async () => (await active()).length).toBe(0);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await faq.locator("summary").nth(2).focus();
+  await faq.locator("summary").nth(2).press("Enter");
+  await expect(faq.locator("details").nth(2)).toHaveAttribute("open", "");
+  expect(await active()).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

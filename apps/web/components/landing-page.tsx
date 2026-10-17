@@ -14,8 +14,8 @@ import motionStyles from "./landing/landing-motion.module.css";
 import s from "./landing/vergo-landing.module.css";
 
 type ArtworkName = "hero" | "scan" | "report" | "review" | "map" | "community";
-function Artwork({ name, className = "", alt = "", eager = false, sizes = "(max-width: 760px) 45vw, 280px" }: { name: ArtworkName; className?: string; alt?: string; eager?: boolean; sizes?: string }) {
-  return <div className={`${s.artwork} ${className}`}><Image src={`/images/landing-25d/${name}.webp`} alt={alt} fill sizes={sizes} preload={eager} /></div>;
+function Artwork({ name, className = "", alt = "", eager = false, motion = true, sizes = "(max-width: 760px) 45vw, 280px" }: { name: ArtworkName; className?: string; alt?: string; eager?: boolean; motion?: boolean; sizes?: string }) {
+  return <div className={`${s.artwork} ${className}`} data-landing-float={motion ? "art" : undefined}><Image src={`/images/landing-25d/${name}.webp`} alt={alt} fill sizes={sizes} preload={eager} /></div>;
 }
 const steps = [
   { art: "report", title: "Warga melaporkan", copy: "Kirim foto dari jarak aman, lokasi, waktu, dan kondisi yang terlihat." },
@@ -68,7 +68,7 @@ export default function LandingPage() {
           <a className={s.optionalScan} href="/dashboard?view=scan"><Camera size={17} aria-hidden="true" />{t("Belum tahu jenis sampahnya? Coba scan AI.")}<ArrowRight size={15} aria-hidden="true" /></a>
           <ul className={s.assurances} data-landing-enter="assurances" data-landing-order="4"><li><Camera />{t("Bukti foto")}</li><li><MapPin />{t("Konteks lokasi")}</li><li><UsersRound />{t("Tinjauan manusia")}</li></ul><a className={s.incidentLink} href="/incidents">{t("Kejadian publik")}<ArrowRight size={15} /></a>
         </div>
-        <div className={s.heroVisual} data-landing-enter="hero-card"><div data-landing-float="shape"><Artwork name="hero" alt={t("Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO")} eager className={s.heroArtwork} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 55vw, 780px" /></div></div>
+        <div className={s.heroVisual} data-landing-enter="hero-card"><div data-landing-float="shape"><Artwork name="hero" motion={false} alt={t("Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO")} eager className={s.heroArtwork} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 55vw, 780px" /></div></div>
       </div></section>
       <section className={`${s.healthContext} ${s.container}`} aria-labelledby="health-context-title">
         <span className={s.pill}>SDG 3 · {t("Target 3.9")}</span><h2 id="health-context-title">{t("Lingkungan terawat, kesehatan lebih terlindungi.")}</h2>

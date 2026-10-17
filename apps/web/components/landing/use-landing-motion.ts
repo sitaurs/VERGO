@@ -44,7 +44,7 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>, paus
           const kind = element.dataset.landingFloat;
           const direction = index % 2 ? -1 : 1;
           const frames: Keyframe[] = kind === "leaf" ? [
-            { transform: "rotate(-3deg)" }, { transform: "rotate(4deg)" }, { transform: "rotate(-3deg)" },
+            { rotate: "0deg" }, { rotate: "4deg" }, { rotate: "0deg" },
           ] : kind === "orbit" ? [{ opacity: .3 }, { opacity: .85 }, { opacity: .3 }]
             : kind === "scan" ? [
               { translate: "0 -130%", opacity: 0, offset: 0 },
@@ -53,19 +53,21 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>, paus
               { translate: "0 400%", opacity: 0, offset: 1 },
             ] : [
               { translate: "0 0" },
-              { translate: `${direction * 3}px ${kind === "shape" ? 12 : -9}px` },
+              { translate: `${direction * 3}px ${kind === "shape" ? 12 : kind === "art" ? -6 : -9}px` },
               { translate: "0 0" },
             ];
           // Observe the stationary photo frame; observing its moving beam can freeze it outside the clip.
           const target = kind === "scan" ? element.querySelector("[data-landing-scan]") ?? element : element;
           animation = target.animate(frames, {
-            duration: kind === "scan" ? 4800 : 6200 + (index % 4) * 700,
-            iterations: Infinity, easing: "ease-in-out",
+            // Each illustration has one short arrival sequence; no perpetual motion or new pause button.
+            duration: kind === "scan" ? 4800 : 4200 + (index % 3) * 180,
+            iterations: 1, easing: "ease-in-out",
           });
           animation.id = "vergo-ambient";
           ambient.set(element, animation);
         }
         if (animation) {
+          if (animation.playState === "finished") continue;
           if (eligible) animation.play();
           else animation.pause();
         }
@@ -85,13 +87,14 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>, paus
         if (preference.matches || document.hidden || userPaused) continue;
         const heroCard = element.dataset.landingEnter === "hero-card";
         const order = Number(element.dataset.landingOrder ?? 0);
+        const faqCard = element.dataset.landingEnter === "faq";
         // Floating cards use scale for entry, translate for idle, and CSS transform for hover.
         const animation = element.animate(heroCard ? [
           { opacity: .25, scale: ".96" }, { opacity: 1, scale: "1" },
         ] : [
-          { opacity: .25, translate: `0 ${element.dataset.landingEnter === "title" ? 20 : 26}px` },
+          { opacity: .25, translate: `0 ${faqCard ? 14 : element.dataset.landingEnter === "title" ? 20 : 26}px` },
           { opacity: 1, translate: "0 0" },
-        ], { duration: heroCard ? 780 : 680, delay: Math.min(order * 85, 340), easing: ease, fill: "backwards" });
+        ], { duration: faqCard ? 480 : heroCard ? 780 : 680, delay: Math.min(order * (faqCard ? 55 : 85), 340), easing: ease, fill: "backwards" });
         animation.id = "vergo-landing-entry";
         entries.set(element, animation);
         void animation.finished.then(() => {

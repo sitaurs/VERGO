@@ -21,7 +21,7 @@
 .healthContext .healthLimit { font-size:13px; }
 .sourceLinks { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:12px; color:#496758; font-size:12px; line-height:1.7; }
 .sourceLinks a { color:var(--landing-green); text-decoration:underline; text-underline-offset:3px; }
-.primary,.secondary { display:inline-flex; align-items:center; justify-content:center; gap:12px; min-height:50px; padding:13px 21px; border:1px solid var(--landing-green); border-radius:9px; font-size:14px; font-weight:750; line-height:1.4; cursor:pointer; text-align:center; transition:background .2s,box-shadow .2s; }
+.primary,.secondary { display:inline-flex; align-items:center; justify-content:center; gap:12px; min-height:50px; padding:13px 21px; border:1px solid var(--landing-green); border-radius:9px; font-size:14px; font-weight:750; line-height:1.4; cursor:pointer; text-align:center; transition:background .2s; }
 .primary { background:var(--landing-green); color:white; box-shadow:0 4px 9px #087f5b14; }
 .primary:hover { background:#056747; box-shadow:0 6px 17px #087f5b25; }
 .secondary { background:#ffffffdc; color:var(--landing-green); }
