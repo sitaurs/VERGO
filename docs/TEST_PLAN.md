@@ -1,10 +1,10 @@
-# TEST_PLAN — Verifikasi SAP
+# TEST_PLAN — Skenario acceptance VERGO
 
-v1.0 · Paket ini mendefinisikan acceptance SAP. Aplikasi kini memiliki implementasi backend/frontend dan automated unit/contract checks, tetapi suite ini belum seluruhnya lulus sebagai integration/E2E release evidence. Fixtures sintetis bukan bukti akurasi model atau kejadian nyata. Status pemeriksaan terbaru ada di [BACKEND_IMPLEMENTATION_STATUS.md](BACKEND_IMPLEMENTATION_STATUS.md).
+v1.0 · Paket ini mendefinisikan acceptance SAP. Aplikasi kini memiliki implementasi backend/frontend dan automated unit/contract checks, tetapi suite ini belum seluruhnya lulus sebagai integration/E2E release evidence. Fixtures sintetis bukan bukti akurasi model atau kejadian nyata. Bukti historis dibatasi tanggal di [ringkasan proyek](RINGKASAN_PROYEK.md); gerbang aktif ada di [rencana ITASE](RENCANA_ITASE_2026.md#gerbang-rilis).
 
 ## 1. Tingkat pengujian
 
-Unit: rules ledger/status/hotspot/mapping. Contract: request/response API dan field/privacy. Integration: Neon Postgres/PostGIS + Upstash Redis/BullMQ + Cloudflare R2 melalui S3-compatible API + worker. E2E: Next.js→NestJS→data dan Gradio self-hosted untuk smoke terkontrol. Visual/accessibility: Zaka memimpin, backend membantu data/state. Hindari semua tes memakai stub sehingga integrasi nyata tidak pernah diperiksa.
+Unit: rules ledger/status/hotspot/mapping. Contract: request/response API dan field/privacy. Integration: PostgreSQL/PostGIS + Redis/BullMQ + private object storage kompatibel S3 + worker pada lingkungan uji yang sesuai. E2E: Next.js→NestJS→data dan Gradio self-hosted untuk smoke terkontrol. Visual/accessibility: Zaka memimpin, backend membantu data/state. Hindari semua tes memakai stub sehingga integrasi nyata tidak pernah diperiksa.
 
 ## 2. Matriks acceptance
 

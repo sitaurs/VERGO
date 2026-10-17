@@ -1,14 +1,14 @@
-# INTEGRATION_CONTRACT — Pencegahan mismatch SAP
+# INTEGRATION_CONTRACT — Integrasi VERGO
 
 v1.0 · Wajib dibaca kedua orang sebelum coding. Tujuannya mendeteksi perbedaan lebih awal; dokumen saja tidak menjamin implementasi bebas bug.
 
-**Scope:** aturan ini mendokumentasikan baseline API existing 1.1.0. Extension komunitas/relawan/Hermes/Instagram memakai [kontrak Zaka–Zamani](CONTRACT_ZAKA_ZAMANI.md) dan [rencana backend](BACKEND_EXECUTION_PLAN.md), termasuk pagination max50, header IK/IM per operasi, enum, DTO, serta gate promosi schema. Kontrak mesin existing tetap disimpan; extension belum otomatis tersedia karena tercantum di Markdown.
+**Scope:** aturan ini mendokumentasikan baseline API existing 1.1.0. Extension komunitas/relawan/Hermes/Instagram memakai [kontrak Zaka–Zamani](CONTRACT_ZAKA_ZAMANI.md) dan [rencana aktif](RENCANA_ITASE_2026.md), termasuk pagination max50, header IK/IM per operasi, enum, DTO, serta gate promosi schema. Kontrak mesin existing tetap disimpan; extension belum otomatis tersedia karena tercantum di Markdown.
 
 ## 1. Satu kontrak bersama
 
-`contracts/openapi.json` menjadi sumber endpoint, tipe, enum, required/null dan HTTP status. `contracts/fixtures.json` menggunakan schema itu. Backend mengimplementasikan kontrak; frontend menghasilkan tipe/client darinya. Jangan menyalin tipe manual ke dua repo. Gunakan commit kontrak yang sama. Kontrak mesin v1.1.0 saat ini mendeklarasikan `X-Contract-Version: 1.1.0` pada respons sukses; perlu PR kontrak terkoordinasi sebelum header itu diwajibkan juga pada semua error.
+`contracts/openapi.json` menjadi sumber endpoint, tipe, enum, required/null dan HTTP status. `contracts/fixtures.json` menggunakan schema itu. Backend mengimplementasikan kontrak; frontend menghasilkan tipe/client darinya. Jangan menyalin tipe manual ke dua repo. Gunakan commit kontrak yang sama. Header `X-Contract-Version` harus mengikuti versi published dan schema respons sukses/error yang berlaku; jangan menyimpulkan kontrak berubah hanya karena catatan rancangan lama.
 
-Gap yang wajib ditutup sebelum coding auth: dokumentasikan efek response `Set-Cookie` untuk `sap_csrf`, `sap_session`, dan `sap_deletion` di OpenAPI. Perubahan harus melalui review kontrak serta regenerasi client, bukan hanya dicatat dalam dokumentasi naratif.
+Efek response `Set-Cookie` untuk `sap_csrf`, `sap_session`, dan `sap_deletion` perlu dicocokkan antara OpenAPI dan handler saat kontrak auth diubah. Perubahan harus melalui review kontrak serta regenerasi client, bukan hanya dicatat dalam dokumentasi naratif.
 
 ## 2. Konvensi yang tidak boleh berbeda
 
@@ -47,9 +47,9 @@ Category IDs tetap: battery, biological, cardboard, clothes, glass, metal, paper
 
 Review bersama berlaku sebelum push ke main sesuai arahan pengguna. PR dapat digunakan sebagai sarana review bila diperlukan; bukan keharusan membuat branch publikasi baru.
 
-## 5. Gate otomatis yang harus dibuat
+## 5. Pemeriksaan kontrak
 
-Script existing: root `contracts:lint` menjalankan scripts/check-contracts.mjs, `contracts:check` saat ini alias lint, dan `contracts:routes` memeriksa route. Generate frontend tersedia melalui `npm run contracts:types -w @sap/web`; generated output berada di apps/web/lib/api/schema.d.ts. `contracts:check` belum berarti generated diff atau semua respons handler telah diperiksa. Gate extension untuk fixture tambahan, generated diff, contract tests handler dan alur integrasi direncanakan pada BE-00/13/14. TypeScript tidak memvalidasi JSON runtime: parse server output/provider dengan validator. Dokumen ini tidak menyatakan gate tersebut sudah dijalankan.
+Script existing: root `contracts:lint` menjalankan scripts/check-contracts.mjs, `contracts:check` saat ini alias lint, dan `contracts:routes` memeriksa route. Generate frontend tersedia melalui `npm run contracts:types -w @sap/web`; generated output berada di apps/web/lib/api/schema.d.ts. `contracts:check` belum berarti generated diff atau semua respons handler telah diperiksa. Acceptance extension untuk fixture tambahan, generated diff, respons handler dan alur integrasi mengikuti [gerbang aktif](RENCANA_ITASE_2026.md#gerbang-rilis). TypeScript tidak memvalidasi JSON runtime: parse server output/provider dengan validator. Dokumen ini tidak menyatakan gate tersebut sudah dijalankan.
 
 ## 6. Mock dan integrasi
 

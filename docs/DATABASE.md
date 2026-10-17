@@ -1,6 +1,6 @@
-# DATABASE — SAP PostgreSQL/PostGIS
+# DATABASE — VERGO PostgreSQL/PostGIS
 
-v1.0 · Pemilik: backend. SQL migrations dibuat saat implementasi; API tidak mengekspos row database langsung.
+v1.0 · Pemilik: backend. SQL migrations berada di `apps/api/migrations`; API tidak mengekspos row database langsung.
 
 ## 1. Konvensi dan relasi
 

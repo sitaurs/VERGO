@@ -1,4 +1,4 @@
-# CONTENT_OPERATIONS — Moderasi dan operasi SAP
+# CONTENT_OPERATIONS — Moderasi dan operasi VERGO
 
 v1.0 · Pemilik teknis: Zamani; admin operasional ditunjuk sebelum peluncuran. Dashboard frontend dikerjakan Zaka.
 
@@ -28,7 +28,7 @@ Baseline usulan: triase submitted setiap hari kerja, tangani laporan PII yang ma
 
 ## 6. Retensi dan penghapusan
 
-Sebelum submit, jelaskan moderasi, penggunaan lokasi untuk agregasi, publikasi teredaksi, dan kebijakan setelah akun dihapus. Baseline TECH_SPEC: scan media24 jam, orphan24 jam, media laporan90 hari setelah resolved, log30 hari/audit180 hari. Foto aktif dan data pribadi yang tidak lagi diperlukan dibersihkan. Akun yang dihapus kehilangan identitas/session; kejadian publik dapat dipertahankan secara anonim sesuai kebijakan yang disetujui. Bukti internal perlu akses terbatas dan masa retensi jelas.
+Sebelum submit, jelaskan moderasi, penggunaan lokasi untuk agregasi, publikasi teredaksi, dan kebijakan setelah akun dihapus. Usulan retensi baseline terdahulu, yang perlu ditetapkan operator sebelum menjadi janji publik: scan media24 jam, orphan24 jam, media laporan90 hari setelah resolved, log30 hari/audit180 hari. Foto aktif dan data pribadi yang tidak lagi diperlukan dibersihkan. Akun yang dihapus kehilangan identitas/session; kejadian publik dapat dipertahankan secara anonim sesuai kebijakan yang disetujui. Bukti internal perlu akses terbatas dan masa retensi jelas.
 
 ## 7. Checklist pembukaan
 

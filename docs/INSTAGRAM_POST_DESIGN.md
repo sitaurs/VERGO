@@ -1,12 +1,12 @@
-# Acuan poster Instagram SAP
+# Acuan poster Instagram VERGO
 
-Instruksi Zamani, 3 Oktober 2026. [Referensi visual](research/assets/sap-instagram-post-reference.png). Melengkapi [kontrak](CONTRACT_ZAKA_ZAMANI.md) dan [rencana backend](BACKEND_EXECUTION_PLAN.md). Ketentuan ini mengatur poster, bukan layout dashboard Zaka.
+Instruksi Zamani, 3 Oktober 2026. [Referensi visual](research/assets/sap-instagram-post-reference.png). Melengkapi [kontrak](CONTRACT_ZAKA_ZAMANI.md) dan [rencana aktif](RENCANA_ITASE_2026.md). Ketentuan ini mengatur poster, bukan layout dashboard Zaka.
 
-**Status: implementasi dilanjutkan atas instruksi Zamani.** Pada 5 Oktober 2026, render QA lokal sudah diperiksa memakai media fixture yang diberi label simulasi dan satu query OSM nyata untuk area H3 publik. QA menemukan lalu memperbaiki pemilihan nama wilayah (level administrasi OSM 7/5), ukuran/posisi inset peta, dan visibilitas atribusi. Output lolos format 1080 × 1350 sRGB JPEG. Pemeriksaan dengan foto laporan yang benar-benar berizin/di-approve, data lokasi sumber laporan, dan preview Meta belum dilakukan; kesesuaian final belum dinyatakan terverifikasi.
+**Batas bukti:** QA poster lokal 5 Oktober 2026 bersifat historis dan dirangkum di [ringkasan proyek](RINGKASAN_PROYEK.md). Foto berizin dari laporan aktual, sumber lokasi, preview Meta dan publish/retract memerlukan acceptance sesuai [rencana aktif](RENCANA_ITASE_2026.md#gerbang-rilis). Nama template/aset teknis lama tidak diubah hanya untuk mengganti merek.
 
 ## Tampilan
 
-Buat semirip mungkin dengan referensi: potret 4:5, latar krem bertekstur, hijau tua dan kuning; logo SAP kiri atas; judul besar/tebal dengan nama kawasan berwarna hijau; baris lokasi dengan ikon; foto lebar dengan potongan diagonal; panel hijau untuk waktu WIB, kategori, dan kode laporan; inset peta kanan bawah dengan bingkai krem; stempel status; CTA kuning “Pantau perkembangan di SAP”, panah, dan ornamen daun/geometris.
+Buat semirip mungkin dengan referensi: potret 4:5, latar krem bertekstur, hijau tua dan kuning; logo VERGO kiri atas; judul besar/tebal dengan nama kawasan berwarna hijau; baris lokasi dengan ikon; foto lebar dengan potongan diagonal; panel hijau untuk waktu WIB, kategori, dan kode laporan; inset peta kanan bawah dengan bingkai krem; stempel status; CTA kuning “Pantau perkembangan di VERGO”, panah, dan ornamen daun/geometris.
 
 Pemenggalan judul mengikuti panjang data nyata tanpa menghilangkan nama lokasi atau menimpa foto. Logo/font/aset template dibundel dan diberi versi. Label simulasi, foto ilustrasi, peta ilustratif, nomor 03, dan SAP-024 tidak disalin ke poster produksi. Poster demo tetap harus ditandai sebagai demo.
 

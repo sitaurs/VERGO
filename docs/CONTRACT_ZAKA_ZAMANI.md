@@ -1,10 +1,10 @@
-# Kontrak pengembangan SAP — Zaka dan Zamani
+# Kontrak extension VERGO — Zaka dan Zamani
 
-Tanggal: **3 Oktober 2026**. Versi dokumen: **1.0.0**. Cakupan: review Hermes, kejadian publik, komunitas, relawan, dampak, serta draf/publikasi/penarikan Instagram.
+Baseline kontrak 3 Oktober 2026, versi dokumen 1.0.0; catatan diperbarui 17 Oktober 2026. Cakupan: Hermes, kejadian publik, komunitas, relawan, dampak dan Instagram.
 
-**Status: kontrak rancangan untuk implementasi.** Endpoint tambahan dalam dokumen ini belum tersedia. Baseline aplikasi yang diperiksa adalah commit `977abeb`; hasil fetch menunjukkan push Zaka `78c2dfb` pada 2 Oktober sudah masuk checkout ini. Kontrak mesin yang sedang dipakai aplikasi tetap OpenAPI **1.1.0**. Target paket tambahan adalah **1.2.0**, setelah schema, handler, fixture, dan frontend siap; nomor target bukan klaim API sudah dirilis.
+**Acuan perilaku/DTO dan input generator R1.** Handler banyak fitur tersedia di source. Published OpenAPI tetap **1.1.0**, extension **1.2.0 draft**; keberadaan handler tidak membuktikan readiness migration/flags/provider atau acceptance deployment. Gunakan source dan kontrak mesin terkait untuk perilaku aktual.
 
-Dokumen ini menggantikan catatan kontrak lama `contract.md` dan `docs/instagram-publication-contract.md` dari commit `78c2dfb`. Riwayat patch autentikasi/animasi tetap dapat dibaca di Git. [Riset Hermes/Instagram](research/2026-10-03-hermes-instagram.md) dan [rencana komunitas](research/2026-10-03-community-volunteers-hermes-ux.md) menjelaskan alasan rancangan. [Rencana backend](BACKEND_EXECUTION_PLAN.md) mengatur pekerjaan Zamani.
+Rencana/handoff lama telah dikonsolidasikan ke [ringkasan proyek](RINGKASAN_PROYEK.md); pekerjaan dan penerimaan aktif ada di [rencana ITASE](RENCANA_ITASE_2026.md). Inventaris menu terkini mengikuti source dan ringkasan, termasuk Komunitas & Hermes, notifikasi dan penugasan. Tabel FE/penempatan layar di bawah adalah baseline fungsi; jangan memakai brief lama untuk menyimpulkan menu sekarang tidak tersedia. Perubahan UI tidak mengubah DTO tanpa sinkronisasi kontrak.
 
 ## 1. Pembagian kerja dan sumber acuan
 
@@ -795,7 +795,7 @@ Daftar skenario adalah requirement verifikasi implementasi mendatang; tidak ada 
 | Vote | Prioritas; tanpa poin/verification | Login/email; unique per canonical | §2, §7 |
 | Kegiatan partial versus resolved | Hasil berbukti | Lifecycle kegiatan terpisah | §11–12 |
 | Penarikan IG-only versus semua kanal | Scope eksplisit dan status per kanal | Peta tetap untuk IG-only | §14.3 |
-| Urutan eksekusi | Mengacu plan backend | Mengacu plan backend | BACKEND_EXECUTION_PLAN.md |
+| Urutan eksekusi | Backlog aktif | Backlog aktif | [Rencana ITASE](RENCANA_ITASE_2026.md) |
 | Layout | Referensi desain poster | Susunan layar hanya rekomendasi | Kebebasan Zaka, §1 dan §5 |
 
 ## 19. Prasyarat operasi yang diisi saat implementasi

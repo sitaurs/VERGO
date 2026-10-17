@@ -6,11 +6,11 @@
 
 | Berkas | Kegunaan |
 | --- | --- |
-| `openapi.json` | Salinan baseline 1.1.0 ditambah schema request/response, enum, query, izin, IM/IK/CSRF dan 79 operasi R1 |
+| `openapi.json` | Salinan baseline 1.1.0 ditambah schema request/response, enum, query, izin, IM/IK/CSRF dan operasi R1 |
 | `fixtures.json` | Contoh DTO dan skenario **sintetis** untuk pengembangan; bukan laporan, akun, foto atau post nyata |
 | `readiness.json` | Inventaris handler, status draf/tidak terverifikasi, default flag, serta syarat promosi kontrak |
 
-Acuan perilaku tetap [kontrak Zaka–Zamani](../../docs/CONTRACT_ZAKA_ZAMANI.md) dan [rencana backend](../../docs/BACKEND_EXECUTION_PLAN.md). Schema JSON menutup field asing pada DTO tetap; map memiliki tipe nilai yang eksplisit. Pemeriksaan lintas field, hubungan bukti, hak akses, revision dan lifecycle dicatat dalam `x-domain-rules` dan kontrak MD.
+Acuan perilaku tetap [kontrak Zaka–Zamani](../../docs/CONTRACT_ZAKA_ZAMANI.md) dan [rencana aktif](../../docs/RENCANA_ITASE_2026.md). Schema JSON menutup field asing pada DTO tetap; map memiliki tipe nilai yang eksplisit. Pemeriksaan lintas field, hubungan bukti, hak akses, revision dan lifecycle dicatat dalam `x-domain-rules` dan kontrak MD.
 
 ## Untuk Zaka
 
@@ -24,7 +24,7 @@ Tambahan operasi yang semula dijelaskan dalam prosa kini eksplisit: penerimaan k
 
 ## Regenerasi
 
-Jalankan `node scripts/generate-r1-contract.mjs` dari root repo. Generator membaca DTO TypeScript dalam kontrak MD, menambah request yang dijelaskan dalam tabel/prosa, dan mencatat deklarasi controller di source. Perintah ini menulis tiga artefak di folder ini; tidak menjalankan test, server, migration atau panggilan provider. Perubahan MD atau controller perlu diregenerasi bersama.
+Jalankan `node scripts/generate-r1-contract.mjs` dari root repo. Generator membaca DTO TypeScript dalam kontrak MD, menambah request yang dijelaskan dalam tabel/prosa, dan mencatat deklarasi controller di source. Perintah ini menulis tiga artefak di folder ini; tidak menjalankan test, server, migration atau panggilan provider. Perubahan MD atau controller perlu disinkronkan bersama. **Temuan 17 Oktober 2026:** generator baseline belum mereproduksi semua tambahan schema/fixture tracked; inspect diff sebelum memakai output agar operasi/field existing tidak hilang. Perapian dokumentasi mempertahankan schema/fixture tracked dan hanya menyinkronkan hash provenance pada readiness. Perbaikan reproduksibilitas ada di [gerbang A-13](../../docs/RENCANA_ITASE_2026.md#gerbang-rilis).
 
 ## Sebelum menjadi published
 

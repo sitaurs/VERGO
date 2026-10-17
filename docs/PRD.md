@@ -1,6 +1,8 @@
-# PRD — SAP
+# PRD — VERGO
 
 v1.0 · Produk web lengkap · Pemilik produk/backend: Zamani; UI/UX/frontend: Zaka.
+
+Acuan kebutuhan baseline; inventaris source/bukti ada di [ringkasan](RINGKASAN_PROYEK.md). Perubahan untuk SDG 3 dan lomba dipelihara pada [rencana aktif](RENCANA_ITASE_2026.md), belum menjadi fitur hanya karena direncanakan.
 
 ## 1. Tujuan
 

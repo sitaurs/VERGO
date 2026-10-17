@@ -1,4 +1,4 @@
-# ML_INTEGRATION — Model EcoLens untuk SAP
+# ML_INTEGRATION — Model EcoLens dan hybrid scan VERGO
 
 v1.0 · Pemilik: backend. Tidak ada training, fine-tuning atau model baru dalam cakupan.
 
@@ -96,10 +96,20 @@ Risiko source: `timm` tidak ada di requirements; `strict=False` dapat menyembuny
 
 VPS baseline 4 GB/2 vCPU, CPU-only, satu process dan concurrency 1. Benchmark RSS idle/peak, cold/warm latency, CPU saturation, timeout, queue age dan 2–5 scan bersamaan masih wajib. Swap hanya proteksi OOM.
 
-## 7. Status penerimaan
+## 7. Penerimaan dan bukti
 
-Terverifikasi: Basic Auth, discovery/`view_api`, upload, `/predict_gradio`, dan bentuk `LabelData`. Pada 4 Oktober 2026 worker production juga berhasil mengakses Gradio melalui jaringan Docker privat dan menjalankan satu inferensi pada gambar sintetis; hasilnya `paper` dengan tiga confidence entries. Ini hanya smoke test koneksi dan adapter, bukan bukti akurasi atau kesiapan model.
+Discovery/inferensi dasar serta smoke 4 Oktober adalah bukti historis yang dibatasi tanggal dan skenario; lihat [ringkasan](RINGKASAN_PROYEK.md#6-bukti-historis-dan-batasnya). Identitas model, matriks kategori/unknown/no-waste, response malformed/degraded, timeout/late result/restart, benchmark dan scan API sampai ledger tetap memerlukan bukti lingkungan sasaran. Jangan menyebut skor sebagai probabilitas terkalibrasi.
 
-Pending: fixture 10 kelas; known-positive/known-negative; unknown/no_waste/invalid/malformed/`error`; model hilang/mismatch; timeout/polling/late result/restart; benchmark; bukti `providerRevision`; dan scan E2E API → queue → worker → database. Lihat [ENVIRONMENT_READINESS.md](ENVIRONMENT_READINESS.md). Satu inferensi berhasil belum membuktikan akurasi, kesiapan kedua checkpoint, atau keseluruhan scan.
+## 8. Hybrid scan dan pengaturan runtime
+
+Empat mode: `full_ml` (ML saja), `unknown_only` (vision bila unknown), `unknown_plus_threshold` (unknown atau classified dengan top score di bawah ambang), dan `full_llm` (vision terlebih dahulu). Vision nonaktif memakai ML. Vision gagal menggunakan hasil ML atau memanggil ML sebagai fallback full-LLM; kegagalan ML sendiri tetap error.
+
+Sumber konfigurasi adalah singleton `scan_settings` pada database, disemai env saat kosong dan dapat diubah melalui admin `GET/PUT /admin/scan-settings`. Guard sesi/admin dan validasi gateway berlaku server-side. Setting dibaca worker dengan cache pendek; env bukan override baris DB yang sudah ada.
+
+Variabel seed: `SCAN_LLM_VISION_ENABLED`, `SCAN_HYBRID_MODE`, `SCAN_CONFIDENCE_THRESHOLD`, `SCAN_LLM_VISION_MODEL`. Timeout vision: `SCAN_LLM_VISION_TIMEOUT_MS`. Gateway memakai `SAPA_LLM_BASE_URL`/`SAPA_LLM_API_KEY`; rahasia tetap server-only. Default/validasi final mengikuti `packages/config/src/index.ts`.
+
+Source: `apps/worker/src/hybrid.ts`, `vision-client.ts`, `scan-settings-repository.ts`, `scan-processor.ts`, dan modul scan-settings admin. `providerRevision` membedakan ML, `llm:<model>` dan `llm_failed:<model>` menurut hasil; nilainya bukan bukti hash checkpoint jika metadata tersebut belum dicatat.
+
+Rencana selesai `HYBRID_SCAN_DETECTION.md` telah dikonsolidasikan; nama lamanya pada komentar migration/source adalah referensi historis. Migration yang sudah diterapkan tidak diedit untuk mengganti komentar.
 
 Rujukan: [Gradio JS client](https://www.gradio.app/main/docs/js-client) dan [source EcoLens](https://huggingface.co/spaces/wahb-amir/ecoLens/blob/3d41e0d13f1199eb34d2cd803914db49f6458904/utils/predict.py).

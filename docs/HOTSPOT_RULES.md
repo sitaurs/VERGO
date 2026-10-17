@@ -1,4 +1,4 @@
-# HOTSPOT_RULES — Area rawan SAP berdasarkan laporan
+# HOTSPOT_RULES — Area berdasarkan laporan VERGO
 
 v1.0 · Method version `reports-h3-v1` · Pemilik perhitungan: backend. Nama UI: **Area rawan berdasarkan laporan**. Perhitungan ini murni dari laporan termoderasi dan tidak bergantung pada runtime ML/provider.
 

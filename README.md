@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://sap.venlab.tech/">
+  <a href="https://vergo.venlab.tech/">
     <img src="docs/assets/vergo-brand-card.png" alt="VERGO — Verify and Go" width="520" />
   </a>
 </p>
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://sap.venlab.tech/"><img src="https://img.shields.io/badge/Explore_VERGO-sap.venlab.tech-087F5B?style=for-the-badge&amp;logo=leaflet&amp;logoColor=white" alt="Explore VERGO at sap.venlab.tech" /></a>
+  <a href="https://vergo.venlab.tech/"><img src="https://img.shields.io/badge/Explore_VERGO-vergo.venlab.tech-087F5B?style=for-the-badge&amp;logo=leaflet&amp;logoColor=white" alt="Explore VERGO at vergo.venlab.tech" /></a>
   <a href="https://github.com/sitaurs/VERGO"><img src="https://img.shields.io/badge/Source-sitaurs%2FVERGO-123B30?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="VERGO source code on GitHub" /></a>
 </p>
 
@@ -43,7 +43,7 @@ The platform brings these flows together with a personal dashboard, geographic i
 
 The project's research focus is **“Optimalisasi Pelaporan Sampah Terverifikasi Berbasis Multimodal Artificial Intelligence dan Geospatial Intelligence Menuju Good Health and Well-being 2030.”** It connects evidence-based reporting and community participation with the goal of healthier environments, in support of SDG 3: Good Health and Well-being.
 
-**Visit the website: [sap.venlab.tech](https://sap.venlab.tech/).** The interface defaults to English; users can choose Indonesian in Settings, and saved language preferences are preserved.
+**Visit the website: [vergo.venlab.tech](https://vergo.venlab.tech/).** The interface defaults to English; users can choose Indonesian in Settings, and saved language preferences are preserved.
 
 **Source repository: [sitaurs/VERGO](https://github.com/sitaurs/VERGO).**
 
@@ -67,7 +67,7 @@ The project's research focus is **“Optimalisasi Pelaporan Sampah Terverifikasi
 | **Hermes-assisted review** | Prepare structured evidence recommendations for human moderators. |
 | **Instagram workflows** | Prepare and publish approved content through consent and publication controls. |
 
-These modules are controlled by feature flags and require their associated migrations and services. The example environment disables the extensions by default. Consult the [implementation status](docs/BACKEND_IMPLEMENTATION_STATUS.md) and [production checklist](docs/PRODUCTION_BACKEND_TODO.md) for recorded verification and remaining work.
+These modules are controlled by feature flags and require their associated migrations and services. The example environment disables the extensions by default. Consult the [project summary](docs/RINGKASAN_PROYEK.md) for dated evidence and the [active plan](docs/RENCANA_ITASE_2026.md#gerbang-rilis) for remaining acceptance work.
 
 ### The product loop
 
@@ -96,7 +96,7 @@ flowchart LR
 | --- | --- |
 | Frontend | Next.js 16 App Router, React 19, TypeScript |
 | Styling and motion | Tailwind CSS 4, Motion, Lucide icons |
-| Maps and spatial indexing | Leaflet, PostGIS, H3 |
+| Maps and spatial indexing | Mapbox GL JS, Leaflet, PostGIS, H3 |
 | HTTP API | NestJS 12, versioned REST at `/api/v1` |
 | Persistence and retrieval | PostgreSQL, SQL migrations, pgvector, full-text search |
 | Background processing | Redis and BullMQ |
@@ -204,7 +204,7 @@ Enable VERA with `SAPA_FEATURE_ENABLED=true` and configure `SAPA_LLM_BASE_URL`, 
 
 Community and activities use `SAP_EXTENSION_ENABLED` together with `SAP_COMMUNITY_ENABLED` and `SAP_ACTIVITIES_ENABLED`. Hermes uses `SAP_HERMES_ENABLED` and its [private service configuration](services/hermes-review/README.md). Instagram rendering and publishing have separate flags and require the Meta integration, consent, and approval workflow.
 
-Apply the relevant migrations and configure the supporting services before enabling a module. Restart the affected processes after environment changes. See [the integration agreement](docs/CONTRACT_ZAKA_ZAMANI.md) and [backend execution plan](docs/BACKEND_EXECUTION_PLAN.md) for the full requirements.
+Apply the relevant migrations and configure the supporting services before enabling a module. Restart the affected processes after environment changes. See [the integration agreement](docs/CONTRACT_ZAKA_ZAMANI.md) and [active plan](docs/RENCANA_ITASE_2026.md) for the full requirements.
 
 </details>
 
@@ -240,28 +240,26 @@ Run these commands from the repository root:
 
 For application changes, run `npm run check` before committing. For documentation-only updates, check links, referenced assets, and command examples. The Hermes test script uses POSIX shell syntax and `python3`; on Windows, run the full check from WSL or Git Bash with Python available. Playwright requires its browser dependencies and the environment expected by its configuration. Database integration tests require a dedicated test database; see the [test plan](docs/TEST_PLAN.md).
 
-The published API contract is `1.1.0`; the R1 extension schema is a `1.2.0` draft. Keep handlers, schemas, fixtures, and generated frontend types aligned when changing API behavior. Local checks verify the repository; external-service and deployment acceptance is tracked separately in the [production checklist](docs/PRODUCTION_BACKEND_TODO.md).
+The published API contract is `1.1.0`; the R1 extension schema is a `1.2.0` draft. Keep handlers, schemas, fixtures, and generated frontend types aligned when changing API behavior. Local checks verify the repository; external-service and deployment acceptance is tracked in the [active release gates](docs/RENCANA_ITASE_2026.md#gerbang-rilis). Historical results are dated in the [project summary](docs/RINGKASAN_PROYEK.md).
 
 ## Documentation
 
 | Guide | Start here for |
 | --- | --- |
-| [Documentation index](docs/README.md) | The full specification and handoff collection. |
-| [Product requirements](docs/PRD.md) | Goals, users, and product scope. |
-| [Frontend handoff](docs/FRONTEND_HANDOFF.md) | Pages, states, and integration behavior. |
-| [VERA assistant guide](docs/SAPA_ASSISTANT.md) | Assistant behavior, API contract, and configuration under the original technical filename. |
-| [Published API contract](contracts/openapi.json) | Machine-readable baseline schemas. |
-| [R1 extension draft](contracts/r1/openapi.json) | Community, activity, moderation, and publication schemas. |
-| [Integration agreement](docs/CONTRACT_ZAKA_ZAMANI.md) | Shared frontend/backend responsibilities and workflows. |
-| [Backend execution plan](docs/BACKEND_EXECUTION_PLAN.md) | Dependencies, migrations, and acceptance criteria. |
-| [Community and volunteer research](docs/research/2026-10-03-community-volunteers-hermes-ux.md) | Participation flows and impact measurement. |
-| [Hermes and Instagram research](docs/research/2026-10-03-hermes-instagram.md) | Assisted review and publication design. |
-| [Implementation status](docs/BACKEND_IMPLEMENTATION_STATUS.md) | Recorded evidence and outstanding integration work. |
-| [Deployment guide](docs/DEPLOYMENT.md) | Runtime configuration and operations. |
+| [Documentation index](docs/README.md) | Maintained guides and source contracts. |
+| [Project summary](docs/RINGKASAN_PROYEK.md) | Existing features, decisions, current navigation, dated evidence and consolidated historical plans. |
+| [ITASE 2026 plan](docs/RENCANA_ITASE_2026.md) | The active backlog for SDG 3, report trust, UX, follow-up, competition deliverables and acceptance. |
+| [Product requirements](docs/PRD.md) | Goals, users and baseline product scope. |
+| [Architecture](docs/TECH_SPEC.md) | Current stack and domain boundaries. |
+| [VERA guide](docs/SAPA_ASSISTANT.md) | Assistant behavior and configuration under the original technical filename. |
+| [Published API](contracts/openapi.json) / [R1 draft](contracts/r1/README.md) | Machine-readable schemas and version promotion rules. |
+| [Extension contract](docs/CONTRACT_ZAKA_ZAMANI.md) | Shared frontend/backend DTOs and workflows. |
+| [Moderation](docs/CONTENT_OPERATIONS.md) | Human review, privacy and operations. |
+| [Deployment](docs/DEPLOYMENT.md) | Runtime configuration and recovery. |
 
 ---
 
 <p align="center">
   <strong>Every cleaner place starts with someone who notices.</strong><br />
-  <a href="https://sap.venlab.tech/">Explore VERGO →</a>
+  <a href="https://vergo.venlab.tech/">Explore VERGO →</a>
 </p>

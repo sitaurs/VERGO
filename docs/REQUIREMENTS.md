@@ -1,4 +1,4 @@
-# REQUIREMENTS — SAP
+# REQUIREMENTS — VERGO
 
 v1.0 · Semua FR-01 sampai FR-14 dan NFR berikut wajib untuk rilis lengkap. UI/UX/frontend milik Zaka; backend milik Zamani. Schema mesin berada di contracts/openapi.json.
 

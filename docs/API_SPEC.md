@@ -1,6 +1,6 @@
-# API_SPEC — SAP REST API
+# API_SPEC — VERGO REST API
 
-v1.1 · Sumber mesin: [contracts/openapi.json](../contracts/openapi.json). Base URL `/api/v1`; tanggal UTC dan hari Asia/Jakarta. **Pembaruan 4 Oktober 2026:** tabel di bawah merangkum 48 operasi dalam kontrak published di repository; ini bukan klaim bahwa semua endpoint sudah aktif di production. Handler tersedia di source, tetapi ketersediaan runtime, health provider, dan acceptance E2E harus dilihat per fitur di [status backend](BACKEND_IMPLEMENTATION_STATUS.md). Kontrak extension R1/1.2 ada sebagai draft terpisah dan belum published.
+v1.1 · Sumber mesin: [contracts/openapi.json](../contracts/openapi.json). Base URL `/api/v1`; tanggal UTC dan hari Asia/Jakarta. **Pembaruan 4 Oktober 2026:** tabel di bawah merangkum 48 operasi dalam kontrak published di repository; ini bukan klaim bahwa semua endpoint sudah aktif di production. Handler tersedia di source, tetapi ketersediaan runtime, health provider, dan acceptance E2E perlu dibuktikan per lingkungan; bukti historis dirangkum di [ringkasan proyek](RINGKASAN_PROYEK.md). Kontrak extension R1/1.2 ada sebagai draft terpisah dan belum published.
 
 ## 1. Envelope dan autentikasi
 

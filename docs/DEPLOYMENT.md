@@ -6,13 +6,13 @@ v1.0 · Pemilik API/data/worker: backend; build frontend: frontend. Target awal 
 
 ## 1. Lingkungan dan provider
 
-Default development memakai layanan managed khusus development: Neon PostgreSQL/PostGIS, Upstash Redis native TLS, Cloudflare R2 private via S3 API, Resend HTTPS API, dan Gradio self-hosted di VPS. Emulator/container lokal opsional, bukan syarat bootstrap. Browser memakai Next.js:3000 dan rewrite `/api/v1/*` ke NestJS:3001 bila lokal.
+Development memakai PostgreSQL/PostGIS, Redis native/BullMQ, object storage private kompatibel S3/R2, layanan email dan Gradio. Neon/Upstash adalah opsi managed dari konfigurasi awal; resource lokal atau host sendiri dapat dipakai sesuai environment. Browser memakai Next.js:3000 dan proxy `/api/v1/*` ke NestJS:3001 bila lokal.
 
 Dev, staging dan production wajib memiliki database, queue, bucket, credential email, ML credential dan application secret terpisah. Jangan mengirim email nyata dari fixture/seed. Resend tetap default dan wajib untuk production. Development dapat memakai credential SMTP lama secara eksplisit dengan `MAIL_TRANSPORT=smtp`; mode ini membutuhkan keempat field `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, dan `SMTP_PASSWORD`, tanpa `RESEND_API_KEY`. SMTP memakai TLS, timeout terbatas, dan tidak menulis isi email atau credential ke log. Tidak ada fallback email palsu ketika pengiriman gagal.
 
-Produksi: reverse proxy membagi `/api/v1` ke NestJS dan route lain ke Next.js; worker adalah process/container terpisah. Neon, Upstash, R2 dan Resend berada di luar private network VPS sehingga wajib TLS, timeout, retry terbatas dan monitoring. Cookie host-only dan same-origin API harus konsisten. Rujukan [Next.js rewrites](https://nextjs.org/docs/app/api-reference/config/next-config-js/rewrites).
+Produksi mengikuti `deploy/compose.yml`: web, API, worker, PostgreSQL dan Redis dapat berjalan pada host sendiri. Reverse proxy membagi `/api/v1` ke NestJS dan route lain ke Next.js; worker terpisah. Akses provider eksternal memerlukan TLS, timeout, retry terbatas dan monitoring; koneksi layanan internal mengikuti jaringan privat operator. Cookie host-only dan same-origin API harus konsisten. Rujukan [Next.js rewrites](https://nextjs.org/docs/app/api-reference/config/next-config-js/rewrites).
 
-Status aktual ada di [ENVIRONMENT_READINESS.md](ENVIRONMENT_READINESS.md); smoke provider tidak menggantikan integration test aplikasi.
+Bukti historis ada di [ringkasan proyek](RINGKASAN_PROYEK.md); status aktual harus dibuktikan per lingkungan. Penerimaan aktif mengikuti [rencana ITASE](RENCANA_ITASE_2026.md#gerbang-rilis); smoke provider tidak menggantikan integration test aplikasi.
 
 ## 2. Variabel environment kanonik
 
@@ -20,9 +20,9 @@ Status aktual ada di [ENVIRONMENT_READINESS.md](ENVIRONMENT_READINESS.md); smoke
 | --- | --- | --- |
 | `APP_ORIGIN` | Web server/API | Origin publik penuh tanpa trailing slash |
 | `API_INTERNAL_URL` | Web server/proxy | URL API server-side, bukan `NEXT_PUBLIC_*` |
-| `DATABASE_URL` | API/worker | Neon pooled connection; secret; TLS |
-| `DATABASE_DIRECT_URL` | Migration/admin | Neon direct connection; secret |
-| `REDIS_URL` | API/worker | Upstash native TLS `rediss://`; bukan REST URL/token |
+| `DATABASE_URL` | API/worker | PostgreSQL runtime connection; secret; TLS bila melintasi jaringan tak tepercaya |
+| `DATABASE_DIRECT_URL` | Migration/admin | Koneksi langsung opsional untuk migration; secret |
+| `REDIS_URL` | API/worker | Redis native `redis://` pada jaringan privat atau `rediss://` sesuai operator; bukan REST URL/token |
 | `SESSION_SECRET` | API | Secret signing security/session |
 | `CSRF_SECRET` | API | Secret signed double-submit token |
 | `MAIL_TRANSPORT` | API/worker config | `resend` default; `smtp` hanya nonproduction dan harus dipilih eksplisit |
