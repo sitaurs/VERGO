@@ -232,7 +232,7 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
               key={report.id}
               role="button"
               tabIndex={0}
-              aria-label={t("Lihat detail laporan {0}", { "0": report.description.slice(0, 50) })}
+              aria-label={t("Lihat detail laporan {0}", { "0": report.description })}
               onClick={() => setDetailId(report.id)}
               onKeyDown={event => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -242,9 +242,9 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
               }}
             >
               <div className={styles.reportFinding}>
-                <MediaThumbnail className={styles.reportPhoto} mediaId={report.mediaIds[0]} alt={t("Foto laporan {0}", { "0": report.description.slice(0, 50) })} />
+                <MediaThumbnail className={styles.reportPhoto} mediaId={report.mediaIds[0]} alt={t("Foto laporan {0}", { "0": report.description })} />
                 <div>
-                  <strong>{report.description.slice(0, 80)}</strong>
+                  <strong>{report.description}</strong>
                   <span className={styles.reportMobileLabel}>{t("Lokasi")}</span>
                   <span>{report.location.latitude.toFixed(4)}, {report.location.longitude.toFixed(4)}</span>
                   <small>{report.reportedSeverity === "small" ? t("Tumpukan kecil") : report.reportedSeverity === "medium" ? t("Tumpukan sedang") : t("Tumpukan besar")} · {report.timeline.length} {" "}{t("pembaruan")}</small>

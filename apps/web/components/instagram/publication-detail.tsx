@@ -18,7 +18,7 @@ import PostDetailDialog from "./post-detail-dialog";
 import PostPreviewPanel from "./post-preview-panel";
 import PostContentEditor from "./post-content-editor";
 import OperationPanel from "./operation-panel";
-import { PostStatus } from "./publication-ui";
+import { Notice, PostStatus } from "./publication-ui";
 import { instagramPermalink } from "./publication-utils";
 import { POSTER_TEMPLATE_VERSION } from "./types";
 import type {
@@ -72,10 +72,12 @@ export default function PublicationDetail({
     [epoch, setEpoch] = useState(0),
     [expired, setExpired] = useState(false);
   const [uncertain, setUncertain] = useState(false);
+  const previewPolls = useRef(0);
   const confirmationRef = useRef<HTMLDivElement>(null);
   useEffect(() => { if (confirm) confirmationRef.current?.focus({ preventScroll: true }); }, [confirm]);
   const key = useIntentKey(),
     id = record?.id ?? post?.id,
+    recordRenditionStatus = record?.rendition.status,
     dirty =
       caption !== (record?.caption ?? preview?.caption ?? "") ||
       altText !== (record?.altText ?? preview?.source.title ?? ""),
@@ -83,6 +85,17 @@ export default function PublicationDetail({
   useEffect(() => {
     dirtyRef.current = dirty;
   }, [dirty]);
+  useEffect(() => {
+    previewPolls.current = 0;
+  }, [id]);
+  useEffect(() => {
+    if (!id || recordRenditionStatus !== "queued" || busy || loading || dirty || latest || uncertain || previewPolls.current >= 15) return;
+    const timer = window.setTimeout(() => {
+      previewPolls.current += 1;
+      setEpoch((value) => value + 1);
+    }, 2000);
+    return () => window.clearTimeout(timer);
+  }, [id, recordRenditionStatus, busy, loading, dirty, latest, uncertain, epoch]);
   useEffect(() => {
     if (!id) return;
     const c = new AbortController();
@@ -93,6 +106,7 @@ export default function PublicationDetail({
     ])
       .then(([p, v]) => {
         if (c.signal.aborted) return;
+        if (p.rendition.status !== "queued") previewPolls.current = 0;
         setUncertain(false);
         if (dirtyRef.current) {
           setLatest({ post: p, preview: v });
@@ -239,6 +253,7 @@ export default function PublicationDetail({
         );
       }
       if (updated) {
+        previewPolls.current = 0;
         setUncertain(false);
         setRecord(updated);
         setCaption(updated.caption);
@@ -292,6 +307,7 @@ export default function PublicationDetail({
     : record.status === "published" ? "Postingan sudah diterbitkan di Instagram."
     : record.status === "retracted" ? "Ditarik"
     : record.status === "cancelled" ? "Draf dibatalkan."
+    : record.rendition.status === "queued" ? "Gambar VERGO sedang dibuat. Pratinjau diperbarui otomatis selama sekitar 30 detik."
     : staleFormat ? needsFormatRefresh ? "Format atau branding draf ini sudah lama. Simpan ulang untuk membuat caption dan preview VERGO baru; persetujuan lama tidak berlaku." : "Caption dan preview VERGO baru sedang disiapkan. Persetujuan lama tidak berlaku."
     : !ready ? "Tinjau gambar final yang siap sebelum menyetujui."
     : !approved ? "Setujui konten sebelum memposting."
@@ -336,10 +352,15 @@ export default function PublicationDetail({
           fallback={!record ? "Simpan draf untuk menghasilkan preview gambar final."
             : expired ? "Preview kedaluwarsa. Perbarui informasi untuk mengambil URL baru."
             : final?.rendition.status === "failed" ? "Pembuatan gambar final gagal. Hubungi pengelola."
+            : record.rendition.status === "queued" || final?.rendition.status === "queued" ? "Gambar VERGO sedang dibuat. Pratinjau akan diperbarui otomatis; bila belum muncul setelah beberapa saat, pilih Perbarui."
             : "Preview gambar final sedang disiapkan atau belum tersedia."}
           refreshing={loading} canRefresh={!busy && !loading && !!id}
-          canOpenReport={!dirty && !busy} onRefresh={() => setEpoch(value => value + 1)} onReport={onReport} onImageError={() => setExpired(true)} />
+          canOpenReport={!dirty && !busy} onRefresh={() => { previewPolls.current = 0; setEpoch(value => value + 1); }} onReport={onReport} onImageError={() => setExpired(true)} />
         <section className={ui.editorColumn} aria-label={t("Konten postingan")}>
+          {overview?.account.status === "connected" && overview.account.username && !/vergo/i.test(overview.account.username) && <Notice warning>
+            <strong>{t("Periksa akun tujuan sebelum menyetujui atau memposting.")}</strong>
+            <p>{t("Konten VERGO akan tampil di Instagram sebagai")} <b>@{overview.account.username}</b>. {t("Hubungkan akun resmi VERGO sebelum publikasi.")}</p>
+          </Notice>}
           <PostContentEditor caption={caption} altText={altText} editable={editable} disabled={busy || loading || uncertain}
             approved={approved && !dirty} approvalLabel={approvalLabel}
             onCaption={value => { setCaption(value); setConfirm(null); setMessage(""); }}

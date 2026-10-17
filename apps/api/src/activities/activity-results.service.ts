@@ -7,6 +7,7 @@ import { ExtensionStore, type Actor, type Executor, type PublicationEvidence, fa
 import { checkRevision, enumeration, ids, object, strings, text, uuid } from '../extensions/input.js';
 import { ActivitiesService } from './activities.service.js';
 import { measurementInput, resultInput, weight, type ActivityRow, type MeasurementInput, type MeasurementRow, type ResultInput, type ResultRow } from './activities.types.js';
+import { isSyntheticQaDescription } from '../reports/synthetic-qa.js';
 
 @Injectable()
 export class ActivityResultsService {
@@ -119,9 +120,9 @@ export class ActivityResultsService {
    return this.store.db.begin(async tx=>{
     const [ref]=await tx<{report_id:string}[]>`SELECT report_id FROM activities WHERE id=${activityId}`;if(!ref)fail(404,'NOT_FOUND');
     // Serialize public reads with source withdrawal, activity edits and consent revocation.
-    const [report]=await tx<{status:string;public_visibility:string;duplicate_of_id:string|null}[]>`SELECT status,public_visibility,duplicate_of_id FROM reports WHERE id=${ref.report_id} FOR SHARE`;
+    const [report]=await tx<{status:string;description:string;public_visibility:string;duplicate_of_id:string|null}[]>`SELECT status,description,public_visibility,duplicate_of_id FROM reports WHERE id=${ref.report_id} FOR SHARE`;
     const [activity]=await tx<{public_ever:boolean}[]>`SELECT public_ever FROM activities WHERE id=${activityId} FOR SHARE`;
-    if(!activity?.public_ever||!report||report.public_visibility!=='public'||report.duplicate_of_id!==null||!['verified','in_progress','resolved'].includes(report.status))fail(404,'NOT_FOUND');
+    if(!activity?.public_ever||!report||report.public_visibility!=='public'||report.duplicate_of_id!==null||isSyntheticQaDescription(report.description)||!['verified','in_progress','resolved'].includes(report.status))fail(404,'NOT_FOUND');
     const rows=await tx<ResultRow[]>`SELECT ar.* FROM activity_results ar WHERE ar.activity_id=${activityId} AND ar.report_id=${ref.report_id} AND ar.status='approved'
       AND (${page.boundary?.at??null}::timestamptz IS NULL OR (ar.created_at,ar.id)<(${page.boundary?.at??null}::timestamptz,${page.boundary?.id??null}::uuid))
       ORDER BY ar.created_at DESC,ar.id DESC LIMIT ${page.limit+1}`;const selected=rows.slice(0,page.limit);
@@ -133,7 +134,7 @@ export class ActivityResultsService {
         AND er.media_id=a.media_id AND er.subject_type=a.subject_type AND er.subject_id=a.subject_id AND er.status='ready' AND er.object_key IS NOT NULL
         AND m.state='stored' AND m.deleted_at IS NULL AND 'web'=ANY(mc.channels) ORDER BY a.id FOR SHARE OF a,er,m,mc`;
      const measurement=row.measurement_id?(await tx<MeasurementRow[]>`WITH RECURSIVE chain AS (SELECT * FROM impact_measurements WHERE id=${row.measurement_id} UNION ALL SELECT m.* FROM impact_measurements m JOIN chain c ON m.supersedes_id=c.id) SELECT * FROM chain WHERE status='verified' LIMIT 1`)[0]:undefined;
-     return {id:row.id,activityId,reportId:row.report_id,summary:row.public_summary!,outcome:row.verified_outcome!,observedAt:iso(row.observed_at),evidence:await Promise.all(evidence.map(async e=>{const signed=await this.objects.createSignedGetUrl(e.object_key);return {id:e.id,url:signed.url,expiresAt:signed.expiresAt.toISOString(),observedAt:row.data.afterMediaIds.includes(e.media_id)?iso(row.observed_at):null,caption:'Bukti yang disetujui SAP'};})),verifiedMeasurement:measurement?{valueKg:Number(measurement.value_kg),unit:'kg',stage:measurement.stage}:null};
+     return {id:row.id,activityId,reportId:row.report_id,summary:row.public_summary!,outcome:row.verified_outcome!,observedAt:iso(row.observed_at),evidence:await Promise.all(evidence.map(async e=>{const signed=await this.objects.createSignedGetUrl(e.object_key);return {id:e.id,url:signed.url,expiresAt:signed.expiresAt.toISOString(),observedAt:row.data.afterMediaIds.includes(e.media_id)?iso(row.observed_at):null,caption:'Bukti yang disetujui VERGO'};})),verifiedMeasurement:measurement?{valueKg:Number(measurement.value_kg),unit:'kg',stage:measurement.stage}:null};
     }));return {items,nextCursor:rows.length>page.limit?page.encode(selected[selected.length-1]!):null};
    });
   }

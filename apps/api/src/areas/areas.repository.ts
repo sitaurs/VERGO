@@ -3,6 +3,7 @@ import { DATABASE, type Database } from '../infrastructure/database.module.js';
 import type { CategoryId } from '../scans/scan.types.js';
 import type { DateRange, EligibleIncident, PublicStatus } from './areas.types.js';
 import type { Bbox } from './areas.types.js';
+import { SYNTHETIC_QA_DESCRIPTION_PATTERN } from '../reports/synthetic-qa.js';
 
 /** A public report row for the area detail listing (no reporter, no exact coords). */
 export interface PublicReportRow {
@@ -34,6 +35,7 @@ export class AreasRepository {
       status IN ('verified', 'in_progress', 'resolved')
       AND duplicate_of_id IS NULL
       AND COALESCE(to_jsonb(reports)->>'public_visibility','public')='public'
+      AND description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
       AND occurred_at >= ${range.from} AND occurred_at < ${range.to}
       ${categoryId ? this.sql`AND category_id = ${categoryId}` : this.sql``}`;
   }
@@ -118,6 +120,7 @@ export class AreasRepository {
       WHERE r.status IN ('verified', 'in_progress', 'resolved')
         AND r.duplicate_of_id IS NULL
         AND COALESCE(to_jsonb(r)->>'public_visibility','public')='public'
+        AND r.description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
         AND r.occurred_at >= ${range.from} AND r.occurred_at < ${range.to}
         ${categoryId ? this.sql`AND r.category_id = ${categoryId}` : this.sql``}
         AND r.h3_cell = ${cellId}

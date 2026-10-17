@@ -20,6 +20,7 @@ import {
 
 /** TTL for a best-effort cached snapshot (refresh cadence is ~5 min, HOTSPOT_RULES §7). */
 const SNAPSHOT_TTL_MS = 10 * 60 * 1_000;
+const SNAPSHOT_SOURCE_FILTER_VERSION = 'public-qa-filter-v1';
 export const DEFAULT_AREA_REPORTS_PAGE = 20;
 
 @Injectable()
@@ -46,7 +47,7 @@ export class AreasService {
     if (!bbox) throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'bbox tidak valid (west,south,east,north).' });
     const range = this.range(fromRaw, toRaw);
     const asOf = new Date();
-    const cacheKey = `map:${METHOD_VERSION}:${range.from.toISOString()}:${range.to.toISOString()}:${categoryId ?? '*'}:${bboxRaw}`;
+    const cacheKey = `map:${METHOD_VERSION}:${SNAPSHOT_SOURCE_FILTER_VERSION}:${range.from.toISOString()}:${range.to.toISOString()}:${categoryId ?? '*'}:${bboxRaw}`;
 
     try {
       const cells = await this.areas.findCandidateCells(bbox, range, categoryId);
@@ -82,7 +83,7 @@ export class AreasService {
     }
     const range = this.range(fromRaw, toRaw);
     const asOf = new Date();
-    const cacheKey = `cell:${METHOD_VERSION}:${range.from.toISOString()}:${range.to.toISOString()}:${categoryId ?? '*'}:${cellId}`;
+    const cacheKey = `cell:${METHOD_VERSION}:${SNAPSHOT_SOURCE_FILTER_VERSION}:${range.from.toISOString()}:${range.to.toISOString()}:${categoryId ?? '*'}:${cellId}`;
 
     let feature: AreaFeatureView | null;
     try {
