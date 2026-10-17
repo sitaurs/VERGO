@@ -63,3 +63,18 @@ test('public report detail hides explicit QA rows without changing their source 
   assert.equal(report.status, 'verified');
   assert.equal(report.public_visibility, 'public');
 });
+
+test('public report detail also hides QA markers stored only in the public summary', async () => {
+  const report = {
+    id: REPORT_ID, description: 'Sampah ditemukan dekat taman.', public_summary: '[DATA UJI QA] simulasi saja',
+    status: 'verified', public_visibility: 'public', public_ever: true, duplicate_of_id: null,
+  };
+  const db = (async () => [report]) as never;
+  const service = new CommunityService({ db } as never, {} as never, {} as never);
+
+  await assert.rejects(service.publicReport(REPORT_ID), (error: unknown) =>
+    typeof error === 'object' && error !== null && 'getStatus' in error &&
+    typeof error.getStatus === 'function' && error.getStatus() === 404);
+  assert.equal(report.description, 'Sampah ditemukan dekat taman.');
+  assert.equal(report.public_summary, '[DATA UJI QA] simulasi saja');
+});

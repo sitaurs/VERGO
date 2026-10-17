@@ -53,6 +53,7 @@ export class PublicationsService{
    FROM reports r LEFT JOIN categories c ON c.id=r.category_id
    WHERE r.public_visibility='public' AND r.instagram_allowed AND r.status IN ('verified','in_progress','resolved')
     AND r.description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
+    AND COALESCE(r.public_summary,'') !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
     AND r.duplicate_of_id IS NULL AND r.public_summary IS NOT NULL AND r.public_summary<>''
     AND (${search==='' } OR r.public_summary ILIKE ${like} OR COALESCE(c.name_id,'') ILIKE ${like}
      OR r.id::text ILIKE ${like} OR to_char(COALESCE(r.occurred_at,r.created_at) AT TIME ZONE 'Asia/Jakarta','YYYY-MM-DD') ILIKE ${like})
@@ -75,7 +76,7 @@ export class PublicationsService{
   const reportId=input.uuid(b.reportId),mediaId=input.uuid(b.mediaId),captionInput=input.text(b.caption,1,2200),altText=input.text(b.altText,1,1000),kind=input.enumeration(b.kind,['initial','resolution'] as const),milestoneId=b.milestoneId===null?null:input.uuid(b.milestoneId),replacesPostId=b.replacesPostId===null?null:input.uuid(b.replacesPostId);
   if((kind==='initial')!==(milestoneId===null))fail(400,'VALIDATION_ERROR');
   return this.store.mutate(actor,'instagram.create',key,{reportId,mediaId,caption:captionInput,altText,kind,milestoneId,replacesPostId},async tx=>{
-   const report=await this.evidence.subject(tx,'report',reportId,true);if(isSyntheticQaDescription(report.description))fail(409,'SOURCE_NOT_APPROVED');const milestone=milestoneId?await this.milestone(tx,reportId,milestoneId):null;const asset=await this.sourceAsset(tx,report,mediaId,kind,milestone);
+   const report=await this.evidence.subject(tx,'report',reportId,true);if(isSyntheticQaDescription(report.description)||isSyntheticQaDescription(report.public_summary))fail(409,'SOURCE_NOT_APPROVED');const milestone=milestoneId?await this.milestone(tx,reportId,milestoneId):null;const asset=await this.sourceAsset(tx,report,mediaId,kind,milestone);
    const source=await this.sourceSnapshot(tx,report,mediaId,milestone),caption=publicationCaption(captionInput,source);
    if(caption.length>2200)fail(400,'VALIDATION_ERROR','Caption terlalu panjang setelah tanggal, area dan tautan status ditambahkan. Ringkas teks utama lalu simpan lagi.');
    const [account]=await tx`SELECT * FROM instagram_accounts WHERE singleton=true FOR SHARE`;if(!account)fail(500,'RESOURCE_STATE_INVALID');if(this.health(account)!=='connected')fail(409,'INSTAGRAM_ACCOUNT_REQUIRED');

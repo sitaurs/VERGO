@@ -120,9 +120,9 @@ export class ActivityResultsService {
    return this.store.db.begin(async tx=>{
     const [ref]=await tx<{report_id:string}[]>`SELECT report_id FROM activities WHERE id=${activityId}`;if(!ref)fail(404,'NOT_FOUND');
     // Serialize public reads with source withdrawal, activity edits and consent revocation.
-    const [report]=await tx<{status:string;description:string;public_visibility:string;duplicate_of_id:string|null}[]>`SELECT status,description,public_visibility,duplicate_of_id FROM reports WHERE id=${ref.report_id} FOR SHARE`;
+    const [report]=await tx<{status:string;description:string;public_summary:string|null;public_visibility:string;duplicate_of_id:string|null}[]>`SELECT status,description,public_summary,public_visibility,duplicate_of_id FROM reports WHERE id=${ref.report_id} FOR SHARE`;
     const [activity]=await tx<{public_ever:boolean}[]>`SELECT public_ever FROM activities WHERE id=${activityId} FOR SHARE`;
-    if(!activity?.public_ever||!report||report.public_visibility!=='public'||report.duplicate_of_id!==null||isSyntheticQaDescription(report.description)||!['verified','in_progress','resolved'].includes(report.status))fail(404,'NOT_FOUND');
+    if(!activity?.public_ever||!report||report.public_visibility!=='public'||report.duplicate_of_id!==null||isSyntheticQaDescription(report.description)||isSyntheticQaDescription(report.public_summary)||!['verified','in_progress','resolved'].includes(report.status))fail(404,'NOT_FOUND');
     const rows=await tx<ResultRow[]>`SELECT ar.* FROM activity_results ar WHERE ar.activity_id=${activityId} AND ar.report_id=${ref.report_id} AND ar.status='approved'
       AND (${page.boundary?.at??null}::timestamptz IS NULL OR (ar.created_at,ar.id)<(${page.boundary?.at??null}::timestamptz,${page.boundary?.id??null}::uuid))
       ORDER BY ar.created_at DESC,ar.id DESC LIMIT ${page.limit+1}`;const selected=rows.slice(0,page.limit);

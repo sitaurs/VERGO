@@ -36,6 +36,7 @@ export class AreasRepository {
       AND duplicate_of_id IS NULL
       AND COALESCE(to_jsonb(reports)->>'public_visibility','public')='public'
       AND description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
+      AND COALESCE(public_summary,'') !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
       AND occurred_at >= ${range.from} AND occurred_at < ${range.to}
       ${categoryId ? this.sql`AND category_id = ${categoryId}` : this.sql``}`;
   }
@@ -121,6 +122,7 @@ export class AreasRepository {
         AND r.duplicate_of_id IS NULL
         AND COALESCE(to_jsonb(r)->>'public_visibility','public')='public'
         AND r.description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
+        AND COALESCE(r.public_summary,'') !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
         AND r.occurred_at >= ${range.from} AND r.occurred_at < ${range.to}
         ${categoryId ? this.sql`AND r.category_id = ${categoryId}` : this.sql``}
         AND r.h3_cell = ${cellId}

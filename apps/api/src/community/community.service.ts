@@ -39,11 +39,11 @@ export class CommunityService {
       if (report.status === 'duplicate' && report.duplicate_of_id && !locked.some(row => row.id === report.duplicate_of_id)) fail(409, 'REVISION_CONFLICT');
     }
     if (!report) fail(404, 'NOT_FOUND');
-    if (isSyntheticQaDescription(report.description)) fail(404, 'NOT_FOUND');
+    if (isSyntheticQaDescription(report.description) || isSyntheticQaDescription(report.public_summary)) fail(404, 'NOT_FOUND');
     if (report.status === 'duplicate' && report.duplicate_of_id) {
       const candidates = lock ? locked.filter(row => row.id === report.duplicate_of_id) : await tx<Row[]>`SELECT * FROM reports WHERE id=${report.duplicate_of_id}`;
       const candidate = candidates[0];
-      if (candidate && !isSyntheticQaDescription(candidate.description) && candidate.public_visibility === 'public' && eligibleStatuses.includes(candidate.status) && !candidate.duplicate_of_id) {
+      if (candidate && !isSyntheticQaDescription(candidate.description) && !isSyntheticQaDescription(candidate.public_summary) && candidate.public_visibility === 'public' && eligibleStatuses.includes(candidate.status) && !candidate.duplicate_of_id) {
         return { ...candidate, redirected_from: report.id };
       }
       if (report.public_ever) fail(410, 'INCIDENT_WITHDRAWN');
@@ -66,6 +66,7 @@ export class CommunityService {
       WHERE a.report_id=${reportId} AND a.channel='web' AND a.approved AND r.public_visibility='public'
         AND r.status IN ('verified','in_progress','resolved') AND r.duplicate_of_id IS NULL
         AND r.description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
+        AND COALESCE(r.public_summary,'') !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
         AND er.status='ready' AND er.object_key IS NOT NULL AND m.state='stored' AND m.deleted_at IS NULL
         AND er.subject_type=a.subject_type AND er.subject_id=a.subject_id AND er.media_id=m.id
         AND (
@@ -99,6 +100,7 @@ export class CommunityService {
         LEFT JOIN incident_supports s ON s.report_id=r.id AND s.supported AND EXISTS(SELECT 1 FROM users u WHERE u.id=s.user_id AND u.deleted_at IS NULL)
         WHERE r.public_visibility='public' AND r.status IN ('verified','in_progress','resolved') AND r.duplicate_of_id IS NULL
           AND r.description !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
+          AND COALESCE(r.public_summary,'') !~* ${SYNTHETIC_QA_DESCRIPTION_PATTERN}
           AND (${status}::text IS NULL OR r.status=${status})
           AND (${categoryId}::text IS NULL OR r.category_id=${categoryId})
           AND (${searchTerm}::text IS NULL OR r.public_summary ILIKE ${searchTerm} ESCAPE '\\' OR r.h3_cell ILIKE ${searchTerm} ESCAPE '\\' OR r.id::text ILIKE ${searchTerm} ESCAPE '\\')
@@ -204,7 +206,7 @@ export class CommunityService {
       ORDER BY f.created_at DESC,f.report_id DESC LIMIT ${page.limit+1}`;
     const chosen = rows.slice(0,page.limit);
     return { items: chosen.map(row => {
-      const publicAvailable = row.public_visibility==='public' && eligibleStatuses.includes(row.status) && !row.duplicate_of_id && !isSyntheticQaDescription(row.description);
+      const publicAvailable = row.public_visibility==='public' && eligibleStatuses.includes(row.status) && !row.duplicate_of_id && !isSyntheticQaDescription(row.description) && !isSyntheticQaDescription(row.public_summary);
       return { incidentId: row.id, title: publicAvailable ? row.public_summary : null, status: publicAvailable ? row.status : null,
         availability: publicAvailable ? 'public' : 'withdrawn', canonicalPath: `/incidents/${row.id}`, lastEventAt: publicAvailable ? iso(row.updated_at) : null };
     }), nextCursor: rows.length>page.limit ? page.encode({id:chosen[chosen.length-1]!.id,created_at:chosen[chosen.length-1]!.followed_at}) : null };
