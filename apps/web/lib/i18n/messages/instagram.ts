@@ -86,6 +86,10 @@ Tarik postingan|Retract post
 Periksa di Instagram|Check on Instagram
 Pengaturan publikasi|Publishing settings
 Memuat versi terbaru…|Loading latest version…
+Draf ini memakai format atau branding lama. Simpan ulang untuk membuat caption dan gambar VERGO baru; persetujuan lama tidak berlaku sampai pratinjau baru diperiksa.|This draft uses an old format or branding. Save it again to create a new VERGO caption and image; the old approval is invalid until the new preview is reviewed.
+Format atau branding draf ini sudah lama. Simpan ulang untuk membuat caption dan preview VERGO baru; persetujuan lama tidak berlaku.|This draft uses an old format or branding. Save it again to create a new VERGO caption and preview; the old approval is invalid.
+Caption dan preview VERGO baru sedang disiapkan. Persetujuan lama tidak berlaku.|The new VERGO caption and preview are being prepared. The old approval is invalid.
+Buat pratinjau VERGO baru|Create a new VERGO preview
 Riwayat publikasi sumber|Source publishing history
 Riwayat publikasi|Publishing history
 Memuat riwayat…|Loading history…

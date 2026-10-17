@@ -9,8 +9,18 @@ type Executor=Sql|TransactionSql;
 export function selectPublicationAsset(assets:Row[],sources:Row[]):Row|undefined{
  return assets.find(asset=>sources.some(source=>(source.media_id===undefined||source.media_id===asset.media_id)&&source.subject_type===asset.subject_type&&source.subject_id===asset.subject_id));
 }
+export function normalizeInstagramTemplate(value:string):string {
+ return value.replace(/https?:\/\/(?:www\.)?sap\.venlab\.tech(?:\/[^\s]*)?/gi,'{url}').replace(/\bSAP\b/gi,'VERGO');
+}
+export function normalizeInstagramHashtags(value:string):string { return value.replace(/#SAP\b/gi,'#VERGO'); }
 export function publicationStatusCaption(caption:string,source:{occurredAt:string;area:{label:string};publicUrl?:string}):string {
- const body=caption.split('--- Status VERGO ---')[0]!.trim();
+ let body=caption.split('--- Status VERGO ---')[0]!.trim()
+  .replace(/\bPantau(?:\s+\w+)?\s+di\s+(?:SAP|VERGO)\s*:\s*https?:\/\/[^\s]+/gi,'')
+  .replace(/https?:\/\/(?:www\.)?sap\.venlab\.tech[^\s]*/gi,source.publicUrl??'')
+  .replace(/#SAP\b/gi,'#VERGO')
+  .replace(/\b(Pantau(?:\s+\w+)?\s+di\s+)SAP\b/gi,'$1VERGO');
+ if(source.publicUrl)body=body.replaceAll(source.publicUrl,'');
+ body=body.replace(/\n[ \t]*\n[ \t]*\n/g,'\n\n').trim();
  const date=new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeZone:'Asia/Jakarta'}).format(new Date(source.occurredAt));
  return `${body}\n\n--- Status VERGO ---\nLaporan warga · bukti ditinjau moderator\nPengamatan: ${date} · ${source.area.label}\nKondisi dapat berubah. Status terbaru / koreksi:\n${source.publicUrl}`;
 }
@@ -115,7 +125,7 @@ export class PublicationProcessor{
    if(media.id===published.id&&typeof media.permalink==='string'&&/^https:\/\//.test(media.permalink))await this.sql`UPDATE instagram_posts SET permalink=${media.permalink} WHERE id=${post.id} AND provider_media_id=${published.id}`;
   }catch{}
  }
- private approved(post:Row){return post.template_version==='vergo-feed-status-v4'&&post.source_snapshot?.publicUrl===new URL(`/incidents/${post.report_id}`,this.config.APP_ORIGIN).toString()&&post.caption===publicationStatusCaption(post.caption,post.source_snapshot)&&post.approval?.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready'&&!!post.rendition_object_key;}
+ private approved(post:Row){return post.template_version==='vergo-feed-status-v5'&&post.source_snapshot?.publicUrl===new URL(`/incidents/${post.report_id}`,this.config.APP_ORIGIN).toString()&&post.caption===publicationStatusCaption(post.caption,post.source_snapshot)&&post.approval?.status==='approved'&&post.approval.contentRevision===post.content_revision&&post.approval.sourceRevision===post.source_revision&&post.approval.renditionId===post.rendition_id&&post.rendition_status==='ready'&&!!post.rendition_object_key;}
  private async inspectUncertain(op:Row,post:Row,token:string){
   if(post.provider_media_id){await this.successPublish(op,post,post.provider_media_id,post.permalink);return;}
   if(post.provider_container_id){try{await this.stage(op,'uncertain');await this.graph(post.provider_container_id,token,{fields:'id,status_code'});}catch(error){if(error instanceof LeaseLost)throw error;}}
@@ -348,9 +358,9 @@ export class PublicationProcessor{
     const sources=milestone.kind==='initial'?[{subject_type:'report',subject_id:reportId}]:milestone.allowedSources;
     const asset=selectPublicationAsset(assets,sources);if(!asset)continue;
     const summary=String(milestone.summary),url=new URL(`/incidents/${reportId}`,this.config.APP_ORIGIN).toString(),template=String(settings.payload.captionTemplate||'{summary}');
-    let caption=template.replace(/\{summary\}/g,summary).replace(/\{url\}/g,url).replace(/\{reportId\}/g,reportId).replace(/\{jenis_sampah\}/g,report.category_name??'Belum dikategorikan').replace(/\{ringkasan_laporan\}/g,summary);
+    let caption=normalizeInstagramTemplate(template).replace(/\{summary\}/g,summary).replace(/\{url\}/g,url).replace(/\{reportId\}/g,reportId).replace(/\{jenis_sampah\}/g,report.category_name??'Belum dikategorikan').replace(/\{ringkasan_laporan\}/g,summary);
     if(milestone.outcome==='partial')caption='Penanganan sebagian. '+caption;
-    caption+=(settings.payload.hashtags?'\n'+settings.payload.hashtags:'');if([...caption].length>2200||![...summary].length)continue;
+    const hashtags=normalizeInstagramHashtags(String(settings.payload.hashtags??''));caption+=(hashtags?'\n'+hashtags:'');if([...caption].length>2200||![...summary].length)continue;
     const source={reportId,canonicalId:reportId,publicUrl:url,sourceRevision:report.revision,scanId:report.scan_id,status:report.status,occurredAt:new Date(milestone.observed_at).toISOString(),area:{cellId:report.h3_cell,label:`Area ${report.h3_cell}`},title:`Laporan ${report.category_name??'lingkungan'}`,categoryName:report.category_name??'Belum dikategorikan',mediaId:asset.media_id,publicSummary:summary};
     await tx`INSERT INTO instagram_publication_series(report_id,account_id,kind,milestone_key) VALUES(${reportId},${account.id},${milestone.kind},${milestone.id??'initial'}) ON CONFLICT DO NOTHING`;
     const [series]=await tx`SELECT * FROM instagram_publication_series WHERE report_id=${reportId} AND account_id=${account.id} AND kind=${milestone.kind} AND milestone_key=${milestone.id??'initial'} FOR UPDATE`;

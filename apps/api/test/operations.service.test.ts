@@ -46,11 +46,13 @@ test('CSV export neutralizes formula prefixes including whitespace and quotes', 
 
 test('evidence request reaches only the report owner and leaves moderation status unchanged', async () => {
   const statements: string[] = [];
+  const notificationValues: unknown[][] = [];
   const reports = [{ reporter_id: target, status: 'submitted', revision: 7 }];
-  const tx = async (parts: TemplateStringsArray) => {
+  const tx = async (parts: TemplateStringsArray, ...values: unknown[]) => {
     const sql = parts.join(' ').replace(/\s+/g, ' ').trim(); statements.push(sql);
     if (sql.includes('FROM reports WHERE id=')) return reports;
     if (sql.includes('FROM users WHERE id=')) return [{ id: target }];
+    if (sql.includes('INSERT INTO notifications(')) notificationValues.push(values);
     return [];
   };
   const store = {
@@ -62,6 +64,7 @@ test('evidence request reaches only the report owner and leaves moderation statu
   const result = await service.requestEvidence(admin as never, target, crypto.randomUUID(), { message: 'Mohon tambahkan foto lokasi.' });
   assert.deepEqual(result, { reportId: target, notified: true });
   assert.ok(statements.some(sql => sql.includes("'evidence_requested'")));
+  assert.equal(notificationValues[0]?.[3], `/dashboard?view=reports&report=${target}`);
   assert.equal(statements.some(sql => sql.startsWith('UPDATE reports')), false);
   assert.equal(reports[0]?.status, 'submitted');
 });

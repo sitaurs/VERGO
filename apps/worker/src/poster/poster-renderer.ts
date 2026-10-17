@@ -12,11 +12,14 @@ export type PosterSource = {
   mediaId:string;publicSummary:string;
 };
 export type PosterInput = {source:PosterSource;photo:Buffer;outcome:'initial'|'partial'|'complete';reportCode:string};
-export type RenderedPoster = {bytes:Buffer;source:PosterSource;map:MapMetadata;mapData:MapData;templateVersion:'vergo-feed-status-v4'};
+export type RenderedPoster = {bytes:Buffer;source:PosterSource;map:MapMetadata;mapData:MapData;templateVersion:'vergo-feed-status-v5'};
 const WIDTH=1080, HEIGHT=1350, CREAM='#f8f4e7', GREEN='#115239';
 const BLACK_FONT=fileURLToPath(new URL('./assets/fonts/Roboto-Black.ttf',import.meta.resolve('@sap/worker/package.json')));
 const BODY_FONT=fileURLToPath(new URL('./assets/fonts/RobotoCondensed-Bold.ttf',import.meta.resolve('@sap/worker/package.json')));
 type Layer={input:Buffer;left:number;top:number};
+
+/** Keep the database's legacy public code private to the identifier; poster branding uses VERGO. */
+export function posterReportCode(value:string):string { return value.replace(/^SAP-/,'VERGO-'); }
 
 // Missing fonts can silently render every letter as the same square in Pango.
 export async function assertPosterFonts(): Promise<void> {
@@ -59,7 +62,7 @@ export class PosterRenderer {
     layers.push(await this.text(map.metadata.areaLabel,35,'#102c23',133,437,870,51,false));
     layers.push(await this.text(`${date} • ${time} WIB`,35,'#ffffff',173,910,375,62,false));
     layers.push(await this.text(source.categoryName,35,'#ffffff',169,1000,379,61,false));
-    layers.push(await this.text(`Laporan ${input.reportCode}`,35,'#ffffff',169,1082,375,57,false));
+    layers.push(await this.text(`Laporan ${posterReportCode(input.reportCode)}`,35,'#ffffff',169,1082,375,57,false));
     layers.push(await this.text('Status terbaru & koreksi di VERGO',34,'#103c29',231,1211,635,45,true));
     layers.push(await this.text(publicUrl,22,GREEN,220,1302,810,35,false));
     layers.push(await this.text('Kondisi dapat berubah setelah tanggal pengamatan.',21,GREEN,230,1258,630,31,false));
@@ -92,7 +95,7 @@ export class PosterRenderer {
     </svg>`;
     const bytes=await sharp(Buffer.from(base),{limitInputPixels:25000000}).composite(layers).flatten({background:CREAM}).toColourspace('srgb').jpeg({quality:93,mozjpeg:true}).toBuffer();
     if(bytes.length>7*1024*1024)throw new Error('POSTER_SIZE_EXCEEDED');
-    return {bytes,source,map:map.metadata,mapData:map.data,templateVersion:'vergo-feed-status-v4'};
+    return {bytes,source,map:map.metadata,mapData:map.data,templateVersion:'vergo-feed-status-v5'};
   }
   private async text(value:string,size:number,color:string,left:number,top:number,width:number,height:number,black:boolean):Promise<Layer> {
     if([...value].length>250)throw new Error('POSTER_TEXT_INVALID');

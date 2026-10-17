@@ -9,6 +9,7 @@ export type PublicationSettings = R1["PublicationSettings"];
 export type PublicationOperation = R1["PublicationOperation"];
 export type PublicationPage = R1["PublicationPage"];
 export type PublicationFilter = "all" | PublicationStatus;
+export const POSTER_TEMPLATE_VERSION = "vergo-feed-status-v5";
 export type PublicationQuery = {
   status: PublicationFilter;
   search: string;

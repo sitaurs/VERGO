@@ -20,6 +20,7 @@ import PostContentEditor from "./post-content-editor";
 import OperationPanel from "./operation-panel";
 import { PostStatus } from "./publication-ui";
 import { instagramPermalink } from "./publication-utils";
+import { POSTER_TEMPLATE_VERSION } from "./types";
 import type {
   InstagramOverview,
   InstagramPost,
@@ -133,7 +134,12 @@ export default function PublicationDetail({
       caption.length <= 2200 &&
       altText.trim().length > 0 &&
       altText.length <= 1000;
-  const needsFormatRefresh = !!record && (record.rendition.templateVersion !== "vergo-feed-status-v4" || !record.caption.includes(source.publicUrl)) && record.rendition.status !== "queued";
+  const staleFormat = !!record && (
+    record.rendition.templateVersion !== POSTER_TEMPLATE_VERSION ||
+    !record.caption.includes(source.publicUrl) ||
+    /sap\.venlab\.tech|#SAP\b|Pantau(?:\s+\w+)?\s+di\s+SAP/i.test(record.caption)
+  );
+  const needsFormatRefresh = staleFormat && record.rendition.status !== "queued";
   const ready =
     !!final &&
     !expired &&
@@ -142,6 +148,8 @@ export default function PublicationDetail({
     final.contentRevision === record?.contentRevision &&
     final.sourceRevision === record?.source.sourceRevision;
   const approved =
+    !staleFormat &&
+    record?.rendition.templateVersion === POSTER_TEMPLATE_VERSION &&
     record?.approval.status === "approved" &&
     record.approval.contentRevision === record.contentRevision &&
     record.approval.sourceRevision === record.source.sourceRevision &&
@@ -284,7 +292,7 @@ export default function PublicationDetail({
     : record.status === "published" ? "Postingan sudah diterbitkan di Instagram."
     : record.status === "retracted" ? "Ditarik"
     : record.status === "cancelled" ? "Draf dibatalkan."
-    : needsFormatRefresh ? "Simpan ulang draf untuk menambahkan tanggal, area dan tautan status pada gambar final."
+    : staleFormat ? needsFormatRefresh ? "Format atau branding draf ini sudah lama. Simpan ulang untuk membuat caption dan preview VERGO baru; persetujuan lama tidak berlaku." : "Caption dan preview VERGO baru sedang disiapkan. Persetujuan lama tidak berlaku."
     : !ready ? "Tinjau gambar final yang siap sebelum menyetujui."
     : !approved ? "Setujui konten sebelum memposting."
     : "Konten disetujui; belum diposting.";
@@ -312,7 +320,7 @@ export default function PublicationDetail({
           <div className={ui.actions}>
             {editable && <button type="button" className={ui.outline}
               disabled={busy || loading || !available || !valid || !!latest || !!confirm || (!!record && ((!dirty && !needsFormatRefresh) || uncertain))}
-              onClick={() => void execute("save")}><Save size={18} />{t(uncertain && !record ? "Periksa penyimpanan draf" : "Simpan draf")}</button>}
+              onClick={() => void execute("save")}><Save size={18} />{t(uncertain && !record ? "Periksa penyimpanan draf" : needsFormatRefresh ? "Buat pratinjau VERGO baru" : "Simpan draf")}</button>}
             {record && <>
               <button type="button" className={approved ? ui.outline : ui.primary} disabled={blocked || !ready || !!confirm || !record.actions.approve.allowed} onClick={() => setConfirm("approve")}><ShieldCheck size={18} />{t("Setujui konten")}</button>
               <button type="button" className={`${ui.primary} ${ui.publish}`} disabled={blocked || !approved || !!confirm || !record.actions.publish.allowed || !overview?.capabilities.canPublish} onClick={() => setConfirm("publish")}><Send size={18} />{t("Posting sekarang")}</button>

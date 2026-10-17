@@ -4,6 +4,7 @@ import test from 'node:test';
 import type { ExecutionContext, HttpException } from '@nestjs/common';
 import { AdminService } from '../src/admin/admin.service.js';
 import { AdminGuard } from '../src/admin/admin.guard.js';
+import { ModerationRepository } from '../src/admin/moderation.repository.js';
 import {
   awardAction,
   isSameStatusPublish,
@@ -13,6 +14,7 @@ import {
   requiresSafePhoto,
 } from '../src/admin/moderation.types.js';
 import type { DecideResult } from '../src/admin/moderation.repository.js';
+import type { Tx } from '../src/infrastructure/idempotency.store.js';
 import type { AuditEventView } from '../src/admin/audit.repository.js';
 import type { DecisionInputDto } from '../src/admin/dto.js';
 import type { ReportRecord, ReportStatus, ReportView } from '../src/reports/report.types.js';
@@ -193,6 +195,7 @@ const FAILURE_CASES: Array<[DecideResult, string]> = [
   [{ ok: false, reason: 'summary_required' }, 'REPORT_INVALID'],
   [{ ok: false, reason: 'resolution_media_required' }, 'REPORT_INVALID'],
   [{ ok: false, reason: 'report_evidence_required' }, 'EVIDENCE_REQUIRED'],
+  [{ ok: false, reason: 'appeal_reviewer_recused' }, 'APPEAL_REVIEWER_RECUSED'],
   [{ ok: false, reason: 'publish_media_invalid' }, 'MEDIA_INVALID'],
 ];
 
@@ -212,6 +215,28 @@ test('decideReport returns the updated report view on success', async () => {
   assert.equal(view.id, REPORT);
   assert.equal((decideArgs[0] as { ifMatchRevision: number }).ifMatchRevision, 3);
   assert.equal((decideArgs[0] as { requestId: string }).requestId, 'req-1');
+});
+
+test('accepted appeal recuses the original report moderator server-side and leaves another admin to normal moderation checks', async () => {
+  async function decideAs(actorId:string, recused:boolean){
+    const tx=Object.assign((async(strings:TemplateStringsArray)=>{
+      const sql=strings.join('?');
+      if(sql.includes('INSERT INTO idempotency_keys'))return [{key:KEY}];
+      if(sql.includes('SELECT reporter_id, status, revision'))return [{reporter_id:'reporter',status:'submitted',revision:3,public_summary:null,public_visibility:'hidden',photo_unavailable_reason:null}];
+      if(sql.includes('SELECT EXISTS'))return [{recused}];
+      return [];
+    }) as unknown as Tx,{json:(value:unknown)=>value});
+    const repository=new ModerationRepository(
+      {begin:(work:(_tx:typeof tx)=>Promise<unknown>)=>work(tx)} as never,
+      {reserve:async()=>null} as never,{} as never,{} as never,{} as never,{} as never,
+    );
+    return repository.decide({reportId:REPORT,actorId,actorScope:`user:${actorId}`,route:'POST /admin/reports/decisions',key:KEY,
+      requestHash:'hash',requestId:null,ifMatchRevision:3,nextStatus:'in_progress',reason:'QA follow-up',duplicateOfId:null,
+      resolutionMediaIds:[],resolutionEvidenceIds:[],publicEvidenceApprovals:[],publicSummary:null,publishMediaIds:[]});
+  }
+  assert.deepEqual(await decideAs('66666666-6666-4666-8666-666666666666',true),{ok:false,reason:'appeal_reviewer_recused'});
+  assert.deepEqual(await decideAs('77777777-7777-4777-8777-777777777777',false),{ok:false,reason:'invalid_transition'},
+    'a different admin passes recusal and reaches the ordinary report transition rules');
 });
 
 test('listAdminReports reports nextCursor only when another page exists', async () => {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { selectPublicationAsset } from '../src/publication-processor.js';
+import { normalizeInstagramHashtags, normalizeInstagramTemplate, publicationStatusCaption, selectPublicationAsset } from '../src/publication-processor.js';
 
 test('automatic initial drafts select only Instagram-approved evidence attached to the report', () => {
   const reportId = 'report-1';
@@ -26,7 +26,6 @@ test('resolution drafts continue to require the approved milestone evidence sour
 });
 
 test('automatic captions preserve a canonical status link and refresh observation metadata without duplicate footer', async () => {
-  const { publicationStatusCaption } = await import('../src/publication-processor.js');
   const source = { occurredAt: '2026-10-05T00:00:00Z', area: { label: 'Kauman, Kota Malang' }, publicUrl: 'https://vergo.example/incidents/report-1' };
   const caption = publicationStatusCaption('Penanganan sebagian. Bukti terbaru.', source);
   assert.match(caption, /Penanganan sebagian/);
@@ -34,4 +33,15 @@ test('automatic captions preserve a canonical status link and refresh observatio
   assert.match(caption, /Pengamatan: 5 Okt 2026 · Kauman, Kota Malang/);
   assert.ok(caption.endsWith(source.publicUrl));
   assert.equal(publicationStatusCaption(caption, source), caption);
+});
+
+test('new automatic copy replaces legacy branding and keeps only the configured canonical status link', () => {
+  const source = { occurredAt: '2026-10-05T00:00:00Z', area: { label: 'Kauman, Kota Malang' }, publicUrl: 'https://vergo.example/incidents/report-1' };
+  const stale = 'Pantau perkembangan di SAP: https://sap.venlab.tech/incidents/old\n#SAP #Lingkungan';
+  const caption = publicationStatusCaption(stale, source);
+  assert.doesNotMatch(caption, /\bSAP\b|sap\.venlab\.tech/i);
+  assert.match(caption, /#VERGO #Lingkungan/);
+  assert.equal(caption.split(source.publicUrl).length - 1, 1);
+  assert.equal(normalizeInstagramTemplate('{summary} Pantau di SAP: {url}'), '{summary} Pantau di VERGO: {url}');
+  assert.equal(normalizeInstagramHashtags('#SAP #Lingkungan'), '#VERGO #Lingkungan');
 });

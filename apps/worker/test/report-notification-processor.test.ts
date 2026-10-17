@@ -109,7 +109,7 @@ test('hidden report decision notifies its original reporter and atomically queue
   const notice = [...h.notifications.values()][0]!;
   assert.equal(notice[0], userId);
   assert.equal(notice[1], `report-reporter:${reportId}:3`);
-  assert.equal(notice[4], '/dashboard?view=reports');
+  assert.equal(notice[4], `/dashboard?view=reports&report=${reportId}`);
   assert.equal(h.emails.size, 1);
   assert.equal(h.outbox.size, 1);
   assert.equal(h.sent.length, 0);
@@ -161,7 +161,7 @@ for (const status of ['submitted', 'verified', 'in_progress', 'resolved', 'rejec
     const email = h.emails.get(emailId)!;
     const notice = reportDecisionNotice(status)!;
     assert.equal(email.subject, notice.title);
-    assert.equal(email.body_text, `${notice.message}\n\nhttps://sap.local.test/dashboard?view=reports`);
+    assert.equal(email.body_text, `${notice.message}\n\nhttps://sap.local.test/dashboard?view=reports&report=${reportId}`);
     assert.doesNotMatch(JSON.stringify([...h.notifications.values(), email]), /PRIVATE/);
   });
 }

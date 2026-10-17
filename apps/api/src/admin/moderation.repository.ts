@@ -52,7 +52,8 @@ export type DecideFailure =
   | 'summary_required'
   | 'resolution_media_required'
   | 'publish_media_invalid'
-  | 'report_evidence_required';
+  | 'report_evidence_required'
+  | 'appeal_reviewer_recused';
 
 export type DecideResult =
   | { ok: true; view: ReportView; replayed: boolean }
@@ -112,6 +113,21 @@ export class ModerationRepository {
       const row = cur[0];
       if (!row) throw new DecisionAbort('not_found');
       if (row.revision !== input.ifMatchRevision) throw new DecisionAbort('conflict');
+
+      // Once an appeal is accepted for a fresh review, the moderator whose
+      // decision is being appealed must not make the follow-up report decision.
+      // source_revision identifies that decision even if later report metadata
+      // changed before the appeal was submitted.
+      const recused = await tx<{ recused:boolean }[]>`SELECT EXISTS (
+        SELECT 1 FROM report_appeals a
+        JOIN LATERAL (
+          SELECT md.actor_id FROM moderation_decisions md
+          WHERE md.report_id=a.report_id AND md.revision_before<a.source_revision
+          ORDER BY md.revision_before DESC,md.created_at DESC LIMIT 1
+        ) appealed_decision ON TRUE
+        WHERE a.report_id=${input.reportId} AND a.status='accepted' AND appealed_decision.actor_id=${input.actorId}
+      ) AS recused`;
+      if (recused[0]?.recused) throw new DecisionAbort('appeal_reviewer_recused');
 
       const from = row.status;
       const to = input.nextStatus;

@@ -181,6 +181,25 @@
 @media(max-width:760px){.historyFilters{align-items:stretch;flex-direction:column}.filterPills{flex-wrap:nowrap}.historyFilters .selectWrap{width:100%}.mapLayers{right:0;width:62px;border-radius:9px 0 0 9px}.helpCardCopy{max-width:44%;position:relative;z-index:1}.helpCard>img{width:49%}}
 @media(max-width:490px){.helpCardCopy{max-width:45%}.helpCard>img{width:48%}}
 
+/* My reports becomes a compact card list on small screens instead of squeezing three table columns. */
+.reportMobileLabel{display:none}
+@media(max-width:760px){
+  .tableHead{display:none}
+  .reportRows{padding:6px 2px}
+  .reportRows article{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:12px;padding:16px 10px;font-size:14px}
+  .reportRows article>.reportFinding{grid-column:1/-1;flex-direction:row;align-items:flex-start;gap:12px;min-width:0}
+  .reportPhoto{width:56px;flex:0 0 56px;border-radius:10px}
+  .reportFinding>div{min-width:0;gap:5px}
+  .reportFinding strong{font-size:15px;line-height:1.4}
+  .reportMobileLabel{display:block;color:#718296;font-size:11px;font-weight:750;line-height:1.3}
+  .reportDate{display:flex;min-width:0;flex-direction:column;align-items:flex-start;gap:4px;color:#43566e;font-size:13px;line-height:1.4}
+  .reportStatus{justify-self:start;align-self:start;width:fit-content;max-width:100%;min-width:0;padding:7px 10px;font-size:12px;line-height:1.35;white-space:normal;overflow-wrap:anywhere}
+}
+@media(max-width:360px){
+  .reportRows article{grid-template-columns:minmax(0,1fr);gap:10px}
+  .reportRows article>.reportFinding{grid-column:auto}
+}
+
 /* Mobile navigation is a separate surface; desktop declarations above stay intact. */
 .mobileAdminBack{display:none}
 @media(max-width:760px){

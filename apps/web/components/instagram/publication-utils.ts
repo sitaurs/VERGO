@@ -23,10 +23,17 @@ export function eligibleReport(report: SapReport) {
     && !!report.publicSummary?.trim() && report.publishedMediaIds.length > 0;
 }
 export function buildCaption(source: PublicationSource, settings: PublicationSettings) {
-  const text = settings.captionTemplate.replaceAll("{jenis_sampah}", source.categoryName)
-    .replaceAll("{ringkasan_laporan}", source.publicSummary);
-  const body = [text.trim(), settings.hashtags.trim()].filter(Boolean).join("\n\n");
+  const template = settings.captionTemplate
+    .replace(/https?:\/\/(?:www\.)?sap\.venlab\.tech(?:\/[^\s]*)?/gi, "{url}")
+    .replace(/\bSAP\b/gi, "VERGO")
+    .replace(/\bPantau(?:\s+\w+)?\s+di\s+VERGO\s*:\s*\{url\}/gi, "");
+  const text = template.replaceAll("{jenis_sampah}", source.categoryName)
+    .replaceAll("{ringkasan_laporan}", source.publicSummary)
+    .replaceAll("{url}", source.publicUrl ?? "");
+  const hashtags = settings.hashtags.replace(/#SAP\b/gi, "#VERGO");
+  let body = [text.trim(), hashtags.trim()].filter(Boolean).join("\n\n");
   if (!source.publicUrl) return body;
+  body = body.replaceAll(source.publicUrl, "").replace(/\n[ \t]*\n[ \t]*\n/g, "\n\n").trim();
   const date = new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeZone: "Asia/Jakarta" }).format(new Date(source.occurredAt));
   return `${body}\n\n--- Status VERGO ---\nLaporan warga · bukti ditinjau moderator\nPengamatan: ${date} · ${source.area.label}\nKondisi dapat berubah. Status terbaru / koreksi:\n${source.publicUrl}`;
 }

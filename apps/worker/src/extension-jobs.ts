@@ -300,8 +300,8 @@ export class ExtensionJobs {
         const notice=type==='incident_withdrawn'
           ? {title:'Informasi kejadian ditarik',message:'Informasi ini tidak lagi tersedia untuk publik.'}
           : type==='incident_resolved'
-            ? {title:'Kejadian telah ditangani',message:'Buka SAP untuk melihat perkembangan penanganan kejadian.'}
-            : {title:'Perkembangan kejadian',message:'Buka SAP untuk melihat informasi terbaru yang tersedia.'};
+            ? {title:'Kejadian telah ditangani',message:'Buka VERGO untuk melihat perkembangan penanganan kejadian.'}
+            : {title:'Perkembangan kejadian',message:'Buka VERGO untuk melihat informasi terbaru yang tersedia.'};
         await tx`INSERT INTO notifications(user_id,event_key,type,title,message,target_path)
           SELECT f.user_id,${`report:${reportId}:${sourceRevision}`},${type},${notice.title},${notice.message},${`/incidents/${reportId}`}
           FROM incident_follows f JOIN users u ON u.id=f.user_id WHERE f.report_id=${reportId} AND f.following AND u.deleted_at IS NULL

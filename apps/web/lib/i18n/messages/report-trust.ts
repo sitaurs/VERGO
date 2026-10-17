@@ -53,4 +53,7 @@ export const reportTrust: Record<string, string> = {
   "Progres tugas ditandai selesai": "The task was marked complete",
   "Belum ada penanggung jawab yang ditugaskan; progres penanganan belum tercatat.": "No one has been assigned yet, so no follow-up progress has been recorded.",
   "Progres tugas adalah catatan tindak lanjut; status Selesai tetap memerlukan keputusan moderator berdasarkan bukti.": "Task progress records follow-up; the incident is marked Resolved only after a moderator reviews the evidence.",
+  "Anda membuat keputusan awal laporan ini. Anda tidak dapat meninjau banding atau mengubah status laporan melalui alur banding. Minta admin lain untuk melanjutkan.": "You made the original report decision. You cannot review this appeal or change the report status through its review. Ask another admin to continue.",
+  "Admin yang membuat keputusan awal tidak dapat memutuskan tindak lanjut banding ini. Minta admin lain untuk melanjutkan.": "The admin who made the original decision cannot decide this appeal follow-up. Ask another admin to continue.",
+  "Anda tidak dapat meninjau permintaan banding sendiri. Minta admin lain untuk melanjutkan.": "You cannot review your own appeal. Ask another admin to continue.",
 };

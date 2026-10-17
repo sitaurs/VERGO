@@ -45939,6 +45939,9 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "reviewerRecused": {
+            "type": "boolean"
           }
         },
         "required": [

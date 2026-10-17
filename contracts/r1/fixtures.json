@@ -1082,7 +1082,8 @@
       "revision": 1,
       "decisionReason": null,
       "createdAt": "2026-10-03T02:15:00.000Z",
-      "updatedAt": "2026-10-03T02:15:00.000Z"
+      "updatedAt": "2026-10-03T02:15:00.000Z",
+      "reviewerRecused": false
     },
     "ReportAppealInput": {
       "reason": "DATA CONTOH SINTETIS",

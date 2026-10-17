@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { incidentPublicUrl, publicationCaption, publicationContextReady, sourceUpdateState } from '../src/publications/publication.types.js';
+import { incidentPublicUrl, normalizeInstagramHashtags, normalizeInstagramTemplate, publicationCaption, publicationContextReady, sourceUpdateState } from '../src/publications/publication.types.js';
 
 const id='11111111-1111-4111-8111-111111111111';
 const origin='https://vergo.example';
@@ -18,9 +18,18 @@ test('caption retains user summary and adds safe area, Jakarta observation date 
  assert.equal(publicationCaption(caption,source),caption);
  assert.match(publicationCaption(caption,{...source,occurredAt:'2026-10-06T00:00:00Z'}),/6 Okt 2026/);
 });
+test('legacy Instagram branding and host are removed from newly saved captions and settings',()=>{
+ const caption=publicationCaption('Pantau perkembangan di SAP: https://sap.venlab.tech/incidents/old\n#SAP #Lingkungan',source);
+ assert.doesNotMatch(caption,/\bSAP\b|sap\.venlab\.tech/i);
+ assert.match(caption,/#VERGO #Lingkungan/);
+ assert.equal(caption.split(source.publicUrl).length-1,1);
+ assert.equal(normalizeInstagramTemplate('{summary}\nPantau perkembangan di SAP: https://sap.venlab.tech/incidents/old'),'{summary}\nPantau perkembangan di VERGO: {url}');
+ assert.equal(normalizeInstagramHashtags('#SAP #Lingkungan'),'#VERGO #Lingkungan');
+});
 test('older previews or captions missing current canonical context cannot be approved for publication',()=>{
- const post={source_snapshot:source,caption:publicationCaption('Sampah terlihat.',source),template_version:'vergo-feed-status-v4'};
+ const post={source_snapshot:source,caption:publicationCaption('Sampah terlihat.',source),template_version:'vergo-feed-status-v5'};
  assert.equal(publicationContextReady(post,origin),true);
+ assert.equal(publicationContextReady({...post,template_version:'vergo-feed-status-v4'},origin),false);
  assert.equal(publicationContextReady({...post,template_version:'sap-feed-reference-v3'},origin),false);
  assert.equal(publicationContextReady({...post,caption:'Tanpa tautan'},origin),false);
  assert.equal(publicationContextReady(post,'https://other.example'),false);

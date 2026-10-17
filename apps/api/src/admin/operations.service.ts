@@ -99,7 +99,7 @@ export class OperationsService {
       if(!recipient)fail(409,'REPORTER_UNAVAILABLE','Pelapor tidak dapat dihubungi.');
       const eventKey=`evidence-request:${actor.id}:${key}`;
       await tx`INSERT INTO notifications(user_id,event_key,type,title,message,target_path)
-        VALUES(${recipient.id},${eventKey},'evidence_requested','Admin meminta klarifikasi',${message},'/dashboard?view=reports') ON CONFLICT(user_id,event_key,type) DO NOTHING`;
+        VALUES(${recipient.id},${eventKey},'evidence_requested','Admin meminta klarifikasi',${message},${`/dashboard?view=reports&report=${id}`}) ON CONFLICT(user_id,event_key,type) DO NOTHING`;
       await this.store.audit(tx,actor.id,'report.evidence_requested','report',id,{reportRevision:report.revision,messageLength:[...message].length});
       return {reportId:id,notified:true};
     });

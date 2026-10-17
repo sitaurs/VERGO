@@ -219,7 +219,57 @@ function ReportsView({ reports, categories, onReportSubmitted, onReportsChanged,
 
   return <>
     <div className={styles.referenceHeadingRow}><PageTitle title={t("Laporan saya")} description={t("Pantau status laporan yang Anda kirim.")} /><div className={styles.reportToolbar}><button className={styles.primaryButton} type="button" onClick={() => { setComposerOpen(true); onReportWizardChange(true); }}><FilePlus2 size={20} />{t("Buat laporan")}</button><span className={styles.selectWrap}><Filter size={19} /><select aria-label={t("Filter status laporan")} value={status} onChange={event => setStatus(event.target.value)}><option value="all">{t("Semua status")}</option>{Object.entries(reportStatus).map(([key, label]) => <option key={key} value={key}>{t(label)}</option>)}</select><ChevronDown size={17} /></span><DateFilter value={period} onChange={setPeriod} /></div></div>
-    <section className={styles.reportTable}><div className={styles.tableHead}><span><MapPin size={22} />{t("Temuan")}</span><span><CalendarDays size={22} />{t("Dikirim")}</span><span><List size={22} />{t("Status")}</span></div>{filtered.length ? <div className={styles.reportRows}>{filtered.map(report => <article key={report.id} role="button" tabIndex={0} aria-label={t("Lihat detail laporan {0}", { "0": report.description.slice(0, 50) })} onClick={() => setDetailId(report.id)} onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setDetailId(report.id); } }}><div className={styles.reportFinding}><MediaThumbnail className={styles.reportPhoto} mediaId={report.mediaIds[0]} alt={t("Foto laporan {0}", { "0": report.description.slice(0, 50) })} /><div><strong>{report.description.slice(0, 80)}</strong><span>{report.location.latitude.toFixed(4)}, {report.location.longitude.toFixed(4)}</span><small>{report.reportedSeverity === "small" ? t("Tumpukan kecil") : report.reportedSeverity === "medium" ? t("Tumpukan sedang") : t("Tumpukan besar")} · {report.timeline.length} {" "}{t("pembaruan")}</small></div></div><span>{formatDate(report.createdAt, intlLocale)}</span><span className={styles.draftBadge}>{t(reportStatus[report.status])}</span></article>)}</div> : <div className={styles.reportEmpty}><Image src="/images/dashboard/views/report-empty.webp" alt="" width={470} height={210} /><h2>{reports.length && status !== "all" ? t("Tidak ada laporan untuk status ini.") : t("Belum ada laporan yang dikirim.")}</h2><p>{reports.length ? t("Ubah filter atau buat laporan baru.") : t("Laporan akan muncul di sini setelah Anda mengirimnya.")}</p></div>}<div className={styles.statusLegend}>{statusLegend.map(([name, color]) => <span key={t(name)}><i style={{ background: color }} />{t(name)}</span>)}</div></section>
+    <section className={styles.reportTable}>
+      <div className={styles.tableHead}>
+        <span><MapPin size={22} />{t("Temuan")}</span>
+        <span><CalendarDays size={22} />{t("Dikirim")}</span>
+        <span><List size={22} />{t("Status")}</span>
+      </div>
+      {filtered.length ? (
+        <div className={styles.reportRows}>
+          {filtered.map(report => (
+            <article
+              key={report.id}
+              role="button"
+              tabIndex={0}
+              aria-label={t("Lihat detail laporan {0}", { "0": report.description.slice(0, 50) })}
+              onClick={() => setDetailId(report.id)}
+              onKeyDown={event => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setDetailId(report.id);
+                }
+              }}
+            >
+              <div className={styles.reportFinding}>
+                <MediaThumbnail className={styles.reportPhoto} mediaId={report.mediaIds[0]} alt={t("Foto laporan {0}", { "0": report.description.slice(0, 50) })} />
+                <div>
+                  <strong>{report.description.slice(0, 80)}</strong>
+                  <span className={styles.reportMobileLabel}>{t("Lokasi")}</span>
+                  <span>{report.location.latitude.toFixed(4)}, {report.location.longitude.toFixed(4)}</span>
+                  <small>{report.reportedSeverity === "small" ? t("Tumpukan kecil") : report.reportedSeverity === "medium" ? t("Tumpukan sedang") : t("Tumpukan besar")} · {report.timeline.length} {" "}{t("pembaruan")}</small>
+                </div>
+              </div>
+              <span className={styles.reportDate}>
+                <span className={styles.reportMobileLabel}>{t("Dikirim")}</span>
+                <time dateTime={report.createdAt}>{formatDate(report.createdAt, intlLocale)}</time>
+              </span>
+              <span className={`${styles.draftBadge} ${styles.reportStatus}`}>
+                <span className={styles.reportMobileLabel}>{t("Status")}</span>
+                {t(reportStatus[report.status])}
+              </span>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className={styles.reportEmpty}>
+          <Image src="/images/dashboard/views/report-empty.webp" alt="" width={470} height={210} />
+          <h2>{reports.length && status !== "all" ? t("Tidak ada laporan untuk status ini.") : t("Belum ada laporan yang dikirim.")}</h2>
+          <p>{reports.length ? t("Ubah filter atau buat laporan baru.") : t("Laporan akan muncul di sini setelah Anda mengirimnya.")}</p>
+        </div>
+      )}
+      <div className={styles.statusLegend}>{statusLegend.map(([name, color]) => <span key={t(name)}><i style={{ background: color }} />{t(name)}</span>)}</div>
+    </section>
     {detailId && <ReportDetail id={detailId} categories={categories} onClose={() => setDetailId(null)} onUpdated={onReportsChanged} />}
   </>;
 }

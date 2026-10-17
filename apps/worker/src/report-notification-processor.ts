@@ -3,7 +3,7 @@ import type { Sql } from 'postgres';
 import type { ExtensionEvent } from './extension-jobs.js';
 import { ReportNotificationMailer, type ReportEmailSender } from './report-notification-mailer.js';
 
-const REPORTS_PATH = '/dashboard?view=reports';
+const reportPath = (reportId: string) => `/dashboard?view=reports&report=${reportId}`;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 // Leave a margin before Resend's 24-hour deduplication window expires.
 const RESEND_RETRY_WINDOW_MS = 23 * 60 * 60 * 1000;
@@ -22,12 +22,12 @@ type EmailRow = {
 
 export function reportDecisionNotice(status: string): { title: string; message: string } | null {
   switch (status) {
-    case 'submitted': return { title: 'Laporan Anda ditinjau kembali', message: 'Laporan Anda kembali menunggu peninjauan. Buka SAP untuk melihat status laporan.' };
-    case 'verified': return { title: 'Laporan Anda terverifikasi', message: 'Laporan Anda telah diverifikasi. Buka SAP untuk melihat perkembangan laporan.' };
-    case 'in_progress': return { title: 'Laporan Anda sedang ditangani', message: 'Penanganan laporan Anda sedang berlangsung. Buka SAP untuk melihat perkembangannya.' };
-    case 'resolved': return { title: 'Laporan Anda telah ditangani', message: 'Laporan Anda telah ditandai selesai ditangani. Buka SAP untuk melihat hasil penanganan.' };
-    case 'rejected': return { title: 'Laporan Anda belum disetujui', message: 'Laporan Anda belum disetujui. Buka SAP untuk melihat keputusan pada laporan Anda.' };
-    case 'duplicate': return { title: 'Laporan Anda ditandai duplikat', message: 'Laporan Anda ditandai sebagai duplikat laporan lain. Buka SAP untuk melihat keputusan pada laporan Anda.' };
+    case 'submitted': return { title: 'Laporan Anda ditinjau kembali', message: 'Laporan Anda kembali menunggu peninjauan. Buka VERGO untuk melihat status laporan.' };
+    case 'verified': return { title: 'Laporan Anda terverifikasi', message: 'Laporan Anda telah diverifikasi. Buka VERGO untuk melihat perkembangan laporan.' };
+    case 'in_progress': return { title: 'Laporan Anda sedang ditangani', message: 'Penanganan laporan Anda sedang berlangsung. Buka VERGO untuk melihat perkembangannya.' };
+    case 'resolved': return { title: 'Laporan Anda telah ditangani', message: 'Laporan Anda telah ditandai selesai ditangani. Buka VERGO untuk melihat hasil penanganan.' };
+    case 'rejected': return { title: 'Laporan Anda belum disetujui', message: 'Laporan Anda belum disetujui. Buka VERGO untuk melihat keputusan pada laporan Anda.' };
+    case 'duplicate': return { title: 'Laporan Anda ditandai duplikat', message: 'Laporan Anda ditandai sebagai duplikat laporan lain. Buka VERGO untuk melihat keputusan pada laporan Anda.' };
     default: return null;
   }
 }
@@ -46,6 +46,7 @@ export class ReportNotificationProcessor {
       || typeof revision !== 'number' || !Number.isSafeInteger(revision) || revision < 1 || typeof status !== 'string') return;
     const notice = reportDecisionNotice(status);
     if (!notice) return;
+    const reportsPath = reportPath(reportId);
     await this.sql.begin(async tx => {
       const [report] = await tx<ReportRow[]>`SELECT reporter_id,status,revision FROM reports WHERE id=${reportId} FOR UPDATE`;
       if (!report?.reporter_id || report.revision < revision) return;
@@ -66,11 +67,11 @@ export class ReportNotificationProcessor {
       const message = current ? notice.message
         : `Pada keputusan sebelumnya: ${notice.message} Status laporan mungkin sudah berubah.`;
       const inserted = await tx<{ id: string }[]>`INSERT INTO notifications(user_id,event_key,type,title,message,target_path)
-        VALUES(${user.id},${eventKey},'incident_updated',${title},${message},${REPORTS_PATH})
+        VALUES(${user.id},${eventKey},'incident_updated',${title},${message},${reportsPath})
         ON CONFLICT(user_id,event_key,type) DO NOTHING RETURNING id`;
       // Opting in later must not turn a replay into a retroactive email.
       if (!current || !inserted.length || !user.report_email_enabled || !user.email_verified_at) return;
-      const body = `${notice.message}\n\n${new URL(REPORTS_PATH, this.config.APP_ORIGIN).href}`;
+      const body = `${notice.message}\n\n${new URL(reportsPath, this.config.APP_ORIGIN).href}`;
       const [email] = await tx<{ id: string }[]>`INSERT INTO report_notification_emails
         (event_key,report_id,user_id,report_revision,report_status,recipient_email,sender_email,mail_transport,subject,body_text)
         VALUES(${eventKey},${reportId},${user.id},${revision},${status},${user.email_normalized},

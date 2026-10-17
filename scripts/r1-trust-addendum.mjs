@@ -9,7 +9,8 @@ export function addTrustRoutes(spec) {
  schemas.TrustPolicy=closed({...schemas.TrustPolicyInput.properties,revision:positive,updatedAt:date});
  schemas.ReportAppealInput=closed({reason:{...str,minLength:20,maxLength:2000},mediaIds:{type:'array',items:uuid,maxItems:3,uniqueItems:true}},['reason']);
  schemas.ReportAppealDecisionInput=closed({action:{...str,enum:['accept_review','reject','request_evidence']},reason:{...str,minLength:5,maxLength:1000},reportRevision:positive});
- schemas.ReportAppeal=closed({id:uuid,reportId:uuid,sourceRevision:positive,reportRevision:positive,reportStatus:ref('ReportStatus'),reason:{...str,minLength:20,maxLength:2000},mediaIds:{type:'array',items:uuid,maxItems:3},status:{...str,enum:['pending','needs_evidence','accepted','rejected']},revision:positive,decisionReason:nullable(str),createdAt:date,updatedAt:date});
+ const reportAppealProperties={id:uuid,reportId:uuid,sourceRevision:positive,reportRevision:positive,reportStatus:ref('ReportStatus'),reason:{...str,minLength:20,maxLength:2000},mediaIds:{type:'array',items:uuid,maxItems:3},status:{...str,enum:['pending','needs_evidence','accepted','rejected']},revision:positive,decisionReason:nullable(str),createdAt:date,updatedAt:date,reviewerRecused:{type:'boolean'}};
+ schemas.ReportAppeal=closed(reportAppealProperties,Object.keys(reportAppealProperties).filter(key=>key!=='reviewerRecused'));
  schemas.ReportAppealPage=closed({items:{type:'array',items:ref('ReportAppeal')},nextCursor:nullable(str)});
  const source=schemas.InstagramPost.properties.source;
  Object.assign(source.properties,{canonicalId:uuid,publicUrl:{...str,format:'uri'}});

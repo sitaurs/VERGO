@@ -8,7 +8,7 @@ import {ObjectStorageService} from '../media/object-storage.service.js';
 import {EvidenceService} from '../evidence/evidence.service.js';
 import {ActivitiesService} from '../activities/activities.service.js';
 import {ReviewService} from '../community/review.service.js';
-import {EMPTY_APPROVAL,INVALID_APPROVAL,POST_STATUSES,REQUIRED_SCOPES,DELETE_SCOPES,incidentPublicUrl,publicationCaption,sourceUpdateState,publicationContextReady,type PostStatus} from './publication.types.js';
+import {EMPTY_APPROVAL,INVALID_APPROVAL,POST_STATUSES,REQUIRED_SCOPES,DELETE_SCOPES,incidentPublicUrl,publicationCaption,sourceUpdateState,publicationContextReady,normalizeInstagramTemplate,normalizeInstagramHashtags,type PostStatus} from './publication.types.js';
 import {encryptCredentials,MetaClient,MetaApiError} from './meta-client.js';
 type Row=Record<string,any>;
 @Injectable()
@@ -180,7 +180,7 @@ export class PublicationsService{
  }
  async settings(actor:Actor,rev:number,raw:unknown){
   this.gate(actor);const b=input.object(raw,['source','onlyVerified','format','timezone','draftGeneration','publishMode','captionTemplate','hashtags']);
-  const payload={source:input.enumeration(b.source,['reports'] as const),onlyVerified:input.bool(b.onlyVerified),format:input.enumeration(b.format,['feed'] as const),timezone:input.enumeration(b.timezone,['Asia/Jakarta'] as const),draftGeneration:input.enumeration(b.draftGeneration,['automatic','manual'] as const),publishMode:input.enumeration(b.publishMode,['approval_required'] as const),captionTemplate:input.text(b.captionTemplate,0,1800),hashtags:input.text(b.hashtags,0,400)};
+  const payload={source:input.enumeration(b.source,['reports'] as const),onlyVerified:input.bool(b.onlyVerified),format:input.enumeration(b.format,['feed'] as const),timezone:input.enumeration(b.timezone,['Asia/Jakarta'] as const),draftGeneration:input.enumeration(b.draftGeneration,['automatic','manual'] as const),publishMode:input.enumeration(b.publishMode,['approval_required'] as const),captionTemplate:normalizeInstagramTemplate(input.text(b.captionTemplate,0,1800)),hashtags:normalizeInstagramHashtags(input.text(b.hashtags,0,400))};
   if(!payload.onlyVerified)fail(400,'VALIDATION_ERROR');
   return this.store.db.begin(async tx=>{const [r]=await tx`SELECT * FROM instagram_settings WHERE singleton=true FOR UPDATE`;if(!r)fail(500,'RESOURCE_STATE_INVALID');input.checkRevision(r.revision,rev);await tx`UPDATE instagram_settings SET revision=revision+1,payload=${tx.json(payload)},updated_at=now() WHERE singleton=true`;await this.store.audit(tx,actor.id,'instagram.settings.changed','instagram_settings','singleton',{revision:r.revision+1});return {revision:r.revision+1,...payload};});
  }

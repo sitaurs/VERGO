@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Copy, ExternalLink } from "lucide-react";
 import { useI18n } from "../../lib/i18n/provider";
 import type { InstagramPost, PublicationSource } from "./types";
+import { POSTER_TEMPLATE_VERSION } from "./types";
 import { Notice } from "./publication-ui";
 import ui from "./post-detail.module.css";
 
@@ -34,8 +35,8 @@ export default function PublicStatusLink({ source, record }: { source: Publicati
     {feedback && <p role="status">{feedback}</p>}
     <p>{t("Gunakan tautan ini pada penempatan yang didukung akun Instagram. URL dalam caption Feed belum tentu dapat diklik.")}</p>
     <p>{t("Laporan terverifikasi tidak otomatis diposting. Izin foto, pratinjau final, persetujuan admin dan perintah publikasi tetap diperlukan.")}</p>
-    {record && ["draft", "failed"].includes(record.status) && record.rendition.templateVersion !== "vergo-feed-status-v4" && <Notice warning>{t("Draf ini memakai format lama. Simpan ulang untuk membuat gambar final dengan tanggal, area dan tautan status, lalu tinjau kembali sebelum menyetujui.")}</Notice>}
-    {record?.publishedAt && record.rendition.templateVersion !== "vergo-feed-status-v4" && <Notice warning>{t("Unggahan ini memakai format lama. Periksa penempatan tautan status dan kebutuhan unggahan lanjutan; perubahan format VERGO tidak otomatis mengubah unggahan Instagram yang sudah terbit.")}</Notice>}
+    {record && ["draft", "failed"].includes(record.status) && record.rendition.templateVersion !== POSTER_TEMPLATE_VERSION && <Notice warning>{t("Draf ini memakai format atau branding lama. Simpan ulang untuk membuat caption dan gambar VERGO baru; persetujuan lama tidak berlaku sampai pratinjau baru diperiksa.")}</Notice>}
+    {record?.publishedAt && record.rendition.templateVersion !== POSTER_TEMPLATE_VERSION && <Notice warning>{t("Unggahan ini memakai format lama. Periksa penempatan tautan status dan kebutuhan unggahan lanjutan; perubahan format VERGO tidak otomatis mengubah unggahan Instagram yang sudah terbit.")}</Notice>}
     {record?.sourceUpdate?.reason && <Notice warning>
       <strong>{t(record.sourceUpdate.followUpRequired ? "Unggahan ini perlu tindak lanjut" : "Sumber perlu ditinjau ulang")}</strong>
       <p>{t(record.sourceUpdate.changed ? "Laporan sumber sudah berubah sejak versi unggahan ini. Tinjau status dan koreksi terbaru sebelum memakai kembali materi." : "Izin foto, bukti atau kelayakan sumber tidak lagi memenuhi syarat publikasi.")}</p>

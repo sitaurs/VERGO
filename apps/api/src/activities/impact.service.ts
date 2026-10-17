@@ -4,13 +4,25 @@ import { bool, date, object, uuid } from '../extensions/input.js';
 import { ActivitiesService } from './activities.service.js';
 import { queryBool, type NotificationType } from './activities.types.js';
 
-type NotificationRow={id:string;user_id:string;type:NotificationType;title:string;message:string;target_path:string;read:boolean;created_at:Date};
+type NotificationRow={id:string;user_id:string;event_key:string;type:NotificationType;title:string;message:string;target_path:string;read:boolean;created_at:Date};
+export function notificationCopy(value:string):string {
+ return value.replace(/\bsap\.venlab\.tech\b/gi,'vergo.venlab.tech').replace(/#sap\b/gi,'#VERGO').replace(/\bSAP\b/gi,'VERGO');
+}
 @Injectable()
 export class ImpactService {
  constructor(private readonly store:ExtensionStore,private readonly activities:ActivitiesService) {}
- private notificationDto(row:NotificationRow){return {id:row.id,type:row.type,title:row.title,message:row.message,targetPath:row.target_path,read:row.read,createdAt:iso(row.created_at)};}
+ private async notificationDto(row:NotificationRow){
+  let targetPath=row.target_path;
+  if(row.type==='evidence_requested'&&targetPath==='/dashboard?view=reports'){
+   const [audit]=await this.store.db<{target_id:string}[]>`SELECT a.target_id FROM audit_events a JOIN reports r ON r.id::text=a.target_id
+    WHERE a.action='report.evidence_requested' AND a.target_type='report' AND a.actor_id::text=${row.event_key.split(':')[1]??''}
+      AND date_trunc('milliseconds',a.created_at)=${row.created_at} AND r.reporter_id=${row.user_id} ORDER BY a.id LIMIT 1`;
+   if(audit&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(audit.target_id))targetPath=`/dashboard?view=reports&report=${audit.target_id}`;
+  }
+  return {id:row.id,type:row.type,title:notificationCopy(row.title),message:notificationCopy(row.message),targetPath,read:row.read,createdAt:iso(row.created_at)};
+ }
  async notifications(actor:Actor,query:Record<string,unknown>) {
-  requireFeature('evidence');object(query,['limit','cursor','unreadOnly']);const unread=queryBool(query.unreadOnly);const page=this.store.cursor(query,{route:'notifications',user:actor.id,unread});const rows=await this.store.db<NotificationRow[]>`SELECT * FROM notifications WHERE user_id=${actor.id} AND (NOT ${unread} OR read=false) AND (${page.boundary?.at??null}::timestamptz IS NULL OR (created_at,id)<(${page.boundary?.at??null}::timestamptz,${page.boundary?.id??null}::uuid)) ORDER BY created_at DESC,id DESC LIMIT ${page.limit+1}`;const selected=rows.slice(0,page.limit);return {items:selected.map(r=>this.notificationDto(r)),nextCursor:rows.length>page.limit?page.encode(selected[selected.length-1]!):null};
+  requireFeature('evidence');object(query,['limit','cursor','unreadOnly']);const unread=queryBool(query.unreadOnly);const page=this.store.cursor(query,{route:'notifications',user:actor.id,unread});const rows=await this.store.db<NotificationRow[]>`SELECT * FROM notifications WHERE user_id=${actor.id} AND (NOT ${unread} OR read=false) AND (${page.boundary?.at??null}::timestamptz IS NULL OR (created_at,id)<(${page.boundary?.at??null}::timestamptz,${page.boundary?.id??null}::uuid)) ORDER BY created_at DESC,id DESC LIMIT ${page.limit+1}`;const selected=rows.slice(0,page.limit);return {items:await Promise.all(selected.map(r=>this.notificationDto(r))),nextCursor:rows.length>page.limit?page.encode(selected[selected.length-1]!):null};
  }
  async read(actor:Actor,id:string,raw:unknown) {
   requireFeature('evidence');uuid(id);const b=object(raw,['read']);const read=bool(b.read);const [row]=await this.store.db<NotificationRow[]>`UPDATE notifications SET read=${read} WHERE id=${id} AND user_id=${actor.id} RETURNING *`;if(!row)fail(404,'NOT_FOUND');return this.notificationDto(row);

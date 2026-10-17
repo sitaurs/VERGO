@@ -200,6 +200,16 @@ test('report observation migration keeps legacy provenance unknown and separates
   assert.doesNotMatch(migration.sql,/UPDATE\s+reports/i,'legacy reports must not be retroactively marked as firsthand or otherwise reclassified');
 });
 
+test('Instagram brand migration updates settings, defaults new renditions, and invalidates stale editable approvals', async () => {
+  const files = await loadMigrations();
+  const migration = files.find(file => file.filename === '0024_vergo_instagram_brand.sql');
+  assert.ok(migration, 'expected the VERGO Instagram branding migration');
+  assert.match(migration.sql, /template_version SET DEFAULT 'vergo-feed-status-v5'/i);
+  assert.match(migration.sql, /UPDATE instagram_settings[\s\S]*captionTemplate[\s\S]*hashtags/i);
+  assert.match(migration.sql, /UPDATE instagram_posts[\s\S]*'status', 'invalidated'[\s\S]*WHERE template_version <> 'vergo-feed-status-v5'[\s\S]*AND status IN \('draft', 'failed'\)/i);
+  assert.doesNotMatch(migration.sql, /\b(?:DROP|TRUNCATE)\b/i);
+});
+
 test('appeals are private, bounded, and leave operator/retention promises unset by default', async () => {
   const files=await loadMigrations();
   const migration=files.find(file=>file.filename==='0023_report_appeals_and_trust.sql');

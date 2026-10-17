@@ -5,7 +5,7 @@ import type { Tx } from '../infrastructure/idempotency.store.js';
 import { ObjectStorageService } from '../media/object-storage.service.js';
 
 type AppealStatus = 'pending'|'needs_evidence'|'accepted'|'rejected';
-type AppealRow = { id:string; report_id:string; appellant_id:string|null; source_revision:number; reason:string; media_ids:string[]; status:AppealStatus; revision:number; decision_reason:string|null; created_at:Date; updated_at:Date; report_status:string; report_revision:number };
+type AppealRow = { id:string; report_id:string; appellant_id:string|null; source_revision:number; reason:string; media_ids:string[]; status:AppealStatus; revision:number; decision_reason:string|null; created_at:Date; updated_at:Date; report_status:string; report_revision:number; reviewer_recused?:boolean; underlying_decision_actor_id?:string|null };
 export function appealBody(value:unknown): { reason:string; mediaIds:string[] } {
  const body=input.object(value,['reason','mediaIds']);
  return {reason:input.text(body.reason,20,2000),mediaIds:input.ids(body.mediaIds??[],0,3)};
@@ -22,7 +22,8 @@ export function policyBody(value:unknown) {
 }
 function view(row:AppealRow) {
  return {id:row.id,reportId:row.report_id,sourceRevision:row.source_revision,reportRevision:row.report_revision,reportStatus:row.report_status,
-  reason:row.reason,mediaIds:row.media_ids,status:row.status,revision:row.revision,decisionReason:row.decision_reason,createdAt:iso(row.created_at),updatedAt:iso(row.updated_at)};
+  reason:row.reason,mediaIds:row.media_ids,status:row.status,revision:row.revision,decisionReason:row.decision_reason,createdAt:iso(row.created_at),updatedAt:iso(row.updated_at),
+  ...(row.reviewer_recused === undefined ? {} : {reviewerRecused:row.reviewer_recused})};
 }
 
 @Injectable()
@@ -104,7 +105,11 @@ export class TrustService {
   requireAdmin(actor);input.object(query,['limit','cursor','status']);
   const status=query.status===undefined?'pending':input.enumeration(query.status,['pending','needs_evidence','accepted','rejected'] as const);
   const page=this.store.cursor(query,{route:'report-appeals',status});
-  const rows=await this.store.db<AppealRow[]>`SELECT a.*,r.status AS report_status,r.revision AS report_revision FROM report_appeals a JOIN reports r ON r.id=a.report_id JOIN users u ON u.id=a.appellant_id AND u.deleted_at IS NULL
+  const rows=await this.store.db<AppealRow[]>`SELECT a.*,r.status AS report_status,r.revision AS report_revision,
+   COALESCE(underlying.actor_id=${actor.id},false) AS reviewer_recused
+   FROM report_appeals a JOIN reports r ON r.id=a.report_id JOIN users u ON u.id=a.appellant_id AND u.deleted_at IS NULL
+   LEFT JOIN LATERAL (SELECT actor_id FROM moderation_decisions md WHERE md.report_id=a.report_id AND md.revision_before<a.source_revision
+    ORDER BY md.revision_before DESC,md.created_at DESC LIMIT 1) underlying ON TRUE
    WHERE a.status=${status} AND (${page.boundary?.at??null}::timestamptz IS NULL OR (a.created_at,a.id)<(${page.boundary?.at??null}::timestamptz,${page.boundary?.id??null}::uuid)) ORDER BY a.created_at DESC,a.id DESC LIMIT ${page.limit+1}`;
   const chosen=rows.slice(0,page.limit);
   return {items:chosen.map(view),nextCursor:rows.length>page.limit?page.encode(chosen[chosen.length-1]!):null};
@@ -114,10 +119,15 @@ export class TrustService {
   const action=input.enumeration(body.action,['accept_review','reject','request_evidence']);const reason=input.text(body.reason,5,1000);const reportRevision=input.integer(body.reportRevision);
   return this.store.mutate(actor,`admin/report-appeals/${id}/decisions`,key,{expected,action,reason,reportRevision},async tx=>{
    await this.lockAppealReport(tx,id);
-   const [row]=await tx<AppealRow[]>`SELECT a.*,r.status AS report_status,r.revision AS report_revision FROM report_appeals a JOIN reports r ON r.id=a.report_id JOIN users u ON u.id=a.appellant_id AND u.deleted_at IS NULL WHERE a.id=${id} FOR UPDATE OF a,r`;
+   const [row]=await tx<AppealRow[]>`SELECT a.*,r.status AS report_status,r.revision AS report_revision,underlying.actor_id AS underlying_decision_actor_id
+    FROM report_appeals a JOIN reports r ON r.id=a.report_id JOIN users u ON u.id=a.appellant_id AND u.deleted_at IS NULL
+    LEFT JOIN LATERAL (SELECT actor_id FROM moderation_decisions md WHERE md.report_id=a.report_id AND md.revision_before<a.source_revision
+     ORDER BY md.revision_before DESC,md.created_at DESC LIMIT 1) underlying ON TRUE
+    WHERE a.id=${id} FOR UPDATE OF a,r`;
    if(!row)fail(404,'NOT_FOUND');input.checkRevision(row.revision,expected);input.checkRevision(row.report_revision,reportRevision);
    if(row.status!=='pending')fail(409,'INVALID_TRANSITION');
    if(row.appellant_id===actor.id)fail(403,'SELF_REVIEW_FORBIDDEN','Permintaan sendiri harus ditinjau admin lain.');
+   if(row.underlying_decision_actor_id===actor.id)fail(403,'APPEAL_REVIEWER_RECUSED','Admin yang membuat keputusan awal tidak dapat memutuskan tindak lanjut banding ini. Minta admin lain untuk melanjutkan.');
    const status=action==='accept_review'?'accepted':action==='reject'?'rejected':'needs_evidence';
    const [saved]=await tx<AppealRow[]>`UPDATE report_appeals SET status=${status},decision_reason=${reason},decided_by=${actor.id},revision=revision+1,updated_at=now() WHERE id=${id} RETURNING *`;
    await tx`INSERT INTO notifications(user_id,event_key,type,title,message,target_path) VALUES(${row.appellant_id},${`appeal:${id}:${expected+1}`},'evidence_requested','Permintaan peninjauan diperbarui',${reason},${`/dashboard?view=reports&report=${row.report_id}`}) ON CONFLICT(user_id,event_key,type) DO NOTHING`;

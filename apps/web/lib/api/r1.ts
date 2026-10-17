@@ -59,6 +59,10 @@ export function r1Error(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.code === "FEATURE_UNAVAILABLE")
       return "Fitur belum tersedia. Pengelola perlu menyiapkan dan mengaktifkan layanan R1.";
+    if (error.code === "APPEAL_REVIEWER_RECUSED")
+      return "Admin yang membuat keputusan awal tidak dapat memutuskan tindak lanjut banding ini. Minta admin lain untuk melanjutkan.";
+    if (error.code === "SELF_REVIEW_FORBIDDEN")
+      return "Anda tidak dapat meninjau permintaan banding sendiri. Minta admin lain untuk melanjutkan.";
     if (error.status >= 500)
       return "Layanan belum dapat dihubungi. Coba muat ulang atau hubungi pengelola VERGO.";
     if (error.status === 401)

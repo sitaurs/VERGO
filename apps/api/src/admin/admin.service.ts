@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -125,6 +126,8 @@ export class AdminService {
           });
         case 'report_evidence_required':
           throw new UnprocessableEntityException({code:'EVIDENCE_REQUIRED',message:'Laporan tanpa foto tetap privat. Minta pelapor melengkapi bukti sebelum verifikasi.'});
+        case 'appeal_reviewer_recused':
+          throw new ForbiddenException({code:'APPEAL_REVIEWER_RECUSED',message:'Admin yang membuat keputusan awal tidak dapat memutuskan tindak lanjut banding ini. Minta admin lain untuk melanjutkan.'});
         case 'publish_media_invalid':
           throw new UnprocessableEntityException({
             code: 'MEDIA_INVALID',

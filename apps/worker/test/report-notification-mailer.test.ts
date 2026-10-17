@@ -4,7 +4,7 @@ import type { AppConfig } from '@sap/config';
 import { ReportNotificationMailer, type ReportEmailMessage } from '../src/report-notification-mailer.js';
 
 const message: ReportEmailMessage = { from: 'SAP <sap@local.test>', to: 'reporter@local.test',
-  subject: 'Laporan Anda terverifikasi', text: 'Buka SAP.', idempotencyKey: 'report-reporter:report:3' };
+  subject: 'Laporan Anda terverifikasi', text: 'Buka VERGO.', idempotencyKey: 'report-reporter:report:3' };
 
 test('NODE_ENV=test never calls SMTP or Resend', async t => {
   const original = globalThis.fetch;

@@ -4436,6 +4436,7 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+            reviewerRecused?: boolean;
         };
         ReportAppealPage: {
             items: components["schemas"]["ReportAppeal"][];

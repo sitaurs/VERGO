@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import sharp from 'sharp';
 import { cellToLatLng, latLngToCell } from 'h3-js';
-import { PosterRenderer, assertPosterFonts } from '../src/poster/poster-renderer.js';
+import { PosterRenderer, assertPosterFonts, posterReportCode } from '../src/poster/poster-renderer.js';
 import { MapSnapshotService } from '../src/poster/map-snapshot.js';
 import type { MapData } from '../src/poster/map-snapshot.js';
 
@@ -46,6 +46,10 @@ function dependencies() {
 }
 
 test('bundled fonts render distinct Latin glyphs rather than missing-font squares', assertPosterFonts);
+test('poster-facing report code uses VERGO branding while database identifiers remain compatible', () => {
+  assert.equal(posterReportCode('SAP-123456'), 'VERGO-123456');
+  assert.equal(posterReportCode('VERGO-123456'), 'VERGO-123456');
+});
 
 test('map preserves OSM geometry, labels roads, and marks the public area without an exact GPS pin', async () => {
   const {sql,config}=dependencies();
@@ -92,7 +96,7 @@ test('renders a design-sized sRGB poster and uses local plus city names from OSM
   assert.equal(metadata.height, 1350);
   assert.equal(metadata.space, 'srgb');
   assert.ok(rendered.bytes.length <= 7 * 1024 * 1024);
-  assert.equal(rendered.templateVersion, 'vergo-feed-status-v4');
+  assert.equal(rendered.templateVersion, 'vergo-feed-status-v5');
   assert.equal(rendered.map.areaLabel, 'Kauman, Kota Malang');
   assert.equal(rendered.map.locality, 'Kauman');
   assert.equal(rendered.map.locationMode, 'public_area');
