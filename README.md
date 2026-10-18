@@ -1,174 +1,174 @@
 <p align="center">
   <a href="https://vergo.venlab.tech/">
-    <img src="docs/assets/vergo-brand-card.png" alt="VERGO — Verify and Go" width="520" />
+    <img src="docs/assets/vergo-brand-card.png" alt="Kartu identitas merek VERGO" width="520" />
   </a>
 </p>
 
-<h1 align="center">VERGO · Verify and Go</h1>
+<h1 align="center">VERGO · Verifikasi dan Tindak Lanjut</h1>
 
 <p align="center">
-  <strong>Photo evidence. Verified reports. Community action.</strong><br />
-  Multimodal AI and geospatial intelligence for waste reporting and follow-up.
+  <strong>Bukti foto. Laporan terverifikasi. Aksi komunitas.</strong><br />
+  Kecerdasan buatan multimodal dan intelijen geospasial untuk pelaporan sampah dan tindak lanjut.
 </p>
 
 <p align="center">
-  <a href="https://vergo.venlab.tech/"><img src="https://img.shields.io/badge/Explore_VERGO-vergo.venlab.tech-087F5B?style=for-the-badge&amp;logo=leaflet&amp;logoColor=white" alt="Explore VERGO at vergo.venlab.tech" /></a>
-  <a href="https://github.com/sitaurs/VERGO"><img src="https://img.shields.io/badge/Source-sitaurs%2FVERGO-123B30?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="VERGO source code on GitHub" /></a>
+  <a href="https://vergo.venlab.tech/"><img src="https://img.shields.io/badge/Buka_VERGO-vergo.venlab.tech-087F5B?style=for-the-badge&amp;logo=leaflet&amp;logoColor=white" alt="Buka VERGO di vergo.venlab.tech" /></a>
+  <a href="https://github.com/sitaurs/VERGO"><img src="https://img.shields.io/badge/Sumber-sitaurs%2FVERGO-123B30?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="Kode sumber VERGO di GitHub" /></a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16-111827?style=flat-square&amp;logo=nextdotjs&amp;logoColor=white" alt="Next.js 16" />
-  <img src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&amp;logo=react&amp;logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&amp;logo=typescript&amp;logoColor=white" alt="TypeScript 5" />
-  <img src="https://img.shields.io/badge/NestJS-12-E0234E?style=flat-square&amp;logo=nestjs&amp;logoColor=white" alt="NestJS 12" />
-  <img src="https://img.shields.io/badge/PostgreSQL-PostGIS-4169E1?style=flat-square&amp;logo=postgresql&amp;logoColor=white" alt="PostgreSQL with PostGIS" />
-  <img src="https://img.shields.io/badge/Node.js-22%2B-417E38?style=flat-square&amp;logo=nodedotjs&amp;logoColor=white" alt="Node.js 22 or later" />
+  <img src="https://img.shields.io/badge/Next.js-16-111827?style=flat-square&amp;logo=nextdotjs&amp;logoColor=white" alt="Versi Next.js 16" />
+  <img src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&amp;logo=react&amp;logoColor=white" alt="Versi React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&amp;logo=typescript&amp;logoColor=white" alt="Versi TypeScript 5" />
+  <img src="https://img.shields.io/badge/NestJS-12-E0234E?style=flat-square&amp;logo=nestjs&amp;logoColor=white" alt="Versi NestJS 12" />
+  <img src="https://img.shields.io/badge/PostgreSQL-PostGIS-4169E1?style=flat-square&amp;logo=postgresql&amp;logoColor=white" alt="PostgreSQL dengan PostGIS" />
+  <img src="https://img.shields.io/badge/Node.js-22%2B-417E38?style=flat-square&amp;logo=nodedotjs&amp;logoColor=white" alt="Node.js versi 22 atau lebih baru" />
 </p>
 
 <p align="center">
-  <a href="#the-idea">The idea</a> ·
-  <a href="#sdg-3-pathway">SDG 3 pathway</a> ·
-  <a href="#features">Features</a> ·
-  <a href="#architecture">Architecture</a> ·
-  <a href="#getting-started">Quick start</a> ·
-  <a href="#documentation">Documentation</a>
+  <a href="#gagasan">Gagasan</a> ·
+  <a href="#jalur-sdg-3">Jalur SDG 3</a> ·
+  <a href="#fitur">Fitur</a> ·
+  <a href="#arsitektur">Arsitektur</a> ·
+  <a href="#mulai">Mulai</a> ·
+  <a href="#dokumentasi">Dokumentasi</a>
 </p>
 
 ---
 
-## The idea
+## Gagasan
 
-**VERGO turns everyday observations into structured environmental reports that people can review and act on.** An optional AI-assisted image scan suggests a waste-material category; a report captures location, time, and context. Human moderators decide what evidence can be verified and shared. Community and volunteer tools can document follow-up.
+**VERGO mengubah pengamatan sehari-hari menjadi laporan lingkungan terstruktur yang dapat ditinjau dan ditindaklanjuti.** Pemindaian gambar berbantuan AI bersifat opsional dan dapat menyarankan kategori material sampah; laporan juga mencatat lokasi, waktu, dan konteks. Moderator manusia menentukan bukti yang dapat diverifikasi dan dibagikan. Fitur komunitas dan relawan dapat mendokumentasikan tindak lanjut.
 
-The platform brings these flows together with a personal dashboard, geographic insights, and **VERA**, the virtual assistant for guidance on VERGO and environmental topics.
+Platform ini menyatukan alur tersebut dengan dasbor pribadi, informasi geografis, dan **VERA**, asisten virtual untuk panduan penggunaan VERGO dan informasi lingkungan.
 
-The competition focus is **“VERGO: Optimalisasi Pelaporan Sampah Terverifikasi Berbasis Multimodal Artificial Intelligence dan Geospatial Intelligence Menuju Good Health and Well-being 2030.”** This title describes the intended contribution; the concrete, evidence-based pathway to SDG 3 is set out below.
+Fokus kompetisi adalah **“VERGO: Optimalisasi Pelaporan Sampah Terverifikasi Berbasis Kecerdasan Buatan Multimodal dan Intelijen Geospasial untuk Mendukung Kehidupan Sehat dan Sejahtera 2030.”** Judul ini menggambarkan kontribusi yang ingin dicapai; jalur kontribusi terhadap SDG 3 yang konkret dan berbasis bukti dijelaskan di bawah.
 
-**Visit the website: [vergo.venlab.tech](https://vergo.venlab.tech/).** The interface defaults to English; users can choose Indonesian in Settings, and saved language preferences are preserved.
+**Kunjungi situs: [vergo.venlab.tech](https://vergo.venlab.tech/).** Antarmuka menggunakan bahasa Inggris secara bawaan; pengguna dapat memilih bahasa Indonesia melalui menu Pengaturan, dan pilihan bahasa akan disimpan.
 
-**Source repository: [sitaurs/VERGO](https://github.com/sitaurs/VERGO).**
+**Repositori sumber: [sitaurs/VERGO](https://github.com/sitaurs/VERGO).**
 
-## SDG 3 pathway
+## Jalur SDG 3
 
-VERGO's most direct SDG 3 connection is **Target 3.9**, which calls for fewer deaths and illnesses related to hazardous chemicals and air, water, and soil pollution and contamination ([United Nations Goal 3](https://sdgs.un.org/goals/goal3)). Waste accumulation can be part of a local environmental-health concern, but a waste report alone does not establish contamination, exposure, or a health effect. VERGO contributes upstream by making observations easier to review and follow up:
+Kaitan VERGO yang paling langsung dengan SDG 3 adalah **Target 3.9**, yang menyerukan pengurangan kematian dan penyakit akibat bahan kimia berbahaya serta pencemaran dan kontaminasi udara, air, dan tanah ([Tujuan 3 Perserikatan Bangsa-Bangsa](https://sdgs.un.org/goals/goal3)). Penumpukan sampah dapat menjadi bagian dari persoalan kesehatan lingkungan setempat, tetapi laporan sampah saja tidak membuktikan adanya kontaminasi, paparan, ataupun dampak kesehatan. VERGO berkontribusi pada tahap awal dengan memudahkan pengamatan untuk ditinjau dan ditindaklanjuti:
 
-1. **Document an observation.** A resident can submit a photo, location, time, and context. Scanning is optional; a report does not need to begin with an AI scan.
-2. **Structure the evidence.** The existing EcoLens inference and optional multimodal vision can suggest a material category. A category suggestion does not establish that a report is true, that material is hazardous, or that anyone has been exposed to it.
-3. **Review before sharing.** A human moderator reviews reports, handles duplicates and follow-up evidence, and controls what is eligible for public display. Private evidence and precise location data are subject to the product's access, consent, and publication controls.
-4. **See where reports recur.** Eligible reports are aggregated into H3 area summaries for a stated period. The map's low/medium/high level describes report concentration under the documented count-and-date rules; it is not a medical, toxicological, or pollution measurement. An area with no reports means “no data,” not “safe.”
-5. **Document a response.** Community updates and volunteer activity workflows can record follow-up, participation, and evidence of results. This can help people responsible for local action prioritize and review recurring reports; VERGO does not dispatch a cleanup team automatically.
+1. **Dokumentasikan pengamatan.** Warga dapat mengirim foto, lokasi, waktu, dan konteks. Pemindaian bersifat opsional; laporan tidak harus diawali dengan pemindaian AI.
+2. **Susun bukti secara terstruktur.** Inferensi EcoLens yang sudah tersedia dan fitur visi multimodal opsional dapat menyarankan kategori material. Saran kategori tidak membuktikan kebenaran laporan, bahwa material tersebut berbahaya, ataupun bahwa seseorang telah terpapar.
+3. **Tinjau sebelum dibagikan.** Moderator manusia meninjau laporan, menangani duplikasi dan bukti tindak lanjut, serta mengendalikan laporan yang memenuhi syarat untuk ditampilkan kepada publik. Bukti privat dan data lokasi terperinci tunduk pada kontrol akses, persetujuan, dan publikasi yang ditetapkan produk.
+4. **Amati kemunculan laporan berulang.** Laporan yang memenuhi syarat diagregasikan menjadi ringkasan area H3 untuk periode tertentu. Tingkat rendah/sedang/tinggi pada peta menggambarkan konsentrasi laporan berdasarkan aturan jumlah dan tanggal yang terdokumentasi; tingkat tersebut bukan ukuran medis, toksikologis, ataupun pencemaran. Area tanpa laporan berarti “tidak ada data”, bukan “aman”.
+5. **Dokumentasikan respons.** Fitur pembaruan komunitas dan kegiatan relawan dapat mencatat tindak lanjut, partisipasi, dan bukti hasil. Informasi ini dapat membantu pihak yang bertanggung jawab atas aksi lokal dalam menentukan prioritas dan meninjau laporan berulang; VERGO tidak mengirim tim pembersihan secara otomatis.
 
-This is an **indirect and conditional contribution** to healthier environments. Any health benefit depends on accurate observations, appropriate and safe follow-up, and conditions in the field. VERGO is not disease surveillance, a toxicology service, or an air, water, or soil sensor. It does not diagnose illness, calculate official SDG 3 indicators, or prove a reduction in illness or deaths. A moderator-verified report means its evidence was reviewed under the app's rules; it does not mean a site is hazard-free or has been cleaned.
+Kontribusi ini **bersifat tidak langsung dan bergantung pada kondisi tertentu**. Manfaat kesehatan bergantung pada ketepatan pengamatan, tindak lanjut yang sesuai dan aman, serta kondisi di lapangan. VERGO bukan sistem surveilans penyakit, layanan toksikologi, ataupun sensor udara, air, atau tanah. VERGO tidak mendiagnosis penyakit, menghitung indikator resmi SDG 3, atau membuktikan penurunan penyakit maupun kematian. Laporan yang diverifikasi moderator berarti buktinya telah ditinjau berdasarkan aturan aplikasi; itu tidak berarti lokasi bebas bahaya atau sudah dibersihkan.
 
-For a field pilot, useful **VERGO-level measures** include unique reports by status and area, time from submission to moderator decision, reports with documented follow-up or resolution evidence, recurring reports in the same area over a defined period, and volunteer activities with recorded outcomes. These describe platform use and documented response; they are not substitutes for official SDG 3 health indicators or evidence of reduced disease. Report them only when the underlying data and method are available.
+Untuk uji coba lapangan, ukuran yang berguna pada tingkat VERGO meliputi **jumlah laporan unik berdasarkan status dan area**, waktu dari pengiriman hingga keputusan moderator, laporan dengan tindak lanjut atau bukti penyelesaian yang terdokumentasi, laporan berulang di area yang sama dalam periode tertentu, serta kegiatan relawan dengan hasil yang tercatat. Ukuran ini menggambarkan penggunaan platform dan respons yang terdokumentasi; ukuran tersebut bukan pengganti indikator kesehatan resmi SDG 3 atau bukti berkurangnya penyakit. Laporkan ukuran tersebut hanya jika data dasar dan metodenya tersedia.
 
-## Features
+## Fitur
 
-| Feature | What it does |
+| Fitur | Fungsi |
 | --- | --- |
-| **Waste recognition** | Capture or upload a photo and receive AI-assisted material classification. |
-| **Evidence-based reports** | Submit photos, location, and context; track the report through human moderation. |
-| **Public incidents and area maps** | Explore eligible, moderator-reviewed reports and H3 summaries of report concentration and recurrence. Area levels are not health-risk or pollution measurements; public visibility is controlled separately from private evidence. |
-| **Personal dashboard** | View scan and report history, points, achievements, notifications, and account settings. |
-| **VERA assistant** | Ask for feature guidance and environmental information; suggestions and permitted account tools remain read-only. |
+| **Pengenalan sampah** | Ambil atau unggah foto untuk memperoleh klasifikasi material berbantuan AI. |
+| **Laporan berbasis bukti** | Kirim foto, lokasi, dan konteks; pantau laporan selama proses moderasi manusia. |
+| **Insiden publik dan peta area** | Jelajahi laporan yang memenuhi syarat dan telah ditinjau moderator, serta ringkasan H3 tentang konsentrasi dan pengulangan laporan. Tingkat area bukan ukuran risiko kesehatan atau pencemaran; keterlihatan publik dikendalikan terpisah dari bukti privat. |
+| **Dasbor pribadi** | Lihat riwayat pemindaian dan laporan, poin, pencapaian, notifikasi, serta pengaturan akun. |
+| **Asisten VERA** | Minta panduan fitur dan informasi lingkungan; saran serta alat akun yang diizinkan hanya dapat membaca data. |
 
-### Community and operations modules
+### Modul komunitas dan operasional
 
-| Module | Purpose |
+| Modul | Fungsi |
 | --- | --- |
-| **Community updates** | Record follow-up evidence and support review of changing conditions. |
-| **Volunteer activities** | Organize cleanup activities, manage participants, and record attendance and results. |
-| **Impact summaries** | Present recorded activity outcomes and participation. |
-| **Hermes-assisted review** | Prepare structured evidence recommendations for human moderators. |
-| **Instagram workflows** | Prepare and publish approved content through consent and publication controls. |
+| **Pembaruan komunitas** | Catat bukti tindak lanjut dan dukung peninjauan perubahan kondisi. |
+| **Kegiatan relawan** | Atur kegiatan pembersihan, kelola peserta, serta catat kehadiran dan hasil. |
+| **Ringkasan dampak** | Sajikan hasil kegiatan dan partisipasi yang tercatat. |
+| **Peninjauan berbantuan Hermes** | Siapkan rekomendasi bukti terstruktur bagi moderator manusia. |
+| **Alur kerja Instagram** | Siapkan dan publikasikan konten yang disetujui melalui kontrol persetujuan dan publikasi. |
 
-These modules are controlled by feature flags and require their associated migrations and services. The example environment disables the extensions by default. Consult the [project summary](docs/RINGKASAN_PROYEK.md) for dated evidence and the [active plan](docs/RENCANA_ITASE_2026.md#gerbang-rilis) for remaining acceptance work.
+Modul-modul ini dikendalikan oleh penanda fitur (feature flag) dan memerlukan migrasi serta layanan pendukungnya. Konfigurasi lingkungan contoh menonaktifkan ekstensi secara bawaan. Lihat [ringkasan proyek](docs/RINGKASAN_PROYEK.md) untuk bukti bertanggal dan [rencana aktif](docs/RENCANA_ITASE_2026.md#gerbang-rilis) untuk pekerjaan penerimaan yang masih tersisa.
 
-### The product loop
+### Alur produk
 
-**Notice → Document → Submit → Human review → Explore → Follow up**
+**Amati → Dokumentasikan → Kirim → Tinjauan manusia → Jelajahi → Tindak lanjuti**
 
-Scanning can suggest a material category, but it is optional and does not verify a report. Public reports pass through moderation. Geographic summaries describe eligible recorded reports and historical patterns. VERA provides guidance without changing account data or report status, and Hermes recommendations remain subject to human review.
+Pemindaian dapat menyarankan kategori material, tetapi bersifat opsional dan tidak memverifikasi laporan. Laporan publik melewati proses moderasi. Ringkasan geografis menggambarkan laporan tercatat yang memenuhi syarat dan pola historisnya. VERA memberi panduan tanpa mengubah data akun atau status laporan, sementara rekomendasi Hermes tetap harus ditinjau manusia.
 
-## Architecture
+## Arsitektur
 
 ```mermaid
 flowchart LR
-    Browser[Browser] --> Web[Next.js web app]
-    Web -->|Same-origin /api/v1 proxy| API[NestJS API]
+    Browser[Peramban] --> Web[Aplikasi web Next.js]
+    Web -->|Proxy /api/v1 dalam origin yang sama| API[API NestJS]
     API --> DB[(PostgreSQL / PostGIS)]
     API --> Queue[(Redis / BullMQ)]
-    Queue --> Worker[Background worker]
-    Worker --> ML[Gradio waste model]
+    Queue --> Worker[Pekerja latar belakang]
+    Worker --> ML[Model sampah Gradio]
     Worker --> DB
-    API --> Storage[Private R2 / S3 storage]
+    API --> Storage[Penyimpanan privat R2 / S3]
     Worker --> Storage
-    API --> VERA[VERA / LLM provider]
-    Worker --> Hermes[Private Hermes reviewer]
+    API --> VERA[VERA / penyedia LLM]
+    Worker --> Hermes[Layanan peninjau Hermes privat]
 ```
 
-| Layer | Technology |
+| Lapisan | Teknologi |
 | --- | --- |
-| Frontend | Next.js 16 App Router, React 19, TypeScript |
-| Styling and motion | Tailwind CSS 4, Motion, Lucide icons |
-| Maps and spatial indexing | Mapbox GL JS, Leaflet, PostGIS, H3 |
-| HTTP API | NestJS 12, versioned REST at `/api/v1` |
-| Persistence and retrieval | PostgreSQL, SQL migrations, pgvector, full-text search |
-| Background processing | Redis and BullMQ |
-| Media | Cloudflare R2 / S3-compatible private object storage |
-| Waste inference | Self-hosted Gradio service using the EcoLens model |
-| Assistant | LangGraph and an OpenAI-compatible LLM provider |
-| Contracts | OpenAPI schemas, generated TypeScript types, and shared fixtures |
+| Antarmuka | Next.js 16 App Router, React 19, TypeScript |
+| Gaya dan animasi | Tailwind CSS 4, Motion, ikon Lucide |
+| Peta dan indeks spasial | Mapbox GL JS, Leaflet, PostGIS, H3 |
+| API HTTP | NestJS 12, REST berversi di `/api/v1` |
+| Persistensi dan pencarian | PostgreSQL, migrasi SQL, pgvector, pencarian teks lengkap |
+| Pemrosesan latar belakang | Redis dan BullMQ |
+| Media | Penyimpanan objek privat yang kompatibel dengan Cloudflare R2 / S3 |
+| Inferensi sampah | Layanan Gradio yang di-host sendiri dengan model EcoLens |
+| Asisten | LangGraph dan penyedia LLM yang kompatibel dengan OpenAI |
+| Kontrak | Skema OpenAPI, tipe TypeScript yang dihasilkan, dan data uji bersama |
 
-### Repository map
+### Peta repositori
 
 ```text
 .
 ├── apps/
-│   ├── web/               Next.js frontend and same-origin API proxy
-│   ├── api/               NestJS API, migrations, and backend tests
-│   └── worker/            Scan processing and background jobs
-├── packages/config/       Shared environment validation
-├── contracts/             Published OpenAPI contract and fixtures
-│   └── r1/                Extension contract draft
-├── services/hermes-review/ Private assisted-review service
-├── deploy/                Docker, database backups, and service configuration
-├── scripts/               Contract and route checks
-├── bench/                 Benchmark tooling
-└── docs/                  Product, design, integration, and operations guides
+│   ├── web/               Antarmuka Next.js dan proxy API dalam origin yang sama
+│   ├── api/               API NestJS, migrasi, dan pengujian sisi server
+│   └── worker/            Pemrosesan pemindaian dan pekerjaan latar belakang
+├── packages/config/       Validasi lingkungan bersama
+├── contracts/             Kontrak OpenAPI terbit dan data uji
+│   └── r1/                Draf kontrak ekstensi
+├── services/hermes-review/ Layanan peninjauan berbantuan privat
+├── deploy/                Docker, pencadangan basis data, dan konfigurasi layanan
+├── scripts/               Pemeriksaan kontrak dan rute
+├── bench/                 Perangkat bantu pembandingan kinerja
+└── docs/                  Panduan produk, desain, integrasi, dan operasional
 ```
 
-VERGO is a fresh implementation informed by EcoLens. Legacy `ecoLens` and `ecoLens_ML` source remains reference material and must not be copied into this repository or added as a submodule or subtree. The existing model supplies waste inference through the Gradio integration.
+VERGO adalah implementasi baru yang mendapat inspirasi dari EcoLens. Kode sumber lama `ecoLens` dan `ecoLens_ML` tetap menjadi bahan referensi dan tidak boleh disalin ke repositori ini atau ditambahkan sebagai submodule maupun subtree. Model yang sudah ada menyediakan inferensi sampah melalui integrasi Gradio.
 
-### Branding and technical compatibility
+### Merek dan kompatibilitas teknis
 
-The public product name is **VERGO — Verify and Go**, and the assistant's display name is **VERA**. Earlier documents may still use the former names SAP and SAPA.
+Nama produk publik adalah **VERGO — Verify and Go** (“Verifikasi dan Bertindak”), sedangkan nama tampilan asistennya adalah **VERA**. Dokumen lama mungkin masih menggunakan nama sebelumnya, SAP dan SAPA.
 
-Existing technical identifiers remain unchanged: npm packages such as `@sap/web`, environment variables prefixed with `SAP_` or `SAPA_`, the `sapaEnabled` preference field, asset paths, and deployment paths such as `/etc/sap/`. Use these names exactly as documented when configuring the application; the rebrand does not rename APIs, database fields, or services.
+Pengenal teknis yang sudah ada tetap dipertahankan: paket npm seperti `@sap/web`, variabel lingkungan berawalan `SAP_` atau `SAPA_`, kolom preferensi `sapaEnabled`, jalur aset, dan jalur penerapan seperti `/etc/sap/`. Gunakan nama tersebut persis seperti yang didokumentasikan saat mengonfigurasi aplikasi; perubahan merek tidak mengganti API, kolom basis data, atau layanan.
 
-## Getting started
+## Mulai
 
-### 1. Prepare your environment
+### 1. Siapkan lingkungan
 
-Use **Node.js 22 or later** and npm. Before starting the API and worker, prepare:
+Gunakan **Node.js versi 22 atau lebih baru** dan npm. Sebelum menjalankan API dan worker, siapkan:
 
-- PostgreSQL with **PostGIS**, **pgvector**, and **pg_trgm** available.
-- Redis and a private S3-compatible bucket, such as Cloudflare R2.
-- A configured Gradio inference service and its credentials.
-- Transactional email through Resend, or SMTP for local development.
+- PostgreSQL dengan **PostGIS**, **pgvector**, dan **pg_trgm** yang tersedia.
+- Redis dan bucket privat yang kompatibel dengan S3, seperti Cloudflare R2.
+- Layanan inferensi Gradio beserta kredensialnya.
+- Email transaksional melalui Resend, atau SMTP untuk pengembangan lokal.
 
-The included [PostgreSQL Dockerfile](deploy/postgres.Dockerfile) packages PostGIS and pgvector. The [deployment compose file](deploy/compose.yml) uses operator-managed configuration under `/etc/sap/` and a private ML network; follow the [deployment guide](docs/DEPLOYMENT.md) when preparing that environment.
+[Dockerfile PostgreSQL](deploy/postgres.Dockerfile) yang disertakan menyediakan PostGIS dan pgvector. [File compose penerapan](deploy/compose.yml) menggunakan konfigurasi yang dikelola operator di `/etc/sap/` dan jaringan ML privat; ikuti [panduan penerapan](docs/DEPLOYMENT.md) saat menyiapkan lingkungan tersebut.
 
-### 2. Configure the application
+### 2. Konfigurasikan aplikasi
 
-For a new checkout:
+Untuk salinan kerja baru:
 
 ```sh
 git clone https://github.com/sitaurs/VERGO.git
 cd VERGO
 ```
 
-For a fresh checkout, run from the repository root. Keep existing configured environment files if you already have them.
+Untuk salinan kerja baru, jalankan perintah berikut dari direktori utama repositori. Pertahankan berkas lingkungan yang sudah dikonfigurasi jika Anda telah memilikinya.
 
 ```sh
 cp .env.example .env
@@ -176,105 +176,105 @@ cp apps/web/.env.example apps/web/.env.local
 npm ci
 ```
 
-`cp` is also available as an alias in PowerShell. Replace the placeholders in `.env` with your private service configuration. The validator rejects example credentials.
+`cp` juga tersedia sebagai alias di PowerShell. Ganti nilai contoh dalam `.env` dengan konfigurasi layanan privat Anda. Validator akan menolak kredensial contoh.
 
-| Configuration | Purpose |
+| Konfigurasi | Fungsi |
 | --- | --- |
-| `APP_ORIGIN` | Browser-facing origin; `http://localhost:3000` for local development. |
-| `API_INTERNAL_URL` | Backend origin; `http://localhost:3001` locally. Also set this in `apps/web/.env.local`. |
-| `DATABASE_URL`, `DATABASE_DIRECT_URL` | Runtime database connection and optional direct migration connection. |
-| `REDIS_URL` | Native Redis connection URL used by background processing. |
-| `SESSION_SECRET`, `CSRF_SECRET` | Independent random secrets of at least 32 characters each. |
-| `MAIL_TRANSPORT`, mail settings | Email delivery; Resend by default, SMTP available locally. |
-| `S3_*` | Private storage endpoint, bucket, and access credentials. |
-| `ML_*` | Gradio endpoint, prediction route, credentials, and timeout. |
+| `APP_ORIGIN` | Alamat asal yang digunakan peramban; gunakan `http://localhost:3000` untuk pengembangan lokal. |
+| `API_INTERNAL_URL` | Alamat sisi server; gunakan `http://localhost:3001` secara lokal. Atur juga nilai ini di `apps/web/.env.local`. |
+| `DATABASE_URL`, `DATABASE_DIRECT_URL` | Koneksi basis data saat aplikasi berjalan dan koneksi langsung opsional untuk migrasi. |
+| `REDIS_URL` | URL koneksi Redis yang digunakan pemrosesan latar belakang. |
+| `SESSION_SECRET`, `CSRF_SECRET` | Rahasia acak yang berbeda, masing-masing minimal 32 karakter. |
+| `MAIL_TRANSPORT`, pengaturan email | Pengiriman email; secara bawaan menggunakan Resend, SMTP tersedia untuk penggunaan lokal. |
+| `S3_*` | Endpoint penyimpanan privat, bucket, dan kredensial akses. |
+| `ML_*` | Endpoint Gradio, rute prediksi, kredensial, dan batas waktu. |
 
-The proxy uses `API_INTERNAL_URL` and accepts the legacy `SAPA_API_BASE_URL` alias. Keep provider credentials on the server and out of `NEXT_PUBLIC_*` settings. Environment files must remain uncommitted. The complete configuration reference starts in [`.env.example`](.env.example).
+Proxy menggunakan `API_INTERNAL_URL` dan menerima alias lama `SAPA_API_BASE_URL`. Simpan kredensial penyedia di server dan jangan letakkan di pengaturan `NEXT_PUBLIC_*`. Berkas lingkungan harus tetap tidak di-commit. Referensi konfigurasi lengkap dimulai di [`.env.example`](.env.example).
 
-### 3. Build shared packages and apply migrations
+### 3. Bangun paket bersama dan terapkan migrasi
 
 ```sh
 npm run build
 npm run migrate -w @sap/api
 ```
 
-Migrations prefer `DATABASE_DIRECT_URL` when provided. Ensure the database account can install the required extensions and apply the schema changes.
+Jika tersedia, migrasi akan memprioritaskan `DATABASE_DIRECT_URL`. Pastikan akun basis data dapat memasang ekstensi yang diperlukan dan menerapkan perubahan skema.
 
-### 4. Start the three processes
+### 4. Jalankan tiga proses
 
-Run each command in a separate terminal from the repository root:
+Jalankan setiap perintah di terminal terpisah dari direktori utama repositori:
 
-| Process | Command | Default address |
+| Proses | Perintah | Alamat bawaan |
 | --- | --- | --- |
 | API | `npm run dev:api` | `http://localhost:3001` |
-| Worker | `npm run dev:worker` | Background process |
+| Worker | `npm run dev:worker` | Proses latar belakang |
 | Web | `npm run dev:web` | `http://localhost:3000` |
 
-Open **[localhost:3000](http://localhost:3000)**. Check **[API readiness](http://localhost:3000/api/v1/health/ready)**, confirm `data.ready` is `true`, and inspect the dependency states. Create an account and verify the emailed code before using the dashboard. Complete scanning requires healthy Redis and private storage, a running worker, and a healthy Gradio integration.
+Buka **[localhost:3000](http://localhost:3000)**. Periksa **[kesiapan API](http://localhost:3000/api/v1/health/ready)**, pastikan `data.ready` bernilai `true`, dan periksa status dependensi. Buat akun dan verifikasi kode yang dikirim melalui email sebelum menggunakan dasbor. Pemindaian lengkap memerlukan Redis dan penyimpanan privat yang sehat, worker yang berjalan, serta integrasi Gradio yang sehat.
 
 <details>
-<summary><strong>Enable optional capabilities</strong></summary>
+<summary><strong>Aktifkan kemampuan opsional</strong></summary>
 
-Enable VERA with `SAPA_FEATURE_ENABLED=true` and configure `SAPA_LLM_BASE_URL`, `SAPA_LLM_API_KEY`, and `SAPA_LLM_MODEL`. These configuration names retain their original `SAPA_` prefix. Read the [assistant guide](docs/SAPA_ASSISTANT.md) before enabling hybrid retrieval.
+Aktifkan VERA dengan `SAPA_FEATURE_ENABLED=true` dan konfigurasikan `SAPA_LLM_BASE_URL`, `SAPA_LLM_API_KEY`, serta `SAPA_LLM_MODEL`. Nama konfigurasi ini tetap memakai awalan `SAPA_` aslinya. Baca [panduan asisten](docs/SAPA_ASSISTANT.md) sebelum mengaktifkan pengambilan informasi hibrida.
 
-Community and activities use `SAP_EXTENSION_ENABLED` together with `SAP_COMMUNITY_ENABLED` and `SAP_ACTIVITIES_ENABLED`. Hermes uses `SAP_HERMES_ENABLED` and its [private service configuration](services/hermes-review/README.md). Instagram rendering and publishing have separate flags and require the Meta integration, consent, and approval workflow.
+Fitur komunitas dan kegiatan menggunakan `SAP_EXTENSION_ENABLED` bersama `SAP_COMMUNITY_ENABLED` dan `SAP_ACTIVITIES_ENABLED`. Hermes menggunakan `SAP_HERMES_ENABLED` dan [konfigurasi layanan privatnya](services/hermes-review/README.md). Pembuatan tampilan dan penerbitan konten Instagram memiliki penanda fitur terpisah serta memerlukan integrasi Meta, persetujuan, dan alur persetujuan publikasi.
 
-Apply the relevant migrations and configure the supporting services before enabling a module. Restart the affected processes after environment changes. See [the integration agreement](docs/CONTRACT_ZAKA_ZAMANI.md) and [active plan](docs/RENCANA_ITASE_2026.md) for the full requirements.
+Terapkan migrasi yang relevan dan konfigurasikan layanan pendukung sebelum mengaktifkan modul. Mulai ulang proses yang terdampak setelah mengubah lingkungan. Lihat [kesepakatan integrasi](docs/CONTRACT_ZAKA_ZAMANI.md) dan [rencana aktif](docs/RENCANA_ITASE_2026.md) untuk persyaratan lengkap.
 
 </details>
 
 <details>
-<summary><strong>Open the development app from another device</strong></summary>
+<summary><strong>Buka aplikasi pengembangan dari perangkat lain</strong></summary>
 
-Set backend `APP_ORIGIN` to the exact frontend URL, such as `http://192.168.1.20:3000`. In `apps/web/.env.local`, set `SAP_ALLOWED_DEV_ORIGINS=192.168.1.20` using only the hostname or IP address. Restart the backend, then start the web app with:
+Atur `APP_ORIGIN` di sisi server ke URL antarmuka web yang tepat, misalnya `http://192.168.1.20:3000`. Di `apps/web/.env.local`, atur `SAP_ALLOWED_DEV_ORIGINS=192.168.1.20` dengan hanya nama host atau alamat IP. Mulai ulang layanan sisi server, lalu jalankan aplikasi web dengan:
 
 ```sh
 npm run dev:web -- --hostname 0.0.0.0
 ```
 
-Open `http://192.168.1.20:3000` from the other device using your actual host IP.
+Buka `http://192.168.1.20:3000` dari perangkat lain menggunakan alamat IP host Anda yang sebenarnya.
 
 </details>
 
-## Development and validation
+## Pengembangan dan validasi
 
-Run these commands from the repository root:
+Jalankan perintah berikut dari direktori utama repositori:
 
-| Command | Purpose |
+| Perintah | Fungsi |
 | --- | --- |
-| `npm run build` | Build config, API, and worker packages. |
-| `npm run build -w @sap/web` | Build the web app for production. |
-| `npm run typecheck` | Check TypeScript across all workspaces. |
-| `npm run contracts:check` | Validate contracts and fixtures. |
-| `npm run contracts:routes` | Check API routes against the extension contract draft. |
-| `npm run contracts:types -w @sap/web` | Regenerate types from the published API contract. |
-| `npm run contracts:r1:types -w @sap/web` | Regenerate types from the R1 extension draft. |
-| `npm run test` | Run workspace tests and the Hermes Python tests. |
-| `npm run test:r1 -w @sap/web` | Run the web Playwright suite. |
-| `npm run check` | Run contract validation, typechecks, tests, backend builds, and route checks. |
+| `npm run build` | Bangun paket konfigurasi, API, dan worker. |
+| `npm run build -w @sap/web` | Bangun aplikasi web untuk produksi. |
+| `npm run typecheck` | Periksa TypeScript di seluruh ruang kerja npm. |
+| `npm run contracts:check` | Validasi kontrak dan data uji. |
+| `npm run contracts:routes` | Periksa rute API terhadap draf kontrak ekstensi. |
+| `npm run contracts:types -w @sap/web` | Buat ulang tipe dari kontrak API yang telah diterbitkan. |
+| `npm run contracts:r1:types -w @sap/web` | Buat ulang tipe dari draf ekstensi R1. |
+| `npm run test` | Jalankan pengujian ruang kerja npm dan pengujian Python Hermes. |
+| `npm run test:r1 -w @sap/web` | Jalankan rangkaian Playwright untuk web. |
+| `npm run check` | Jalankan validasi kontrak, pemeriksaan tipe, pengujian, build sisi server, dan pemeriksaan rute. |
 
-For application changes, run `npm run check` before committing. For documentation-only updates, check links, referenced assets, and command examples. The Hermes test script uses POSIX shell syntax and `python3`; on Windows, run the full check from WSL or Git Bash with Python available. Playwright requires its browser dependencies and the environment expected by its configuration. Database integration tests require a dedicated test database; see the [test plan](docs/TEST_PLAN.md).
+Untuk perubahan aplikasi, jalankan `npm run check` sebelum melakukan commit. Untuk pembaruan dokumentasi saja, periksa tautan, aset yang dirujuk, dan contoh perintah. Skrip pengujian Hermes menggunakan sintaks shell POSIX dan `python3`; di Windows, jalankan pemeriksaan lengkap dari WSL atau Git Bash dengan Python tersedia. Playwright memerlukan dependensi browser dan lingkungan sesuai konfigurasinya. Pengujian integrasi basis data memerlukan basis data pengujian khusus; lihat [rencana pengujian](docs/TEST_PLAN.md).
 
-The published API contract is `1.1.0`; the R1 extension schema is a `1.2.0` draft. Keep handlers, schemas, fixtures, and generated frontend types aligned when changing API behavior. Local checks verify the repository; external-service and deployment acceptance is tracked in the [active release gates](docs/RENCANA_ITASE_2026.md#gerbang-rilis). Historical results are dated in the [project summary](docs/RINGKASAN_PROYEK.md).
+Kontrak API yang telah diterbitkan adalah `1.1.0`; skema ekstensi R1 adalah draf `1.2.0`. Saat mengubah perilaku API, selaraskan pengendali (handler), skema, data uji, dan tipe antarmuka web yang dihasilkan. Pemeriksaan lokal memvalidasi repositori; penerimaan layanan eksternal dan penerapan dicatat di [gerbang rilis aktif](docs/RENCANA_ITASE_2026.md#gerbang-rilis). Hasil historis disertai tanggal di [ringkasan proyek](docs/RINGKASAN_PROYEK.md).
 
-## Documentation
+## Dokumentasi
 
-| Guide | Start here for |
+| Panduan | Rujukan |
 | --- | --- |
-| [Documentation index](docs/README.md) | Maintained guides and source contracts. |
-| [Project summary](docs/RINGKASAN_PROYEK.md) | Existing features, decisions, current navigation, dated evidence and consolidated historical plans. |
-| [ITASE 2026 plan](docs/RENCANA_ITASE_2026.md) | The active backlog for SDG 3, report trust, UX, follow-up, competition deliverables and acceptance. |
-| [Product requirements](docs/PRD.md) | Goals, users and baseline product scope. |
-| [Architecture](docs/TECH_SPEC.md) | Current stack and domain boundaries. |
-| [VERA guide](docs/SAPA_ASSISTANT.md) | Assistant behavior and configuration under the original technical filename. |
-| [Published API](contracts/openapi.json) / [R1 draft](contracts/r1/README.md) | Machine-readable schemas and version promotion rules. |
-| [Extension contract](docs/CONTRACT_ZAKA_ZAMANI.md) | Shared frontend/backend DTOs and workflows. |
-| [Moderation](docs/CONTENT_OPERATIONS.md) | Human review, privacy and operations. |
-| [Deployment](docs/DEPLOYMENT.md) | Runtime configuration and recovery. |
+| [Indeks dokumentasi](docs/README.md) | Panduan yang dipelihara dan kontrak sumber. |
+| [Ringkasan proyek](docs/RINGKASAN_PROYEK.md) | Fitur yang ada, keputusan, navigasi saat ini, bukti bertanggal, dan rencana historis yang dihimpun. |
+| [Rencana ITASE 2026](docs/RENCANA_ITASE_2026.md) | Daftar pekerjaan aktif untuk SDG 3, kepercayaan laporan, UX, tindak lanjut, luaran kompetisi, dan penerimaan. |
+| [Persyaratan produk](docs/PRD.md) | Tujuan, pengguna, dan cakupan dasar produk. |
+| [Arsitektur](docs/TECH_SPEC.md) | Tumpukan teknologi saat ini dan batasan domain. |
+| [Panduan VERA](docs/SAPA_ASSISTANT.md) | Perilaku asisten dan konfigurasi dengan nama berkas teknis asli. |
+| [API terbit](contracts/openapi.json) / [draf R1](contracts/r1/README.md) | Skema yang dapat dibaca mesin dan aturan peningkatan versi. |
+| [Kontrak ekstensi](docs/CONTRACT_ZAKA_ZAMANI.md) | DTO antarmuka web dan sisi server bersama serta alur kerja. |
+| [Moderasi](docs/CONTENT_OPERATIONS.md) | Tinjauan manusia, privasi, dan operasional. |
+| [Panduan penerapan](docs/DEPLOYMENT.md) | Konfigurasi lingkungan aplikasi saat berjalan dan pemulihan. |
 
 ---
 
 <p align="center">
-  <strong>Every cleaner place starts with someone who notices.</strong><br />
-  <a href="https://vergo.venlab.tech/">Explore VERGO →</a>
+  <strong>Tempat yang lebih bersih dimulai dari seseorang yang peduli dan mau bertindak.</strong><br />
+  <a href="https://vergo.venlab.tech/">Buka VERGO →</a>
 </p>
