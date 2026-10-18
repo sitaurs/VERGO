@@ -1,0 +1,31 @@
+{
+  "tool": "Built-in imagegen",
+  "created": "2026-10-18",
+  "purpose": "Separate transparent illustrations adapted from the user-supplied VERGO health context mockup.",
+  "assets": {
+    "environment": {
+      "file": "environment.webp",
+      "width": 1280,
+      "height": 960,
+      "alpha": true,
+      "bytes": 268342,
+      "sha256": "99ded3654a5153a59dd66cc119e4afa300328a3d4a105c9644e4c9239561bb1c"
+    },
+    "sdg-reference": {
+      "file": "sdg-reference.webp",
+      "width": 640,
+      "height": 480,
+      "alpha": true,
+      "bytes": 51154,
+      "sha256": "b5a5cb4fce113c95d3aa842386db0da6dcbe7b7c530ea21989542e47bf0ed3e9"
+    },
+    "who-reference": {
+      "file": "who-reference.webp",
+      "width": 640,
+      "height": 480,
+      "alpha": true,
+      "bytes": 49954,
+      "sha256": "2b53d62205e15a4363e37c6d1844671671faeedfdd82457d56554fdf53ba553e"
+    }
+  }
+}

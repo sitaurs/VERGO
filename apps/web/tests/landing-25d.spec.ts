@@ -12,11 +12,16 @@ test("2.5D landing keeps complete readable content, artwork and real destination
     await page.setViewportSize({ width, height: width < 761 ? 844 : 1000 });
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
-    for (const id of ["beranda", "cara-kerja", "fitur", "peta", "verifikasi", "aksi-warga", "edukasi"]) {
+    for (const id of ["beranda", "kesehatan-lingkungan", "cara-kerja", "fitur", "peta", "verifikasi", "aksi-warga", "edukasi"]) {
       await expect(page.locator(`#${id}`)).toBeVisible();
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
     }
     await page.locator("footer").scrollIntoViewIfNeeded();
+    const health = page.locator("#kesehatan-lingkungan");
+    await expect(health.getByRole("link")).toHaveCount(2);
+    await expect(health.getByRole("link").first()).toHaveAttribute("href", "https://sdgs.un.org/goals/goal3");
+    await expect(health.getByRole("link").last()).toHaveAttribute("href", "https://www.who.int/news/item/16-12-2025-who-highlights-health-risks-and-opportunities-in-the-global-waste-crisis");
+    await expect(health.getByRole("link").first()).toHaveAttribute("rel", "noopener noreferrer");
     const featureTitles = page.locator("#fitur h3");
     expect(await featureTitles.evaluateAll(titles => titles.every(title => Number(getComputedStyle(title).fontWeight) >= 700))).toBe(true);
     const firstFeature = page.locator("#fitur a").first();
@@ -25,7 +30,7 @@ test("2.5D landing keeps complete readable content, artwork and real destination
     expect(artwork!.x + artwork!.width).toBeLessThanOrEqual(copy!.x);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await expect(page.locator("h1")).toHaveCount(1);
-    await expect.poll(() => page.locator('img[src*="landing-25d"]').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
+    await expect.poll(() => page.locator('img[src*="landing-25d"], img[src*="landing-health"]').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
     await expect(page.locator("#aksi-warga").getByRole("link").filter({ has: page.getByRole("heading", { name: "Kegiatan warga", exact: true }) })).toHaveAttribute("href", "/activities");
     if ([390, 1440].includes(width)) {
       await page.locator("#fitur").screenshot({ path: info.outputPath(`features-25d-${width}.png`) });

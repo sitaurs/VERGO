@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowRight, Camera, Check, Clock3, FileText, Leaf, LockKeyhole, MapPin, Recycle, ShieldCheck, UsersRound, CalendarDays } from "lucide-react";
 import LandingHeader from "./landing/landing-header";
 import LandingFaq from "./landing/landing-faq";
+import HealthContextSection from "./landing/health-context-section";
 import PublicMapSection from "./public-map-section";
 import BrandLogo from "./brand-logo";
 import { DetailDialog, type BottomDetail } from "./lower-section";
@@ -70,12 +71,7 @@ export default function LandingPage() {
         </div>
         <div className={s.heroVisual} data-landing-enter="hero-card"><div data-landing-float="shape"><Artwork name="hero" motion={false} alt={t("Ilustrasi foto sampah, konteks lokasi, dan pemeriksaan manusia di VERGO")} eager className={s.heroArtwork} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 55vw, 780px" /></div></div>
       </div></section>
-      <section className={`${s.healthContext} ${s.container}`} aria-labelledby="health-context-title">
-        <span className={s.pill}>SDG 3 · {t("Target 3.9")}</span><h2 id="health-context-title">{t("Lingkungan terawat, kesehatan lebih terlindungi.")}</h2>
-        <p>{t("Sampah yang tidak dikelola dapat mencemari air, tanah, dan udara serta menjadi tempat berkembangnya pembawa penyakit. VERGO membantu warga mendokumentasikan kondisi dan memantau tindak lanjut, sejalan dengan tujuan SDG 3.9 untuk mengurangi dampak pencemaran terhadap kesehatan.")}</p>
-        <p className={s.healthLimit}>{t("Peta VERGO merangkum laporan warga; peta ini tidak mengukur risiko penyakit atau membuktikan penurunan penyakit.")}</p>
-        <div className={s.sourceLinks}><span>{t("Rujukan:")}</span><a href="https://sdgs.un.org/goals/goal3">{t("PBB — SDG 3.9")}</a><a href="https://www.who.int/news/item/16-12-2025-who-highlights-health-risks-and-opportunities-in-the-global-waste-crisis">{t("WHO — sampah dan kesehatan")}</a></div>
-      </section>
+      <HealthContextSection />
       <section id="cara-kerja" className={`${s.section} ${s.container}`} aria-labelledby="workflow-title">
         <div className={`${s.heading} ${s.centered}`} data-landing-enter="heading"><span className={s.pill}>{t("Cara kerja")}</span><h2 id="workflow-title">{t("Lihat masalahnya.")} <em>{t("Tentukan langkahnya.")}</em></h2></div>
         <ol className={s.steps}>{steps.map((step, index) => <li key={step.title} data-landing-enter="card" data-landing-order={index}><Artwork name={step.art} /><div><span className={s.stepNumber}>0{index + 1}</span><h3>{t(step.title)}</h3><p>{t(step.copy)}</p></div>{index < steps.length - 1 && <ArrowRight className={s.stepArrow} aria-hidden="true" />}</li>)}</ol><ReportPreview />

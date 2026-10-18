@@ -1,0 +1,12 @@
+{
+  "tool": "Built-in imagegen",
+  "mode": "background-extraction",
+  "reference": "User-supplied codex-clipboard-e0f3349b-185a-45b6-b3c2-8882bfdedc5e.png",
+  "transparent_background": true,
+  "shared": "Use case: background-extraction. Edit target: the attached VERGO section mockup. Produce ONE isolated illustration asset from this mockup, NOT a page or UI card. Match the original 2.5D soft clay render, rich emerald/mint greens, rounded materials, gentle sunlight, and detailed foliage faithfully. Transparent background with real alpha, no white rectangle, no checkerboard, no text, no labels, no borders, no UI, no watermarks. Keep every subject fully inside the frame, centered with only a small transparent margin. Preserve a soft tight contact shadow, not a large background gradient.",
+  "assets": {
+    "environment": "Extract/recreate ONLY the large RIGHT HAND neighbourhood diorama: cream house with orange tiled roof and green door, lush round green trees, two residents cleaning (one sweeping, one collecting litter into a black bag), three green sorting bins, small turquoise creek with stones and flowers across the front of a rounded grassy island base, and the floating green shield with a white heart above the roof. Include the shield. Exclude distant clouds, flat leaf silhouettes, all left hand copy and both bottom source illustrations. Full 4:3 landscape composition, front isometric view, visually faithful to the mockup.",
+    "sdg-reference": "Extract/recreate ONLY the SMALL BOTTOM LEFT illustration from the PBB source card: a mint globe with raised green continents, an open cream book, an emerald shield with white heart, surrounding green leaves and small plants. These objects form one compact harmonious diorama. Exclude every other scene, title, card, arrow button and all text. Full 4:3 landscape canvas. Generic original illustration, no official UN logo.",
+    "who-reference": "Extract/recreate ONLY the SMALL BOTTOM RIGHT illustration from the WHO source card: two green recycling wheelie bins (dark emerald and spring green) with simple white recycling symbols, a green shield with white heart behind them, lush leaves and rounded shrubs. Match the compact original diorama. Exclude every other scene, title, card, arrow button and all text. Full 4:3 landscape canvas. Generic original illustration, no official WHO logo."
+  }
+}
