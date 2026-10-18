@@ -27,6 +27,7 @@
 
 <p align="center">
   <a href="#the-idea">The idea</a> ·
+  <a href="#sdg-3-pathway">SDG 3 pathway</a> ·
   <a href="#features">Features</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#getting-started">Quick start</a> ·
@@ -37,15 +38,29 @@
 
 ## The idea
 
-**VERGO turns everyday observations into environmental information people can act on.** A photo helps identify waste. A report adds the location and context. Human review determines what becomes public evidence. Community and volunteer tools help organize the next step.
+**VERGO turns everyday observations into structured environmental reports that people can review and act on.** An optional AI-assisted image scan suggests a waste-material category; a report captures location, time, and context. Human moderators decide what evidence can be verified and shared. Community and volunteer tools can document follow-up.
 
 The platform brings these flows together with a personal dashboard, geographic insights, and **VERA**, the virtual assistant for guidance on VERGO and environmental topics.
 
-The project's research focus is **“Optimalisasi Pelaporan Sampah Terverifikasi Berbasis Multimodal Artificial Intelligence dan Geospatial Intelligence Menuju Good Health and Well-being 2030.”** It connects evidence-based reporting and community participation with the goal of healthier environments, in support of SDG 3: Good Health and Well-being.
+The competition focus is **“VERGO: Optimalisasi Pelaporan Sampah Terverifikasi Berbasis Multimodal Artificial Intelligence dan Geospatial Intelligence Menuju Good Health and Well-being 2030.”** This title describes the intended contribution; the concrete, evidence-based pathway to SDG 3 is set out below.
 
 **Visit the website: [vergo.venlab.tech](https://vergo.venlab.tech/).** The interface defaults to English; users can choose Indonesian in Settings, and saved language preferences are preserved.
 
 **Source repository: [sitaurs/VERGO](https://github.com/sitaurs/VERGO).**
+
+## SDG 3 pathway
+
+VERGO's most direct SDG 3 connection is **Target 3.9**, which calls for fewer deaths and illnesses related to hazardous chemicals and air, water, and soil pollution and contamination ([United Nations Goal 3](https://sdgs.un.org/goals/goal3)). Waste accumulation can be part of a local environmental-health concern, but a waste report alone does not establish contamination, exposure, or a health effect. VERGO contributes upstream by making observations easier to review and follow up:
+
+1. **Document an observation.** A resident can submit a photo, location, time, and context. Scanning is optional; a report does not need to begin with an AI scan.
+2. **Structure the evidence.** The existing EcoLens inference and optional multimodal vision can suggest a material category. A category suggestion does not establish that a report is true, that material is hazardous, or that anyone has been exposed to it.
+3. **Review before sharing.** A human moderator reviews reports, handles duplicates and follow-up evidence, and controls what is eligible for public display. Private evidence and precise location data are subject to the product's access, consent, and publication controls.
+4. **See where reports recur.** Eligible reports are aggregated into H3 area summaries for a stated period. The map's low/medium/high level describes report concentration under the documented count-and-date rules; it is not a medical, toxicological, or pollution measurement. An area with no reports means “no data,” not “safe.”
+5. **Document a response.** Community updates and volunteer activity workflows can record follow-up, participation, and evidence of results. This can help people responsible for local action prioritize and review recurring reports; VERGO does not dispatch a cleanup team automatically.
+
+This is an **indirect and conditional contribution** to healthier environments. Any health benefit depends on accurate observations, appropriate and safe follow-up, and conditions in the field. VERGO is not disease surveillance, a toxicology service, or an air, water, or soil sensor. It does not diagnose illness, calculate official SDG 3 indicators, or prove a reduction in illness or deaths. A moderator-verified report means its evidence was reviewed under the app's rules; it does not mean a site is hazard-free or has been cleaned.
+
+For a field pilot, useful **VERGO-level measures** include unique reports by status and area, time from submission to moderator decision, reports with documented follow-up or resolution evidence, recurring reports in the same area over a defined period, and volunteer activities with recorded outcomes. These describe platform use and documented response; they are not substitutes for official SDG 3 health indicators or evidence of reduced disease. Report them only when the underlying data and method are available.
 
 ## Features
 
@@ -53,7 +68,7 @@ The project's research focus is **“Optimalisasi Pelaporan Sampah Terverifikasi
 | --- | --- |
 | **Waste recognition** | Capture or upload a photo and receive AI-assisted material classification. |
 | **Evidence-based reports** | Submit photos, location, and context; track the report through human moderation. |
-| **Public incidents and area maps** | Explore verified reports and geographic summaries, with public visibility controlled separately from private evidence. |
+| **Public incidents and area maps** | Explore eligible, moderator-reviewed reports and H3 summaries of report concentration and recurrence. Area levels are not health-risk or pollution measurements; public visibility is controlled separately from private evidence. |
 | **Personal dashboard** | View scan and report history, points, achievements, notifications, and account settings. |
 | **VERA assistant** | Ask for feature guidance and environmental information; suggestions and permitted account tools remain read-only. |
 
@@ -71,9 +86,9 @@ These modules are controlled by feature flags and require their associated migra
 
 ### The product loop
 
-**Notice → Scan → Add context → Submit → Review → Explore → Take action**
+**Notice → Document → Submit → Human review → Explore → Follow up**
 
-Public reports pass through moderation. Geographic summaries describe recorded conditions and historical patterns. VERA provides guidance without changing account data or report status, and Hermes recommendations remain subject to human review.
+Scanning can suggest a material category, but it is optional and does not verify a report. Public reports pass through moderation. Geographic summaries describe eligible recorded reports and historical patterns. VERA provides guidance without changing account data or report status, and Hermes recommendations remain subject to human review.
 
 ## Architecture
 
