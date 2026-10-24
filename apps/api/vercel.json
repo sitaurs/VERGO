@@ -1,3 +1,8 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "src/main.*": {
+      "includeFiles": "../../node_modules/openai/lib/responses/ResponseInputItems.js"
+    }
+  }
 }
