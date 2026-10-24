@@ -70,11 +70,11 @@ Isi environment **Production** dan **Preview** secara sengaja; jangan commit nil
 | `S3_BUCKET` | Nama bucket R2 yang dipakai VERGO. |
 | `S3_ACCESS_KEY_ID` | R2 access key dengan izin yang diperlukan pada bucket tersebut. |
 | `S3_SECRET_ACCESS_KEY` | Secret key pasangannya. |
-| `ML_INFERENCE_URL` | Endpoint layanan ML yang benar-benar dapat dijangkau worker/API. Schema aplikasi masih mewajibkan nilai ini. |
+| `ML_INFERENCE_URL` | Endpoint layanan ML yang dapat dijangkau worker. API tidak menjalankan inferensi, tetapi schema saat ini tetap mewajibkan nilai ini saat startup. |
 | `ML_USERNAME` | Kredensial endpoint ML. |
 | `ML_PASSWORD` | Kredensial endpoint ML. |
 
-`DATABASE_DIRECT_URL` bersifat opsional untuk aplikasi saat runtime, tetapi diperlukan ketika menjalankan migrasi. `S3_REGION` memiliki default `auto`; variabel lain di tabel API adalah wajib menurut schema saat ini. Jika konfigurasi ML belum tersedia, jangan isi URL asal: API saat ini tidak akan lolos validasi env tanpa ketiga nilai ML itu, dan worker tidak dapat memproses scan tanpa layanan ML yang aktif.
+`DATABASE_DIRECT_URL` bersifat opsional untuk runtime dan sangat dianjurkan untuk migrasi. CLI akan memakai `DATABASE_URL` sebagai fallback, tetapi endpoint pooled Neon dapat menolak DDL atau pola advisory lock yang dipakai migrasi. `S3_REGION` memiliki default `auto`; variabel lain di tabel API adalah wajib menurut schema saat ini. Jika konfigurasi ML belum tersedia, jangan isi URL asal: API saat ini tetap meminta ketiga field ML itu saat validasi env, dan worker tidak dapat memproses scan tanpa layanan ML yang aktif.
 
 Fitur tambahan seperti SAPA, komunitas, aktivitas, Instagram, MFA, dan Hermes memiliki flag serta secret opsional tersendiri di schema config. Biarkan flag tetap `false` untuk deployment awal kecuali dependensi, migration, dan kredensial fitur tersebut sudah disiapkan. Jika diaktifkan, lengkapi seluruh variable kondisional yang disebut schema.
 
