@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "npm --prefix ../.. run build --workspace=@sap/config",
     "build": "tsc -p tsconfig.json",
-    "build:vercel": "npm --prefix ../.. run build --workspace=@sap/config && npm run build",
+    "build:vercel": "npm run build",
     "dev": "tsc-watch -p tsconfig.json --onSuccess \"node dist/main.js\"",
     "start": "node dist/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
