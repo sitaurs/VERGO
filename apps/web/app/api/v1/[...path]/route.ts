@@ -9,6 +9,13 @@ async function proxy(request: Request) {
     return Response.json({ error: { code: "INVALID_PATH", message: "Path API tidak valid." } }, { status: 400 });
   }
   const upstreamUrl = new URL(`${incoming.pathname}${incoming.search}`, backendOrigin);
+  // Older tabs can keep sending the dashboard's previous `limit=100` query
+  // after a Preview deployment. These collection endpoints already paginate
+  // with cursors and use a safe default page size, so normalize that legacy
+  // parameter before it reaches the API's strict query validation.
+  if (incoming.pathname === "/api/v1/scans" || incoming.pathname === "/api/v1/reports/mine") {
+    upstreamUrl.searchParams.delete("limit");
+  }
   const headers = new Headers();
   for (const name of ["cookie", "content-type", "accept", "x-csrf-token", "idempotency-key", "if-match"]) {
     const value = request.headers.get(name);
