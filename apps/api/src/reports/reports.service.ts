@@ -183,7 +183,7 @@ export class ReportsService {
     }
 
     const result = await this.reports.updateOwnedSubmitted(reportId, userId, ifMatchRevision, changes);
-    if (!result.ok) {
+    if (result.ok === false) {
       switch (result.reason) {
         case 'not_found':
           throw new NotFoundException({ code: 'NOT_FOUND', message: 'Laporan tidak ditemukan.' });
