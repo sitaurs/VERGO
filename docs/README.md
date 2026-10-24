@@ -1,6 +1,6 @@
 # Dokumentasi VERGO
 
-Diperbarui 17 Oktober 2026. Produk **VERGO — Verify and Go**, asisten **VERA**. [README utama](../README.md) menjelaskan cara menjalankan aplikasi.
+Diperbarui 24 Oktober 2026. Produk **VERGO — Verify and Go**, asisten **VERA**. [README utama](../README.md) menjelaskan cara menjalankan aplikasi.
 
 ## Mulai di sini
 
@@ -20,7 +20,7 @@ Diperbarui 17 Oktober 2026. Produk **VERGO — Verify and Go**, asisten **VERA**
 | [ML](ML_INTEGRATION.md), [aturan area](HOTSPOT_RULES.md) | Adapter, hybrid scan, taxonomy, H3 dan arti peta. |
 | [VERA](SAPA_ASSISTANT.md) | Bantuan, query tools, konfigurasi dan batas AI; nama berkas teknis dipertahankan. |
 | [Moderasi](CONTENT_OPERATIONS.md), [poster Instagram](INSTAGRAM_POST_DESIGN.md) | Pemeriksaan manusia, privasi, penanganan dan rendition/publikasi. |
-| [Deployment](DEPLOYMENT.md), [acceptance](TEST_PLAN.md) | Konfigurasi/runbook dan kebutuhan bukti implementasi. |
+| [Deployment](DEPLOYMENT.md), [deployment Vercel](DEPLOYMENT_VERCEL.md), [acceptance](TEST_PLAN.md) | Konfigurasi/runbook VPS, Vercel, dan kebutuhan bukti implementasi. |
 | [Provenance](SOURCE_AUDIT.md) | Audit source EcoLens, batas reuse dan sumber model. |
 | [Published OpenAPI](../contracts/openapi.json), [draft R1](../contracts/r1/README.md) | Kontrak mesin dan batas promosi versi. |
 

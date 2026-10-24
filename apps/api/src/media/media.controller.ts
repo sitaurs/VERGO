@@ -3,7 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import type { AuthenticatedUser } from '../platform/http/request-context.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
 import { SessionAuthGuard } from '../auth/session-auth.guard.js';
-import { UploadMediaDto } from './dto.js';
+import { CreateMediaUploadDto, UploadMediaDto } from './dto.js';
 import { MAX_UPLOAD_BYTES } from './image-processor.service.js';
 import { MediaService } from './media.service.js';
 
@@ -30,6 +30,18 @@ export class MediaController {
     @UploadedFile() file: UploadedFile | undefined,
   ) {
     return this.media.upload(user.id, dto.purpose, file);
+  }
+
+  @Post('uploads')
+  @HttpCode(201)
+  createUpload(@CurrentUser() user: AuthenticatedUser, @Body() dto: CreateMediaUploadDto) {
+    return this.media.beginUpload(user.id, dto.purpose, dto.contentType, dto.sizeBytes);
+  }
+
+  @Post(':mediaId/complete')
+  @HttpCode(201)
+  completeUpload(@CurrentUser() user: AuthenticatedUser, @Param('mediaId', ParseUUIDPipe) mediaId: string) {
+    return this.media.completeUpload(user.id, mediaId);
   }
 
   @Get(':mediaId/url')

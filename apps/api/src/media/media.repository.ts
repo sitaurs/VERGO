@@ -70,6 +70,60 @@ export class MediaRepository {
     }) as Promise<MediaRecord>;
   }
 
+  /** Reserve an owner-scoped pending media row before issuing a direct R2 upload URL. */
+  async createUploadReservation(input: {
+    ownerId: string;
+    purpose: MediaPurpose;
+    objectKey: string;
+    mime: MediaMime;
+    sizeBytes: number;
+    expiresAt: Date;
+  }): Promise<MediaRecord> {
+    return this.sql.begin(async tx => {
+      const owner = await tx`SELECT id FROM users WHERE id=${input.ownerId} AND deleted_at IS NULL FOR SHARE`;
+      if (!owner.length) fail(403, 'ACCOUNT_INACTIVE', 'Akun tidak aktif.');
+      const rows = await tx<MediaRow[]>`
+        INSERT INTO media (owner_id, purpose, object_key, mime, size_bytes, sha256, state, expires_at)
+        VALUES (${input.ownerId}, ${input.purpose}, ${input.objectKey}, ${input.mime}, ${input.sizeBytes}, 'pending-upload', 'pending', ${input.expiresAt})
+        RETURNING ${tx.unsafe(COLUMNS)}`;
+      return mapMedia(rows[0]!);
+    }) as Promise<MediaRecord>;
+  }
+
+  async findPendingUploadForOwner(mediaId: string, ownerId: string): Promise<MediaRecord | null> {
+    const rows = await this.sql<MediaRow[]>`
+      SELECT ${this.sql.unsafe(COLUMNS)} FROM media
+      WHERE id=${mediaId} AND owner_id=${ownerId} AND state='pending' AND deleted_at IS NULL AND expires_at>now()
+      LIMIT 1`;
+    return rows[0] ? mapMedia(rows[0]) : null;
+  }
+
+  async completeUpload(input: {
+    id: string;
+    ownerId: string;
+    sourceObjectKey: string;
+    objectKey: string;
+    mime: MediaMime;
+    sizeBytes: number;
+    sha256: string;
+    width: number;
+    height: number;
+    expiresAt: Date;
+  }): Promise<MediaRecord | null> {
+    return this.sql.begin(async tx => {
+      const owner = await tx`SELECT id FROM users WHERE id=${input.ownerId} AND deleted_at IS NULL FOR SHARE`;
+      if (!owner.length) return null;
+      const rows = await tx<MediaRow[]>`
+        UPDATE media SET object_key=${input.objectKey}, mime=${input.mime}, size_bytes=${input.sizeBytes},
+          sha256=${input.sha256}, width=${input.width}, height=${input.height}, state='stored',
+          expires_at=${input.expiresAt}, updated_at=now()
+        WHERE id=${input.id} AND owner_id=${input.ownerId} AND object_key=${input.sourceObjectKey}
+          AND state='pending' AND deleted_at IS NULL AND expires_at>now()
+        RETURNING ${tx.unsafe(COLUMNS)}`;
+      return rows[0] ? mapMedia(rows[0]) : null;
+    }) as Promise<MediaRecord | null>;
+  }
+
   async markStored(id:string,ownerId:string):Promise<MediaRecord|null> {
     return this.sql.begin(async tx=>{
       const owner=await tx`SELECT id FROM users WHERE id=${ownerId} AND deleted_at IS NULL FOR SHARE`;

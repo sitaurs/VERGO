@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException, PayloadTooLargeException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { ImageProcessorService } from './image-processor.service.js';
+import { ImageProcessorService, MAX_UPLOAD_BYTES, type ImageMime } from './image-processor.service.js';
 import { MediaRepository, type MediaPurpose, type MediaRecord } from './media.repository.js';
 import { ObjectStorageService } from './object-storage.service.js';
 import { fail, requireFeature } from '../extensions/extension.store.js';
@@ -28,6 +28,14 @@ export interface MediaUrlView {
   expiresAt: string;
 }
 
+export interface MediaUploadTicketView {
+  mediaId: string;
+  uploadUrl: string;
+  method: 'PUT';
+  headers: { 'Content-Type': ImageMime };
+  expiresAt: string;
+}
+
 @Injectable()
 export class MediaService {
   constructor(
@@ -37,8 +45,7 @@ export class MediaService {
   ) {}
 
   async upload(ownerId: string, purpose: MediaPurpose, file: UploadedFile | undefined): Promise<MediaView> {
-    if (purpose === 'community') requireFeature('community');
-    if (purpose === 'activity_evidence') requireFeature('activities');
+    this.assertPurposeEnabled(purpose);
     if (!file || !file.buffer || file.buffer.length === 0) {
       throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Berkas wajib diunggah.' });
     }
@@ -70,6 +77,81 @@ export class MediaService {
     }
   }
 
+  async beginUpload(ownerId: string, purpose: MediaPurpose, contentType: ImageMime, sizeBytes: number): Promise<MediaUploadTicketView> {
+    this.assertPurposeEnabled(purpose);
+    if (!Number.isSafeInteger(sizeBytes) || sizeBytes < 1) throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Ukuran berkas tidak valid.' });
+    if (sizeBytes > MAX_UPLOAD_BYTES) throw new PayloadTooLargeException({ code: 'IMAGE_TOO_LARGE', message: 'Berkas melebihi 10 MiB.' });
+    const sourceObjectKey = `upload-pending/${ownerId}/${randomUUID()}`;
+    const reservation = await this.repository.createUploadReservation({
+      ownerId,
+      purpose,
+      objectKey: sourceObjectKey,
+      mime: contentType,
+      sizeBytes,
+      expiresAt: new Date(Date.now() + ORPHAN_TTL_MS),
+    });
+    try {
+      const signed = await this.storage.createSignedPutUrl(sourceObjectKey, contentType);
+      return {
+        mediaId: reservation.id,
+        uploadUrl: signed.url,
+        method: 'PUT',
+        headers: { 'Content-Type': contentType },
+        expiresAt: signed.expiresAt.toISOString(),
+      };
+    } catch (error) {
+      await this.repository.scheduleObjectCleanup(sourceObjectKey, reservation.id).catch(() => undefined);
+      throw error;
+    }
+  }
+
+  async completeUpload(ownerId: string, mediaId: string): Promise<MediaView> {
+    const pending = await this.repository.findPendingUploadForOwner(mediaId, ownerId);
+    if (!pending) throw new NotFoundException({ code: 'NOT_FOUND', message: 'Unggahan tidak ditemukan atau sudah kedaluwarsa.' });
+
+    let finalObjectKey: string | undefined;
+    try {
+      const original = await this.storage.getObjectBuffer(pending.objectKey, MAX_UPLOAD_BYTES);
+      if (!original) throw new BadRequestException({ code: 'UPLOAD_INCOMPLETE', message: 'Berkas belum berhasil diunggah ke penyimpanan.' });
+      const processed = await this.processor.process(original);
+      finalObjectKey = `${pending.purpose}/${ownerId}/${randomUUID()}.${processed.extension}`;
+      await this.storage.putObject({ key: finalObjectKey, body: processed.buffer, contentType: processed.mime, sha256: processed.sha256 });
+      const record = await this.repository.completeUpload({
+        id: pending.id,
+        ownerId,
+        sourceObjectKey: pending.objectKey,
+        objectKey: finalObjectKey,
+        mime: processed.mime,
+        sizeBytes: processed.sizeBytes,
+        sha256: processed.sha256,
+        width: processed.width,
+        height: processed.height,
+        expiresAt: new Date(Date.now() + ORPHAN_TTL_MS),
+      });
+      if (!record) {
+        throw new NotFoundException({ code: 'NOT_FOUND', message: 'Unggahan tidak ditemukan atau sudah kedaluwarsa.' });
+      }
+      await this.storage.deleteObject(pending.objectKey).catch(async () => {
+        await this.repository.scheduleObjectCleanup(pending.objectKey, pending.id).catch(() => undefined);
+      });
+      return this.toView(record);
+    } catch (error) {
+      // Preserve the source object on infrastructure errors so the same pending
+      // upload can be finalized again. Validation failures are permanent and
+      // should release their temporary object immediately.
+      if (error instanceof HttpException && error.getStatus() < 500) {
+        await this.repository.scheduleObjectCleanup(pending.objectKey, pending.id).catch(() => undefined);
+        await this.storage.deleteObject(pending.objectKey).catch(() => undefined);
+        if (finalObjectKey) {
+          await this.storage.deleteObject(finalObjectKey).catch(async () => {
+            await this.repository.scheduleObjectCleanup(finalObjectKey!, pending.id).catch(() => undefined);
+          });
+        }
+      }
+      throw error;
+    }
+  }
+
   async createReadUrl(ownerId: string, mediaId: string): Promise<MediaUrlView> {
     const record = await this.repository.findStoredForOwner(mediaId, ownerId);
     if (!record) {
@@ -87,5 +169,10 @@ export class MediaService {
       sizeBytes: record.sizeBytes,
       expiresAt: record.expiresAt ? record.expiresAt.toISOString() : null,
     };
+  }
+
+  private assertPurposeEnabled(purpose: MediaPurpose): void {
+    if (purpose === 'community') requireFeature('community');
+    if (purpose === 'activity_evidence') requireFeature('activities');
   }
 }

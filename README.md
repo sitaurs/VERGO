@@ -271,6 +271,7 @@ Kontrak API yang telah diterbitkan adalah `1.1.0`; skema ekstensi R1 adalah draf
 | [Kontrak ekstensi](docs/CONTRACT_ZAKA_ZAMANI.md) | DTO antarmuka web dan sisi server bersama serta alur kerja. |
 | [Moderasi](docs/CONTENT_OPERATIONS.md) | Tinjauan manusia, privasi, dan operasional. |
 | [Panduan penerapan](docs/DEPLOYMENT.md) | Konfigurasi lingkungan aplikasi saat berjalan dan pemulihan. |
+| [Persiapan deployment Vercel](docs/DEPLOYMENT_VERCEL.md) | Pemisahan proyek web/API, environment, direct upload R2, migrasi, dan worker Armbian. |
 
 ---
 
