@@ -137,9 +137,13 @@ async function collectPages<T>(path: string, signal?: AbortSignal): Promise<{ it
   const items: T[] = [];
   let cursor: string | null = null;
   do {
-    const params = new URLSearchParams({ limit: "100" });
+    // Let the API use its stable default page size. Cursor pagination still
+    // retrieves every page, and omitting the optional limit avoids the 400
+    // validation responses observed on the Vercel Preview API.
+    const params = new URLSearchParams();
     if (cursor) params.set("cursor", cursor);
-    const page: { items: T[]; nextCursor: string | null } = await apiGet(`${path}?${params}`, signal);
+    const query = params.size ? `?${params}` : "";
+    const page: { items: T[]; nextCursor: string | null } = await apiGet(`${path}${query}`, signal);
     items.push(...page.items);
     cursor = page.nextCursor;
   } while (cursor);
