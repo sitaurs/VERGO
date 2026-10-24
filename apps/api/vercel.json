@@ -1,8 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "npm run build",
   "functions": {
-    "api/**/*.js": {
+    "api/dispatcher.js": {
       "includeFiles": "../../node_modules/openai/lib/responses/ResponseInputItems.js"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "missing": [{ "type": "query", "key": "__vergo_path" }],
+      "destination": "/api/dispatcher?__vergo_path=/api/:path*"
+    }
+  ]
 }
