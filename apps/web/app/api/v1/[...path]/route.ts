@@ -14,6 +14,10 @@ async function proxy(request: Request) {
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }
+  // Vercel injects this short-lived OIDC token into the function Request. Pass
+  // it only server-to-server so the protected API can trust this web project.
+  const vercelOidcToken = request.headers.get("x-vercel-oidc-token");
+  if (vercelOidcToken) headers.set("x-vercel-trusted-oidc-idp-token", vercelOidcToken);
   // Next may build request.url from its listening address (e.g. 0.0.0.0).
   // CSRF must validate the browser's actual Origin, never that internal address.
   // Do not synthesize an allowed Origin: cross-site requests must still fail.
