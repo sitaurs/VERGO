@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+// Ensure Vercel includes the deep OpenAI response module imported by LangChain.
+import 'openai/lib/responses/ResponseInputItems.js';
 import { NestFactory } from '@nestjs/core';
 import { loadConfig } from '@sap/config';
 import { setDefaultResultOrder } from 'node:dns';
