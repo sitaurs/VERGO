@@ -98,7 +98,7 @@ export class AdminService {
       publishMediaIds,
     });
 
-    if (!result.ok) {
+    if (result.ok === false) {
       switch (result.reason) {
         case 'not_found':
           throw new NotFoundException({ code: 'NOT_FOUND', message: 'Laporan tidak ditemukan.' });
