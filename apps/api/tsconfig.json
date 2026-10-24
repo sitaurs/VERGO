@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "rootDir": "src", "outDir": "dist" },
-  "files": ["src/main.ts"],
+  "files": ["src/main.ts", "src/vercel-handler.ts"],
   "exclude": ["node_modules", "../web"]
 }
